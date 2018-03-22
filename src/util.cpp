@@ -88,6 +88,7 @@ const char * const DEFAULT_DEBUGLOGFILE = "debug.log";
 
 ArgsManager gArgs;
 bool fPrintToConsole = false;
+bool fDisableDebugLog = false; // FIXME.SUGAR // add disable "debug.log" // REMOVE after BTC 0.17
 bool fPrintToDebugLog = true;
 
 bool fLogTimestamps = DEFAULT_LOGTIMESTAMPS;
@@ -349,6 +350,10 @@ int LogPrintStr(const std::string &str)
         // print to console
         ret = fwrite(strTimestamped.data(), 1, strTimestamped.size(), stdout);
         fflush(stdout);
+    }
+    else if (fDisableDebugLog) // FIXME.SUGAR // add disable "debug.log" // REMOVE after BTC 0.17
+    {
+        // do nothing
     }
     else if (fPrintToDebugLog)
     {
