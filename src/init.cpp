@@ -1,5 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2017 The Bitcoin Core developers
+// Copyright (c) 2014-2018 The BitZeny developers
+// Copyright (c) 2018 The Sugarchain developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -43,6 +45,9 @@
 #include <util.h>
 #include <utilmoneystr.h>
 #include <validationinterface.h>
+
+#include <hashdb.h>
+
 #ifdef ENABLE_WALLET
 #include <wallet/init.h>
 #endif
@@ -247,6 +252,7 @@ void Shutdown()
         pcoinscatcher.reset();
         pcoinsdbview.reset();
         pblocktree.reset();
+        phashdb.reset();
     }
 #ifdef ENABLE_WALLET
     StopWallets();
@@ -1432,6 +1438,10 @@ bool AppInitMain()
                 // fails if it's still open from the previous loop. Close it first:
                 pblocktree.reset();
                 pblocktree.reset(new CBlockTreeDB(nBlockTreeDBCache, false, fReset));
+
+                // TODO: add cache size option for CHashDB
+                phashdb.reset();
+                phashdb.reset(new CHashDB(nBlockTreeDBCache, false, fReset));
 
                 if (fReset) {
                     pblocktree->WriteReindexing(true);
