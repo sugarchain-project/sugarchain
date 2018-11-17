@@ -43,7 +43,7 @@ config file):
 
 	HiddenServiceDir /var/lib/tor/bitcoin-service/
 	HiddenServicePort 7979 127.0.0.1:7979
-	HiddenServicePort 18333 127.0.0.1:18333
+	HiddenServicePort 17979 127.0.0.1:17979
 
 The directory can be different of course, but (both) port numbers should be equal to
 your bitcoind's P2P listen port (7979 by default).
