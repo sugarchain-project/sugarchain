@@ -77,7 +77,7 @@ public:
     CMainParams() {
         strNetworkID = "main";
         consensus.nSubsidyHalvingInterval = 4200000; // 20x bitcoin // 210000 * 20
-        // consensus.BIP16Height = 0; // always on // FIXME.SUGAR
+        consensus.BIP16Height = 0;  // always on
         consensus.BIP34Height = 0;  // always on
         consensus.BIP34Hash = uint256S("0x202ee1f14d11dd1f3fd2746945c64bf7cdac39f24223e19e18939d782dfac9b1");   // always on // genesis
         consensus.BIP65Height = 0;  // always on
@@ -138,8 +138,8 @@ public:
         // vSeeds.emplace_back("seed.bitcoin.jonasschnelli.ch"); // Jonas Schnelli, only supports x1, x5, x9, and xd
         // vSeeds.emplace_back("seed.btc.petertodd.org"); // Peter Todd, only supports x1, x5, x9, and xd
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,63);  // S (upper)
-        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,5);
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,125); // s (lower)
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,63);  // S (upper)
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,128);
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
@@ -176,7 +176,7 @@ public:
     CTestNetParams() {
         strNetworkID = "test";
         consensus.nSubsidyHalvingInterval = 4200000;
-        // consensus.BIP16Height = 0;  // always on // FIXME.SUGAR
+        consensus.BIP16Height = 0;  // always on
         consensus.BIP34Height = 0;  // always on
         consensus.BIP34Hash = uint256S("0x42c6257468e29f8aff8fe9116bbb2ba27aaa7062a3276846267725c3da2e2746");   // genesis // always on
         consensus.BIP65Height = 0; // always on
