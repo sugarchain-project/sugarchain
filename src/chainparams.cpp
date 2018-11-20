@@ -79,10 +79,10 @@ public:
         consensus.nSubsidyHalvingInterval = 4200000; // 20x bitcoin // 210000 * 20
         consensus.BIP16Height = 0;  // always on
         consensus.BIP34Height = 0;  // always on
-        consensus.BIP34Hash = uint256S("0x202ee1f14d11dd1f3fd2746945c64bf7cdac39f24223e19e18939d782dfac9b1");   // always on // genesis
+        consensus.BIP34Hash = uint256S("0x0005ab1f82e540826c218b634f82a99e292913303747244685d561d90bc06de5");   // always on // genesis
         consensus.BIP65Height = 0;  // always on
         consensus.BIP66Height = 0;  // always on
-        consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x207fffff
+        consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1e0ffff0
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600 // before DGW3
         consensus.nPowTargetSpacing = 0.5 * 60; // 30 sec.
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -107,7 +107,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x00"); // FIXME.SUGAR
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x202ee1f14d11dd1f3fd2746945c64bf7cdac39f24223e19e18939d782dfac9b1"); // genesis
+        consensus.defaultAssumeValid = uint256S("0x0005ab1f82e540826c218b634f82a99e292913303747244685d561d90bc06de5"); // genesis
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -121,9 +121,9 @@ public:
         nDefaultPort = 7979;
         nPruneAfterHeight = 100000;
 
-        genesis = CreateGenesisBlock(1541009400, 1, 0x207fffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541009400, 23862, 0x1f07ffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x202ee1f14d11dd1f3fd2746945c64bf7cdac39f24223e19e18939d782dfac9b1"));
+        assert(consensus.hashGenesisBlock == uint256S("0x0005ab1f82e540826c218b634f82a99e292913303747244685d561d90bc06de5"));
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         // Note that of those which support the service bits prefix, most only support a subset of
@@ -154,7 +154,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x202ee1f14d11dd1f3fd2746945c64bf7cdac39f24223e19e18939d782dfac9b1")}, // genesis
+                {0, uint256S("0x00000730dc516bd33861a99b07e2cefc2264a9d5056bc7adff5b42e4101bcf72")}, // genesis
             }
         };
 
