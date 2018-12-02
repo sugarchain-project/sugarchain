@@ -83,16 +83,9 @@ TestingSetup::TestingSetup(const std::string& chainName) : BasicTestingSetup(cha
         GetMainSignals().RegisterBackgroundSignalScheduler(scheduler);
 
         mempool.setSanityCheck(1.0);
-
-        pcoinsTip.reset(new CCoinsViewCache(pcoinsdbview.get()));
-        pcoinsdbview.reset(new CCoinsViewDB(1 << 23, true));
-
         pblocktree.reset(new CBlockTreeDB(1 << 20, true));
         pcoinsdbview.reset(new CCoinsViewDB(1 << 23, true));
         pcoinsTip.reset(new CCoinsViewCache(pcoinsdbview.get()));
-
-        phashdb.reset(new CHashDB(1 << 23, true));
-
         if (!LoadGenesisBlock(chainparams)) {
             throw std::runtime_error("LoadGenesisBlock failed.");
         }
@@ -122,9 +115,6 @@ TestingSetup::~TestingSetup()
         pcoinsTip.reset();
         pcoinsdbview.reset();
         pblocktree.reset();
-
-        phashdb.reset();
-
         fs::remove_all(pathTemp);
 }
 
@@ -166,7 +156,7 @@ TestChain100Setup::CreateAndProcessBlock(const std::vector<CMutableTransaction>&
         IncrementExtraNonce(&block, chainActive.Tip(), extraNonce);
     }
 
-    while (!CheckProofOfWork(block.GetHash(), block.nBits, chainparams.GetConsensus())) ++block.nNonce;
+    while (!CheckProofOfWork(block.GetPoWHash(), block.nBits, chainparams.GetConsensus())) ++block.nNonce;
 
     std::shared_ptr<const CBlock> shared_pblock = std::make_shared<const CBlock>(block);
     ProcessNewBlock(chainparams, shared_pblock, true, nullptr);

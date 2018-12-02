@@ -16,8 +16,6 @@
 
 #include <vector>
 
-#include <hashdb.h>
-
 /**
  * Maximum amount of time that a block timestamp is allowed to exceed the
  * current network-adjusted time before the block will be accepted.
@@ -298,6 +296,11 @@ public:
         return *phashBlock;
     }
 
+    uint256 GetBlockPoWHash() const
+    {
+        return GetBlockHeader().GetPoWHash();
+    }
+
     int64_t GetBlockTime() const
     {
         return (int64_t)nTime;
@@ -420,9 +423,7 @@ public:
         block.nTime           = nTime;
         block.nBits           = nBits;
         block.nNonce          = nNonce;
-
-        assert(phashdb != nullptr); // FIXME: Benchmark and tests don't initialize hash database
-        return phashdb->GetHash(block);
+        return block.GetHash();
     }
 
 

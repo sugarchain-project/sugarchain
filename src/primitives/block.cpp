@@ -12,9 +12,56 @@
 #include <utilstrencodings.h>
 #include <crypto/common.h>
 
+#include <stdlib.h>
+#include "crypto/yespower-1.0.0/yespower.h"
+#include "streams.h"
+#include "version.h"
+#include "crypto/yespower-sugarchain.c"
+
 uint256 CBlockHeader::GetHash() const
 {
-    return SerializeHashYespower(*this);
+    return SerializeHash(*this);
+}
+
+// uint256 CBlockHeader::GetPoWHash() const
+// {
+//     uint256 thash;
+//     yespower_hash(BEGIN(nVersion), BEGIN(thash));
+//     return thash;
+// }
+
+// src/crypto/yespower-sugarchain.c
+// void yespower_hash(const char *input, char *output)
+// {
+//     yespower_params_t yespower_1_0_sugarchain = {
+//         .version = YESPOWER_1_0,
+//         .N = 2048,
+//         .r = 32,
+//         .pers = NULL,
+//         .perslen = 0
+//     };
+//     if (yespower_tls((unsigned char *)input, 80, &yespower_1_0_sugarchain, (yespower_binary_t *)output)) {
+//         abort();
+//     }
+// }
+
+uint256 CBlockHeader::GetPoWHash() const
+{
+    uint256 thash;
+    CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
+    ss << *this;
+    yespower_params_t yespower_1_0_sugarchain = {
+        // static const yespower_params_t yespower_1_0_sugarchain = {YESPOWER_1_0, 2048, 32, NULL, 0};
+        .version = YESPOWER_1_0,
+        .N = 2048,
+        .r = 32,
+        .pers = NULL,
+        .perslen = 0
+    };
+    if (yespower_tls( (unsigned char *)&ss[0], ss.size(), &yespower_1_0_sugarchain, (yespower_binary_t *)&thash) ) {
+        abort();
+    }
+    return thash;
 }
 
 std::string CBlock::ToString() const

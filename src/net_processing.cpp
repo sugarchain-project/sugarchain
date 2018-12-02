@@ -34,8 +34,6 @@
 
 #include <memory>
 
-#include <hashdb.h>
-
 #if defined(NDEBUG)
 # error "Sugarchain cannot be compiled without assertions."
 #endif
@@ -927,7 +925,7 @@ void PeerLogicValidation::UpdatedBlockTip(const CBlockIndex *pindexNew, const CB
 void PeerLogicValidation::BlockChecked(const CBlock& block, const CValidationState& state) {
     LOCK(cs_main);
 
-    const uint256 hash(phashdb->GetHash(block));
+    const uint256 hash(block.GetHash());
     std::map<uint256, std::pair<NodeId, bool>>::iterator it = mapBlockSource.find(hash);
 
     int nDoS = 0;
