@@ -78,8 +78,8 @@ public:
         strNetworkID = "main";
         consensus.nSubsidyHalvingInterval = 4200000; // 20x bitcoin // 210000 * 20
         consensus.BIP16Height = 0;  // always on
-        consensus.BIP34Height = 0;  // always on
-        consensus.BIP34Hash = uint256S("0x13ba2437e0d213a2f2d3dacb5f3160e5e40a2f3889b2cb74a551750691e66156");   // always on // genesis
+        consensus.BIP34Height = 1; // FIXME.SUGAR
+        consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
         consensus.BIP65Height = 0;  // always on
         consensus.BIP66Height = 0;  // always on
         consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1e0ffff0
@@ -181,8 +181,8 @@ public:
         strNetworkID = "test";
         consensus.nSubsidyHalvingInterval = 4200000;
         consensus.BIP16Height = 0;  // always on
-        consensus.BIP34Height = 0;  // always on
-        consensus.BIP34Hash = uint256S("0x56e24f1101246bd24e73171688791aa3438e84bd6e3e3387d96ddd36f2a30e4a");   // genesis // always on
+        consensus.BIP34Height = 1; // FIXME.SUGAR
+        consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
         consensus.BIP65Height = 0; // always on
         consensus.BIP66Height = 0; // always on
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x207fffff
