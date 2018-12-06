@@ -236,13 +236,13 @@ public:
         // vSeeds.emplace_back("seed.testnet.bitcoin.sprovoost.nl");
         // vSeeds.emplace_back("testnet-seed.bluematt.me"); // Just a static list of stable node(s), only supports x9
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
-        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,66);  // legacy: starting with T (upper)
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,128); // p2sh-segwit: stwrting with t (lower)
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        bech32_hrp = "test";
+        bech32_hrp = "tugar";     // bech32: starting with tugar1q
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_test, pnSeed6_test + ARRAYLEN(pnSeed6_test));
 
@@ -310,13 +310,13 @@ public:
         nDefaultPort = 17799;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1540000002, 31819, 0x1e0ffff0, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1540000001, 0, 0x207fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         printf("***\n");
         printf("genesis.GetHash.REGTEST = %s\n", genesis.GetHash().ToString().c_str());
         printf("genesis.GetPoWHash.REGTEST = %s\n", genesis.GetPoWHash().ToString().c_str());
         printf("***\n");
-        assert(consensus.hashGenesisBlock == uint256S("0x19e8c73886277a644580d9785cb8f78a7bc6ff98f20c52c5d490357f672cae02"));
+        assert(consensus.hashGenesisBlock == uint256S("0x56e24f1101246bd24e73171688791aa3438e84bd6e3e3387d96ddd36f2a30e4a"));
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
@@ -328,7 +328,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x19e8c73886277a644580d9785cb8f78a7bc6ff98f20c52c5d490357f672cae02")}, // genesis
+                {0, uint256S("0x56e24f1101246bd24e73171688791aa3438e84bd6e3e3387d96ddd36f2a30e4a")}, // genesis
             }
         };
 
@@ -344,7 +344,7 @@ public:
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        bech32_hrp = "rtest";
+        bech32_hrp = "rugar";    // bech32: starting with rugar1q
     }
 };
 
