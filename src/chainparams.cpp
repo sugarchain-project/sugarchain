@@ -82,7 +82,7 @@ public:
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
         consensus.BIP65Height = 0;  // always on
         consensus.BIP66Height = 0;  // always on
-        consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1e0ffff0
+        consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f07ffff
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600 // before DGW3
         consensus.nPowTargetSpacing = 0.5 * 60; // 30 sec.
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -126,6 +126,7 @@ public:
         printf("***\n");
         printf("genesis.GetHash.MAIN = %s\n", genesis.GetHash().ToString().c_str());
         printf("genesis.GetPoWHash.MAIN = %s\n", genesis.GetPoWHash().ToString().c_str());
+        printf("genesis.hashMerkleRoot.GetHash.MAIN %s\n",genesis.hashMerkleRoot.ToString().c_str());
         printf("***\n");
         assert(consensus.hashGenesisBlock == uint256S("0x13ba2437e0d213a2f2d3dacb5f3160e5e40a2f3889b2cb74a551750691e66156"));
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
@@ -185,7 +186,7 @@ public:
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
         consensus.BIP65Height = 0; // always on
         consensus.BIP66Height = 0; // always on
-        consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x207fffff
+        consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f07ffff
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600 // before DGW3
         consensus.nPowTargetSpacing = 0.5 * 60; // 30 sec.
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -210,7 +211,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x56e24f1101246bd24e73171688791aa3438e84bd6e3e3387d96ddd36f2a30e4a"); // genesis
+        consensus.defaultAssumeValid = uint256S("0x33ddfd509b0a71e4e488fc6b4507ef79eac8246347276396c2f53cf78de7b286"); // genesis
 
         pchMessageStart[0] = 0xb0;
         pchMessageStart[1] = 0x11;
@@ -219,13 +220,14 @@ public:
         nDefaultPort = 17979;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1541009401, 0, 0x207fffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541009401, 12592, 0x1f07ffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         printf("***\n");
         printf("genesis.GetHash.TESTNET = %s\n", genesis.GetHash().ToString().c_str());
         printf("genesis.GetPoWHash.TESTNET = %s\n", genesis.GetPoWHash().ToString().c_str());
+        printf("genesis.hashMerkleRoot.GetHash.TESTNET %s\n",genesis.hashMerkleRoot.ToString().c_str());
         printf("***\n");
-        assert(consensus.hashGenesisBlock == uint256S("0x56e24f1101246bd24e73171688791aa3438e84bd6e3e3387d96ddd36f2a30e4a"));
+        assert(consensus.hashGenesisBlock == uint256S("0x33ddfd509b0a71e4e488fc6b4507ef79eac8246347276396c2f53cf78de7b286"));
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         vFixedSeeds.clear();
@@ -253,7 +255,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x56e24f1101246bd24e73171688791aa3438e84bd6e3e3387d96ddd36f2a30e4a")}, // genesis
+                {0, uint256S("0x33ddfd509b0a71e4e488fc6b4507ef79eac8246347276396c2f53cf78de7b286")}, // genesis
             }
         };
 
@@ -301,7 +303,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x00");
+        consensus.defaultAssumeValid = uint256S("0x00"); // genesis
 
         pchMessageStart[0] = 0xaf;
         pchMessageStart[1] = 0xfb;
@@ -310,13 +312,14 @@ public:
         nDefaultPort = 17799;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1540000001, 0, 0x207fffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1540000000, 1, 0x207fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         printf("***\n");
         printf("genesis.GetHash.REGTEST = %s\n", genesis.GetHash().ToString().c_str());
         printf("genesis.GetPoWHash.REGTEST = %s\n", genesis.GetPoWHash().ToString().c_str());
+        printf("genesis.hashMerkleRoot.GetHash.REGTEST %s\n",genesis.hashMerkleRoot.ToString().c_str());
         printf("***\n");
-        assert(consensus.hashGenesisBlock == uint256S("0x56e24f1101246bd24e73171688791aa3438e84bd6e3e3387d96ddd36f2a30e4a"));
+        assert(consensus.hashGenesisBlock == uint256S("0x1e036a1e10d802d290b1f244b496db0eab1d0a1c385411e664e1d9b906cf3672"));
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
@@ -328,7 +331,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x56e24f1101246bd24e73171688791aa3438e84bd6e3e3387d96ddd36f2a30e4a")}, // genesis
+                {0, uint256S("0x1e036a1e10d802d290b1f244b496db0eab1d0a1c385411e664e1d9b906cf3672")}, // genesis
             }
         };
 
@@ -338,8 +341,8 @@ public:
             0
         };
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
-        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,61);  // legacy: starting with R (upper)
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,123); // p2sh-segwit: stwrting with r (lower)
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,239);
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
