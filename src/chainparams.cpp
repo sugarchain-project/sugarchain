@@ -126,7 +126,7 @@ public:
         printf("***\n");
         printf("genesis.GetHash.MAIN = %s\n", genesis.GetHash().ToString().c_str());
         printf("genesis.GetPoWHash.MAIN = %s\n", genesis.GetPoWHash().ToString().c_str());
-        printf("genesis.hashMerkleRoot.GetHash.MAIN %s\n",genesis.hashMerkleRoot.ToString().c_str());
+        printf("genesis.hashMerkleRoot.MAIN %s\n",genesis.hashMerkleRoot.ToString().c_str());
         printf("***\n");
         assert(consensus.hashGenesisBlock == uint256S("0x10603e42df8af98b64d8a4bc9699b59faa6ae37dfece4d9a060be44f5a7aee97"));
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
@@ -225,7 +225,7 @@ public:
         printf("***\n");
         printf("genesis.GetHash.TESTNET = %s\n", genesis.GetHash().ToString().c_str());
         printf("genesis.GetPoWHash.TESTNET = %s\n", genesis.GetPoWHash().ToString().c_str());
-        printf("genesis.hashMerkleRoot.GetHash.TESTNET %s\n",genesis.hashMerkleRoot.ToString().c_str());
+        printf("genesis.hashMerkleRoot.TESTNET %s\n",genesis.hashMerkleRoot.ToString().c_str());
         printf("***\n");
         assert(consensus.hashGenesisBlock == uint256S("0x0cd2892e2d72806e550ffb8730870ce88ee53dbefe8eb882d17b23e3d34321f1"));
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
@@ -317,7 +317,7 @@ public:
         printf("***\n");
         printf("genesis.GetHash.REGTEST = %s\n", genesis.GetHash().ToString().c_str());
         printf("genesis.GetPoWHash.REGTEST = %s\n", genesis.GetPoWHash().ToString().c_str());
-        printf("genesis.hashMerkleRoot.GetHash.REGTEST %s\n",genesis.hashMerkleRoot.ToString().c_str());
+        printf("genesis.hashMerkleRoot.REGTEST %s\n",genesis.hashMerkleRoot.ToString().c_str());
         printf("***\n");
         assert(consensus.hashGenesisBlock == uint256S("0x263837a52ecfb31c0d80c23e41404e6e7dc659cb2c3a5956bb0f57f193d024ac"));
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
