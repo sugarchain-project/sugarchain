@@ -78,7 +78,7 @@ public:
         strNetworkID = "main";
         consensus.nSubsidyHalvingInterval = 4200000; // 20x bitcoin // 210000 * 20
         consensus.BIP16Height = 0;  // always on
-        consensus.BIP34Height = 1; // FIXME.SUGAR
+        consensus.BIP34Height = 17; // FIXME.SUGAR
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
         consensus.BIP65Height = 0;  // always on
         consensus.BIP66Height = 0;  // always on
@@ -182,7 +182,7 @@ public:
         strNetworkID = "test";
         consensus.nSubsidyHalvingInterval = 4200000;
         consensus.BIP16Height = 0;  // always on
-        consensus.BIP34Height = 1; // FIXME.SUGAR
+        consensus.BIP34Height = 17; // FIXME.SUGAR
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
         consensus.BIP65Height = 0; // always on
         consensus.BIP66Height = 0; // always on
@@ -278,7 +278,7 @@ public:
         strNetworkID = "regtest";
         consensus.nSubsidyHalvingInterval = 150;
         consensus.BIP16Height = 0; // always enforce P2SH BIP16 on regtest
-        consensus.BIP34Height = 100000000; // BIP34 has not activated on regtest (far in the future so block v1 are not rejected in tests)
+        consensus.BIP34Height = 17; // FIXME.SUGAR // BIP34 has not activated on regtest (far in the future so block v1 are not rejected in tests)
         consensus.BIP34Hash = uint256();
         consensus.BIP65Height = 1351; // BIP65 activated on regtest (Used in rpc activation tests)
         consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in rpc activation tests)
