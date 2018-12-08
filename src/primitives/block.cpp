@@ -55,8 +55,8 @@ uint256 CBlockHeader::GetPoWHash() const
         .version = YESPOWER_1_0,
         .N = 2048,
         .r = 32,
-        .pers = NULL,
-        .perslen = 0
+        .pers = (const uint8_t *)"Sugarchain: Decentralized Cryptocurrency for one-CPU-one-vote",
+        .perslen = 61
     };
     if (yespower_tls( (unsigned char *)&ss[0], ss.size(), &yespower_1_0_sugarchain, (yespower_binary_t *)&thash) ) {
         abort();
