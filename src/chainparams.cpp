@@ -76,7 +76,7 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        consensus.nSubsidyHalvingInterval = 4200000; // 20x bitcoin // 210000 * 20
+        consensus.nSubsidyHalvingInterval = 8400000; // 40x bitcoin // 210000 * 40
         consensus.BIP16Height = 0;  // always on
         consensus.BIP34Height = 17; // FIXME.SUGAR
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
@@ -84,11 +84,11 @@ public:
         consensus.BIP66Height = 0;  // always on
         consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f07ffff
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600 // before DGW3
-        consensus.nPowTargetSpacing = 0.5 * 60; // 30 sec.
+        consensus.nPowTargetSpacing = 0.25 * 60; // 15 sec. // 40x bitcoin // 10 * 60 / 40 = 15
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
-        consensus.nRuleChangeActivationThreshold = 30240; // 75% of 2 weeks: 1209600 / 30 * 0.75
-        consensus.nMinerConfirmationWindow = 40320; // nPowTargetTimespan / nPowTargetSpacing: 1209600 / 30
+        consensus.nRuleChangeActivationThreshold = 60480; // 75% of 2 weeks: 1209600 / 15 * 0.75
+        consensus.nMinerConfirmationWindow = 80640; // nPowTargetTimespan / nPowTargetSpacing: 1209600 / 15
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
@@ -180,7 +180,7 @@ class CTestNetParams : public CChainParams {
 public:
     CTestNetParams() {
         strNetworkID = "test";
-        consensus.nSubsidyHalvingInterval = 4200000;
+        consensus.nSubsidyHalvingInterval = 8400000; // 40x bitcoin // 210000 * 40
         consensus.BIP16Height = 0;  // always on
         consensus.BIP34Height = 17; // FIXME.SUGAR
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
@@ -188,11 +188,11 @@ public:
         consensus.BIP66Height = 0; // always on
         consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f07ffff
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600 // before DGW3
-        consensus.nPowTargetSpacing = 0.5 * 60; // 30 sec.
+        consensus.nPowTargetSpacing = 0.25 * 60; // 15 sec. // 40x bitcoin // 10 * 60 / 40 = 15
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
-        consensus.nRuleChangeActivationThreshold = 30240; // 75% of 2 weeks: 1209600 / 30 * 0.75
-        consensus.nMinerConfirmationWindow = 40320; // nPowTargetTimespan / nPowTargetSpacing: 1209600 / 30
+        consensus.nRuleChangeActivationThreshold = 60480; // 75% of 2 weeks: 1209600 / 15 * 0.75
+        consensus.nMinerConfirmationWindow = 80640; // nPowTargetTimespan / nPowTargetSpacing: 1209600 / 15
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
@@ -276,19 +276,19 @@ class CRegTestParams : public CChainParams {
 public:
     CRegTestParams() {
         strNetworkID = "regtest";
-        consensus.nSubsidyHalvingInterval = 150;
+        consensus.nSubsidyHalvingInterval = 6000;    // 40x bitcoin // 150 * 40
         consensus.BIP16Height = 0; // always enforce P2SH BIP16 on regtest
         consensus.BIP34Height = 17; // FIXME.SUGAR // BIP34 has not activated on regtest (far in the future so block v1 are not rejected in tests)
         consensus.BIP34Hash = uint256();
         consensus.BIP65Height = 1351; // BIP65 activated on regtest (Used in rpc activation tests)
         consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in rpc activation tests)
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
-        consensus.nPowTargetSpacing = 0.5 * 60; // 30 sec.
+        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600 // before DGW3
+        consensus.nPowTargetSpacing = 0.25 * 60; // 15 sec. // 40x bitcoin // 10 * 60 / 40 = 15
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
-        consensus.nRuleChangeActivationThreshold = 108; // 75% for testchains
-        consensus.nMinerConfirmationWindow = 144; // Faster than normal for regtest (144 instead of 2016)
+        consensus.nRuleChangeActivationThreshold = 4320; // 75% for testchains // 40x bitcoin // 108 * 40
+        consensus.nMinerConfirmationWindow = 5760; // Faster than normal for regtest (144 instead of 2016) // 40x bitcoin // 144 * 40
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 0;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
