@@ -20,7 +20,7 @@
  * Maximum amount of time that a block timestamp is allowed to exceed the
  * current network-adjusted time before the block will be accepted.
  */
-static const int64_t MAX_FUTURE_BLOCK_TIME = 2 * 60 * 60;
+static const int64_t MAX_FUTURE_BLOCK_TIME = 300; //  FTL must be changed to 300 or N*T/20 whichever is higher. //  FTL in BTC clones is MAX_FUTURE_BLOCK_TIME in chain.h.
 
 /**
  * Timestamp window used as a grace period by code that compares external
