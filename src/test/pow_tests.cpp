@@ -13,6 +13,23 @@
 
 BOOST_FIXTURE_TEST_SUITE(pow_tests, BasicTestingSetup)
 
+BOOST_AUTO_TEST_CASE(Lwma3CalculateNextWorkRequired_test)
+{
+    // Copyright (c) 2017-2018 h4x3rotab of the Bitcoin Gold
+    const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
+    std::vector<CBlockIndex> blocks(805); // (N * 4) + 5 = (200 * 4) + 5 = 805
+    for (int i = 0; i < 805; i++) {
+        blocks[i].pprev = i ? &blocks[i - 1] : nullptr;
+        blocks[i].nHeight = i;
+        blocks[i].nTime = 1541009400 + i * chainParams->GetConsensus().nPowTargetSpacing; // block:0
+        blocks[i].nBits = 0x1f07ffff; // block:0 // 0x1f07ffff = 520617983
+        blocks[i].nChainWork = i ? blocks[i - 1].nChainWork + GetBlockProof(blocks[i - 1]) : arith_uint256(0);
+    }
+
+    int bits = Lwma3CalculateNextWorkRequired(&blocks.back(), chainParams->GetConsensus());
+    BOOST_CHECK_EQUAL(bits, 0x1f07fffe); // 0x1f07fffe = 520617983(0x1f07ffff) - 1 = 520617982
+}
+
 // /* Test calculation of next difficulty target with no constraints applying */
 // BOOST_AUTO_TEST_CASE(get_next_work)
 // {

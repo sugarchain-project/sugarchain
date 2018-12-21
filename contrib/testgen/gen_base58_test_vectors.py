@@ -18,10 +18,10 @@ import random
 from binascii import b2a_hex
 
 # key types
-PUBKEY_ADDRESS = 0
-SCRIPT_ADDRESS = 5
-PUBKEY_ADDRESS_TEST = 111
-SCRIPT_ADDRESS_TEST = 196
+PUBKEY_ADDRESS = 63
+SCRIPT_ADDRESS = 125
+PUBKEY_ADDRESS_TEST = 66
+SCRIPT_ADDRESS_TEST = 128
 PRIVKEY = 128
 PRIVKEY_TEST = 239
 
@@ -125,4 +125,3 @@ if __name__ == '__main__':
     data = list(islice(uiter(), count))
     json.dump(data, sys.stdout, sort_keys=True, indent=4)
     sys.stdout.write('\n')
-
