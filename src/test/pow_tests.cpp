@@ -13,7 +13,7 @@
 
 BOOST_FIXTURE_TEST_SUITE(pow_tests, BasicTestingSetup)
 
-BOOST_AUTO_TEST_CASE(Lwma3CalculateNextWorkRequired_test)
+BOOST_AUTO_TEST_CASE(h4x3rotab_test)
 {
     // Copyright (c) 2017-2018 h4x3rotab of the Bitcoin Gold
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
@@ -28,6 +28,188 @@ BOOST_AUTO_TEST_CASE(Lwma3CalculateNextWorkRequired_test)
 
     int bits = Lwma3CalculateNextWorkRequired(&blocks.back(), chainParams->GetConsensus());
     BOOST_CHECK_EQUAL(bits, 0x1f07fffe); // 0x1f07fffe = 520617983(0x1f07ffff) - 1 = 520617982
+}
+
+static CBlockIndex GetBlockIndex(CBlockIndex *pindexPrev, int64_t nTimeInterval, uint32_t nBits) {
+    CBlockIndex block;
+    block.pprev = pindexPrev;
+    block.nHeight = pindexPrev->nHeight + 1;
+    block.nTime = pindexPrev->nTime + nTimeInterval;
+    block.nBits = nBits;
+
+    block.nChainWork = pindexPrev->nChainWork + GetBlockProof(block);
+    return block;
+}
+
+BOOST_AUTO_TEST_CASE(ishikawa_test) {
+    // Copyright (c) 2018 ishikawa-pss9 of the Susucoin Core developers
+    const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
+
+    std::vector<CBlockIndex> blocks(3000);
+
+    const arith_uint256 powLimit = UintToArith256(chainParams->GetConsensus().powLimit);
+    // uint32_t powLimitBits = powLimit.GetCompact();
+    arith_uint256 currentPow = powLimit >> 4;
+    uint32_t initialBits = currentPow.GetCompact();
+
+    // Genesis block.
+    blocks[0] = CBlockIndex();
+    blocks[0].nHeight = 0;
+    blocks[0].nTime = 1541009400;
+    blocks[0].nBits = initialBits;
+
+    blocks[0].nChainWork = GetBlockProof(blocks[0]);
+
+    // Block counter.
+    size_t i;
+
+    // Create the first window for lwma, with blocks every 10 minutes.
+    // consensus.lwmaAveragingWindow = 200; 
+    // N=200 for T=15: Lwma3CalculateNextWorkRequired
+    for (i = 1; i < 202; i++) {
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 600, initialBits); // 0x1f07ffff
+    }
+
+    uint32_t nBits =
+        Lwma3CalculateNextWorkRequired(&blocks[201], chainParams->GetConsensus());
+
+    // For the first window, with 10 minutes between blocks, the difficulty should be low.
+    BOOST_CHECK_EQUAL( nBits, 0x1f02ffff ); // 520421370
+
+    // Add one block far in the future.
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 6000, nBits);
+    // The difficulty is now a somewhat lower.
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    BOOST_CHECK_EQUAL( nBits, 0x1f031333 ); // 520295219
+
+    // Add another block with a normal timestamp.
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 2 * 600 - 6000, nBits);
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    // The difficulty is now just a little bit lower, again.
+    BOOST_CHECK_EQUAL( nBits, 0x1f031f09 ); // 520298249
+
+    // And another block with a regular timestamp.
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 600, nBits);
+    // The difficulty has lowered yet again, by a fraction.
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    BOOST_CHECK_EQUAL( nBits, 0x1f032ade ); // 520301278
+
+    // Simulate a hash attack, add a window with very low increase.
+    for ( int j = 0; j < 10; j++ ) {
+        // first, add one block with 0.125 second interval
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 0.125, nBits);
+        nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+	// then add 20 more with zero second interval
+        for ( int k = 0; k < 20; k++ ) {
+            blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
+            nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+        }
+        // and do that ten times.  That gives us 200 block window with very high frequency
+        // of blocks.
+    }
+    // The difficulty is now significantly higher.
+    BOOST_CHECK_EQUAL( nBits, 0x1e2eaf51 ); // 506376017
+
+    // Add one more block with a significant delay.
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 4 * 3600, nBits);
+    // The difficulty has lowered significantly.
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    BOOST_CHECK_EQUAL( nBits, 0x1e577959 ); // 509049177
+
+    // One more block with little less delay.
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 2 * 3600, nBits);
+    // The difficulty has lowered again.
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    BOOST_CHECK_EQUAL( nBits, 0x1e7f90f4 ); // 511676660
+}
+
+BOOST_AUTO_TEST_CASE(sugarchain_test) {
+    // Copyright (c) 2018 The Sugarchain Core developers
+    const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
+
+    std::vector<CBlockIndex> blocks(500);
+
+    const arith_uint256 powLimit = UintToArith256(chainParams->GetConsensus().powLimit);
+    uint32_t powLimitBits = powLimit.GetCompact();
+    arith_uint256 currentPow = powLimit >> 4;
+    uint32_t initialBits = currentPow.GetCompact();
+    printf("******\n");
+    printf("%-12s %s\n", "Parameter", "Value");
+    printf("%-12s %s\n", "powLimit", powLimit.ToString().c_str());
+    printf("%-12s %u / %x\n", "powLimitBits", (unsigned)powLimitBits, (unsigned)powLimitBits);
+    printf("%-12s %s\n", "currentPow", currentPow.ToString().c_str());
+    printf("%-12s %u / %x\n", "initialBits", (unsigned)currentPow.GetCompact(), (unsigned)currentPow.GetCompact());
+    printf("******\n");
+
+    // Genesis block.
+    blocks[0] = CBlockIndex();
+    blocks[0].nHeight = 0;
+    blocks[0].nTime = 1541009400;
+    blocks[0].nBits = initialBits;
+
+    blocks[0].nChainWork = GetBlockProof(blocks[0]);
+
+    // Block counter.
+    size_t i;
+
+    // Create the first window for lwma, with blocks every 10 minutes.
+    // consensus.lwmaAveragingWindow = 200; 
+    // N=200 for T=15: Lwma3CalculateNextWorkRequired
+    for (i = 1; i < 202; i++) {
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 600, initialBits); // 0x1f07ffff
+    }
+
+    uint32_t nBits =
+        Lwma3CalculateNextWorkRequired(&blocks[201], chainParams->GetConsensus());
+
+    // For the first window, with 10 minutes between blocks, the difficulty should be low.
+    BOOST_CHECK_EQUAL( nBits, 0x1f02ffff ); // 520421370
+
+    // Add one block far in the future.
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 6000, nBits);
+    // The difficulty is now a somewhat lower.
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    BOOST_CHECK_EQUAL( nBits, 0x1f031333 ); // 520295219
+
+    // Add another block with a normal timestamp.
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 2 * 600 - 6000, nBits);
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    // The difficulty is now just a little bit lower, again.
+    BOOST_CHECK_EQUAL( nBits, 0x1f031f09 ); // 520298249
+
+    // And another block with a regular timestamp.
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 600, nBits);
+    // The difficulty has lowered yet again, by a fraction.
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    BOOST_CHECK_EQUAL( nBits, 0x1f032ade ); // 520301278
+
+    // Simulate a hash attack, add a window with very low increase.
+    for ( int j = 0; j < 10; j++ ) {
+        // first, add one block with 0.125 second interval
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 0.125, nBits);
+        nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+	// then add 20 more with zero second interval
+        for ( int k = 0; k < 20; k++ ) {
+            blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
+            nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+        }
+        // and do that ten times.  That gives us 200 block window with very high frequency
+        // of blocks.
+    }
+    // The difficulty is now significantly higher.
+    BOOST_CHECK_EQUAL( nBits, 0x1e2eaf51 ); // 506376017
+
+    // Add one more block with a significant delay.
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 4 * 3600, nBits);
+    // The difficulty has lowered significantly.
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    BOOST_CHECK_EQUAL( nBits, 0x1e577959 ); // 509049177
+
+    // One more block with little less delay.
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 2 * 3600, nBits);
+    // The difficulty has lowered again.
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    BOOST_CHECK_EQUAL( nBits, 0x1e7f90f4 ); // 511676660
 }
 
 // /* Test calculation of next difficulty target with no constraints applying */
