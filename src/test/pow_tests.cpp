@@ -126,51 +126,84 @@ BOOST_AUTO_TEST_CASE(ishikawa_test) {
 BOOST_AUTO_TEST_CASE(sugarchain_test) {
     // Copyright (c) 2018 The Sugarchain Core developers
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
+    const Consensus::Params &mainnetParams = chainParams->GetConsensus();
 
     std::vector<CBlockIndex> blocks(500);
-
+    // Block counter.
+    int i = 0;
+    
     const arith_uint256 powLimit = UintToArith256(chainParams->GetConsensus().powLimit);
     uint32_t powLimitBits = powLimit.GetCompact();
-    arith_uint256 currentPow = powLimit >> 4;
-    uint32_t initialBits = currentPow.GetCompact();
-    printf("******\n");
-    printf("%-12s %s\n", "Parameter", "Value");
-    printf("%-12s %s\n", "powLimit", powLimit.ToString().c_str());
-    printf("%-12s %u / %x\n", "powLimitBits", (unsigned)powLimitBits, (unsigned)powLimitBits);
-    printf("%-12s %s\n", "currentPow", currentPow.ToString().c_str());
-    printf("%-12s %u / %x\n", "initialBits", (unsigned)currentPow.GetCompact(), (unsigned)currentPow.GetCompact());
-    printf("******\n");
+    // arith_uint256 currentPow = powLimit >> 4;
+    // uint32_t initialBits = currentPow.GetCompact();
+
+    printf("*** mainnetParams \n");
+    printf("%-12s %-5ld \n",        "T", mainnetParams.nPowTargetSpacing);
+    printf("%-12s %-5ld \n",        "N", mainnetParams.lwmaAveragingWindow);
+    printf("*** block[0] \n");
+    printf("%-12s %-5s %s\n",       "Parameter", "Block", "Value");
+    printf("%-12s %-5d %u / %x\n",  "powLimitBits", i, (unsigned)powLimitBits, (unsigned)powLimitBits);
+    printf("%-12s %-5d %s\n",       "powLimit",     i, powLimit.ToString().c_str());
+    // printf("%-12s %-5d %s\n",        "currentPow",   i, currentPow.ToString().c_str());
+    // printf("%-12s %-5d %u / %x\n",   "currentBits",  i, (unsigned)powLimit.GetCompact(), (unsigned)powLimit.GetCompact());
+    // printf("******\n");
 
     // Genesis block.
     blocks[0] = CBlockIndex();
     blocks[0].nHeight = 0;
     blocks[0].nTime = 1541009400;
-    blocks[0].nBits = initialBits;
+    blocks[0].nBits = powLimitBits;
 
     blocks[0].nChainWork = GetBlockProof(blocks[0]);
-
-    // Block counter.
-    size_t i;
 
     // Create the first window for lwma, with blocks every 10 minutes.
     // consensus.lwmaAveragingWindow = 200; 
     // N=200 for T=15: Lwma3CalculateNextWorkRequired
-    for (i = 1; i < 202; i++) {
-        blocks[i] = GetBlockIndex(&blocks[i - 1], 600, initialBits); // 0x1f07ffff
+    
+    /* Begin - First Window */
+    for (i = 1; i < 201; i++) {
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 15, powLimitBits); // 0x1f07ffff
     }
+    uint32_t nBits = Lwma3CalculateNextWorkRequired(&blocks[201], chainParams->GetConsensus());
 
-    uint32_t nBits =
-        Lwma3CalculateNextWorkRequired(&blocks[201], chainParams->GetConsensus());
-
-    // For the first window, with 10 minutes between blocks, the difficulty should be low.
-    BOOST_CHECK_EQUAL( nBits, 0x1f02ffff ); // 520421370
-
-    // Add one block far in the future.
-    blocks[i] = GetBlockIndex(&blocks[i - 1], 6000, nBits);
-    // The difficulty is now a somewhat lower.
+    // Last block for the first window: still same
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 15+1, nBits);
     nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-    BOOST_CHECK_EQUAL( nBits, 0x1f031333 ); // 520295219
+    printf("*** block[201] \n");
+    // printf("%-12s %-5d %s\n",       "currentPow",   i, currentPow.ToString().c_str());
+    printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
+    printf("*** \n");
+    BOOST_CHECK_EQUAL( nBits, powLimitBits ); // 0x1f07ffff
+    /* End - First Window */
+    
+    printf("*** filling first window finished \n");
+    printf("*** \n");
+    
+    // Add one block: still same
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 15+1, nBits);
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    printf("*** block[202] \n");
+    // printf("%-12s %-5d %s\n",       "currentPow",   i, currentPow.ToString().c_str());
+    printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
+    printf("*** \n");
+    BOOST_CHECK_EQUAL( nBits, powLimitBits ); // 0x1f07ffff
+    
+    // Add one block: little bit higher
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 15-1.0000000000000010, nBits);
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    printf("*** block[203] \n");
+    // printf("%-12s %-5d %s\n",       "currentPow",   i, currentPow.ToString().c_str());
+    printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
+    printf("*** \n");
+    BOOST_CHECK_EQUAL( nBits, 0x1f07fff9 );
 
+    // // Add one block far in the future.
+    // blocks[i] = GetBlockIndex(&blocks[i - 1], 6000, nBits);
+    // // The difficulty is now a somewhat lower.
+    // nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    // BOOST_CHECK_EQUAL( nBits, 0x1f031333 ); // 520295219
+
+    /*
     // Add another block with a normal timestamp.
     blocks[i] = GetBlockIndex(&blocks[i - 1], 2 * 600 - 6000, nBits);
     nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
@@ -210,6 +243,7 @@ BOOST_AUTO_TEST_CASE(sugarchain_test) {
     // The difficulty has lowered again.
     nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
     BOOST_CHECK_EQUAL( nBits, 0x1e7f90f4 ); // 511676660
+    */
 }
 
 // /* Test calculation of next difficulty target with no constraints applying */
