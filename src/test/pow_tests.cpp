@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(sugarchain_test) {
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
     const Consensus::Params &mainnetParams = chainParams->GetConsensus();
 
-    std::vector<CBlockIndex> blocks(500);
+    std::vector<CBlockIndex> blocks(99999);
     // Block counter.
     int i = 0;
     
@@ -172,7 +172,7 @@ BOOST_AUTO_TEST_CASE(sugarchain_test) {
     // arith_uint256 right = UintToArith256(uint256S("0007ffff00000000000000000000000000000000000000000000000000000000"));
     arith_uint256 right = powLimitFromBits;
     uint32_t rightBits = right.GetCompact();
-    printf("*** Check nBits\n");
+    printf("*** Check Genesis nBits\n");
     printf("%-12s %-5d %u / %x\n",  "nBitsA", i, leftBits, leftBits);
     printf("%-12s %-5d %s\n",       "powLimitA",     i, powLimit.ToString().c_str()); // 0x1f07ffff
     printf("%-12s %-5d %u / %x\n",  "nBitsB", i, rightBits, rightBits);
@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE(sugarchain_test) {
 
     blocks[0].nChainWork = GetBlockProof(blocks[0]);
 
-    // Create the first window for lwma, with blocks every 10 minutes.
+    // Create the first window for lwma, with blocks every 15 seconds.
     // consensus.lwmaAveragingWindow = 200; 
     // N=200 for T=15: Lwma3CalculateNextWorkRequired
     
@@ -202,24 +202,21 @@ BOOST_AUTO_TEST_CASE(sugarchain_test) {
     // Last block for the first window: still same
     blocks[i] = GetBlockIndex(&blocks[i - 1], 15+1, nBits);
     nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-    printf("*** block[201] \n");
+    printf("*** block[201] Last block for the first window: still same\n");
     printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
-    powLimitFromBits.SetCompact((unsigned)powLimitBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+    powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
     printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
-    printf("*** \n");
+    printf("*** filling the first window is finished \n");
     BOOST_CHECK_EQUAL( nBits, powLimitBits ); // 0x1f07ffff
     // BOOST_CHECK_EQUAL( powLimitBits.c_str(), powLimitFromBits.GetHex().c_str() ); // 0x1f07ffff // FIXME.SUGAR
     /* End - First Window */
     
-    printf("*** filling first window finished \n");
-    printf("*** \n");
-    
     // Add one block: still same
     blocks[i] = GetBlockIndex(&blocks[i - 1], 15+1, nBits);
     nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-    printf("*** block[202] \n");
+    printf("*** block[202] Add one block: still same\n");
     printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
-    powLimitFromBits.SetCompact((unsigned)powLimitBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+    powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
     printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
     printf("*** \n");
     BOOST_CHECK_EQUAL( nBits, powLimitBits ); // 0x1f07ffff
@@ -227,31 +224,33 @@ BOOST_AUTO_TEST_CASE(sugarchain_test) {
     // Add one block: a little bit higher
     blocks[i] = GetBlockIndex(&blocks[i - 1], 15-1.0000000000000010, nBits);
     nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-    printf("*** block[203] \n");
+    printf("*** block[203] Add one block: a little bit higher\n");
     printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
-    powLimitFromBits.SetCompact(0x1f07fff9, &fNegative, &fOverflow);
+    powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow);
     printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
     printf("*** \n");
     BOOST_CHECK_EQUAL( nBits, 0x1f07fff9 );
+    // 0x1f07fff9 == 520617977 == 0007fff900000000000000000000000000000000000000000000000000000000
 
     // Add one block: a little bit lower: back to powLimit
-    blocks[i] = GetBlockIndex(&blocks[i - 1], 15*100, nBits);
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 15*99, nBits);
     nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-    printf("*** block[204] \n");
+    printf("*** block[204] Add one block: a little bit lower: back to powLimit\n");
     printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
-    powLimitFromBits.SetCompact((unsigned)powLimitBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+    powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
     printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
     printf("*** \n");
     BOOST_CHECK_EQUAL( nBits, powLimitBits );
     
+    /* BEGIN - SMALL ATACK */
     // Add 5 blocks: small attack: with 0 interval
-    printf("*** SMALL ATTACK \n");
+    printf("*** SMALL ATTACK: Add 5 blocks: attack: with 0 interval: still same\n");
     for ( int j = 0; j < 5; j++ ) {
         blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
         nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
         // printf("*** block[%d] \n", i-1);
         printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
-        powLimitFromBits.SetCompact((unsigned)powLimitBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
         printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
         BOOST_CHECK_EQUAL( nBits, powLimitBits );
     }
@@ -260,12 +259,74 @@ BOOST_AUTO_TEST_CASE(sugarchain_test) {
     // Add one block: higher with normal interval
     blocks[i] = GetBlockIndex(&blocks[i - 1], 15, nBits);
     nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-    printf("*** block[210] \n");
+    printf("*** block[210] LAST SMALL ATTACK: Add one block: higher with normal interval\n");
     printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
-    powLimitFromBits.SetCompact(0x1f07fe58, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+    powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow);
+    printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
+    printf("*** SMALL ATTACK is finished\n");
+    BOOST_CHECK_EQUAL( nBits, 0x1f07fe58 );
+    // 0x1f07fe58 == 520617560 == 0007fe5800000000000000000000000000000000000000000000000000000000
+    /* END - SMALL ATACK */
+    
+    // Add one block: lower: back to powLimit
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 15*999, nBits);
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    printf("*** block[211] Add one block: lower: back to powLimit\n");
+    printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
+    powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
     printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
     printf("*** \n");
-    BOOST_CHECK_EQUAL( nBits, 0x1f07fe58 );
+    BOOST_CHECK_EQUAL( nBits, powLimitBits );
+    
+    /* BEGIN - MEDIUM ATACK */
+    // Add 100 blocks: small attack: with 0 interval
+    printf("*** MEDIUM ATTACK: Add 100 blocks: attack: with 0 interval: higher\n");
+    for ( int j = 0; j < 100; j++ ) {
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
+        nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
+    }
+    BOOST_CHECK_EQUAL( nBits, 0x1f021c42 );
+    // 0x1f021c42 == 520232002 == 00021c4200000000000000000000000000000000000000000000000000000000
+    printf("*** MEDIUM ATTACK is finished\n");
+    /* END - SMALL ATACK */
+    
+    /* BEGIN - HUGE ATACK */
+    // Add 5000 blocks: small attack: with 0 interval
+    printf("*** HUGE ATTACK: Add 5000 blocks: attack: with 0 interval: insanely higher\n");
+    for ( int j = 0; j < 5000; j++ ) {
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
+        nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
+    }
+    BOOST_CHECK_EQUAL( nBits, 0xc0deca3 );
+    // 0xc0deca3 == 202239139 == 00000000000000000000000000000000000000000deca3000000000000000000
+    printf("*** HUGE ATTACK is finished\n");
+    /* END - HUGE ATACK */
+    
+    /* BEGIN - RESTORE */
+    // Add 3210 blocks: with normal interval
+    printf("*** RESTORE: Add 3210 blocks: with longer interval\n");
+    for ( int j = 0; j < 3210; j++ ) {
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 15*99999999, nBits);
+        nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
+    }
+    BOOST_CHECK_EQUAL( nBits, powLimitBits );
+    // 0xc0deca3 == 202239139 == 00000000000000000000000000000000000000000deca3000000000000000000
+    printf("*** RESTORE is finished\n");
+    /* END - RESTORE */
+    
+
+    
+    
+    
     
     /*
     // Add another block with a normal timestamp.
