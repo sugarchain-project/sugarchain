@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(ishikawa_test) {
 }
 
 BOOST_AUTO_TEST_CASE(sugarchain_test) {
-    // Copyright (c) 2018 The Sugarchain Core developers
+    // Copyright (c) 2018 cryptozeny of the Sugarchain Core developers
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
     const Consensus::Params &mainnetParams = chainParams->GetConsensus();
 
@@ -137,10 +137,10 @@ BOOST_AUTO_TEST_CASE(sugarchain_test) {
     // arith_uint256 currentPow = powLimit >> 4;
     // uint32_t initialBits = currentPow.GetCompact();
     
-    printf("*** mainnetParams \n");
-    printf("%-12s %-5ld \n",        "T", mainnetParams.nPowTargetSpacing);
-    printf("%-12s %-5ld \n",        "N", mainnetParams.lwmaAveragingWindow);
-    printf("*** block[0] \n");
+    printf("*** Show mainnetParams\n");
+    printf("%-12s %-5ld\n",         "T", mainnetParams.nPowTargetSpacing);
+    printf("%-12s %-5ld\n",         "N", mainnetParams.lwmaAveragingWindow);
+    printf("*** Check Genesis\n");
     printf("%-12s %-5s %s\n",       "Parameter", "Block", "Value");
     printf("%-12s %-5d %u / %x\n",  "powLimitBits", i, (unsigned)powLimitBits, (unsigned)powLimitBits);
     printf("%-12s %-5d %s\n",       "powLimit",     i, powLimit.ToString().c_str()); // 0x1f07ffff
@@ -155,12 +155,31 @@ BOOST_AUTO_TEST_CASE(sugarchain_test) {
     printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
     /* END - SetCompact */
 
-    // printf("%-12s %-5d %u\n",       "powLimitA",    i, (unsigned)powLimitBits.SetCompact();
-    // printf("%-12s %-5d %s\n",       "powLimit2",    i, ArithToUint256(powLimitBits).ToString().c_str());
-    // printf("%-12s %-5d %s\n",       "powLimit3",    i, currentPow.ToString().c_str());
-    // printf("%-12s %-5d %s\n",        "currentPow",   i, currentPow.ToString().c_str());
-    // printf("%-12s %-5d %u / %x\n",   "currentBits",  i, (unsigned)powLimit.GetCompact(), (unsigned)powLimit.GetCompact());
-    // printf("******\n");
+    /* BEGIN - Check nBits */
+
+    /*
+    MODELL REFERENCE
+    arith_uint256 left = UintToArith256(uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+    uint32_t leftBits = left.GetCompact();
+    arith_uint256 right = UintToArith256(uint256S("0007ffff00000000000000000000000000000000000000000000000000000000"));
+    uint32_t rightBits = right.GetCompact();
+    BOOST_CHECK_EQUAL( leftBits, rightBits ); // 0x1f07ffff
+    */
+
+    // arith_uint256 left = UintToArith256(uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+    arith_uint256 left = powLimit;
+    uint32_t leftBits = left.GetCompact();
+    // arith_uint256 right = UintToArith256(uint256S("0007ffff00000000000000000000000000000000000000000000000000000000"));
+    arith_uint256 right = powLimitFromBits;
+    uint32_t rightBits = right.GetCompact();
+    printf("*** Check nBits\n");
+    printf("%-12s %-5d %u / %x\n",  "nBitsA", i, leftBits, leftBits);
+    printf("%-12s %-5d %s\n",       "powLimitA",     i, powLimit.ToString().c_str()); // 0x1f07ffff
+    printf("%-12s %-5d %u / %x\n",  "nBitsB", i, rightBits, rightBits);
+    powLimitFromBits.SetCompact((unsigned)powLimitBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+    printf("%-12s %-5d %s\n",       "powLimitB",    i, powLimitFromBits.GetHex().c_str());
+    BOOST_CHECK_EQUAL( leftBits, rightBits ); // 0x1f07ffff
+    /* END - Check nBits */
 
     // Genesis block.
     blocks[0] = CBlockIndex();
