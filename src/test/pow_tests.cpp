@@ -123,6 +123,7 @@ BOOST_AUTO_TEST_CASE(ishikawa_test) {
     BOOST_CHECK_EQUAL( nBits, 0x1e7f90f4 ); // 511676660
 }
 
+#if 0
 BOOST_AUTO_TEST_CASE(cryptozeny_test) {
     // Copyright (c) 2018 cryptozeny of the Sugarchain Core developers
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
@@ -303,6 +304,89 @@ BOOST_AUTO_TEST_CASE(cryptozeny_test) {
         printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
     }
     BOOST_CHECK_EQUAL( nBits, 0xc0deca3 );
+    // 0xc0deca3 == 202239139 == 00000000000000000000000000000000000000000deca3000000000000000000
+    printf("*** HUGE ATTACK is finished\n");
+    /* END - HUGE ATACK */
+}
+#endif
+
+BOOST_AUTO_TEST_CASE(ridiculous_test) {
+    // Copyright (c) 2018 cryptozeny of the Sugarchain Core developers
+    const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
+    const Consensus::Params &mainnetParams = chainParams->GetConsensus();
+
+    // int maxBlockIndex = 999999;
+    // int maxBlockIndex = 2147483647 / 1024;
+    int maxBlockIndex = INT_MAX / 1024;
+    std::vector<CBlockIndex> blocks(maxBlockIndex);
+    // Block counter.
+    int i = 0;
+    
+    const arith_uint256 powLimit = UintToArith256(chainParams->GetConsensus().powLimit);
+    uint32_t powLimitBits = powLimit.GetCompact();
+
+    /* BEGIN - SetCompact */
+    // https://en.bitcoin.it/wiki/Difficulty
+    // https://en.bitcoin.it/wiki/Target
+    arith_uint256 powLimitFromBits;
+    bool fNegative;
+    bool fOverflow;
+    powLimitFromBits.SetCompact((unsigned)powLimitBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+    /* END - SetCompact */
+
+    /* BEGIN - Check nBits */
+    // arith_uint256 left = UintToArith256(uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+    arith_uint256 left = powLimit;
+    uint32_t leftBits = left.GetCompact();
+    // arith_uint256 right = UintToArith256(uint256S("0007ffff00000000000000000000000000000000000000000000000000000000"));
+    arith_uint256 right = powLimitFromBits;
+    uint32_t rightBits = right.GetCompact();
+    powLimitFromBits.SetCompact((unsigned)powLimitBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+    BOOST_CHECK_EQUAL( leftBits, rightBits ); // 0x1f07ffff
+    /* END - Check nBits */
+
+    // Genesis block.
+    blocks[0] = CBlockIndex();
+    blocks[0].nHeight = 0;
+    blocks[0].nTime = 1541009400;
+    blocks[0].nBits = powLimitBits;
+    blocks[0].nChainWork = GetBlockProof(blocks[0]);
+
+    uint32_t nBits = Lwma3CalculateNextWorkRequired(&blocks[mainnetParams.lwmaAveragingWindow + 1], chainParams->GetConsensus());
+    
+    /* BEGIN - First Window */
+    // mainnetParams.lwmaAveragingWindow = 200
+    // mainnetParams.nPowTargetSpacing = 15
+    for (i = 1; i <= mainnetParams.lwmaAveragingWindow + 1; i++) {
+        blocks[i] = GetBlockIndex(&blocks[i - 1], mainnetParams.nPowTargetSpacing, powLimitBits); // 0x1f07ffff
+    }
+    
+    blocks[i] = GetBlockIndex(&blocks[i - 1], mainnetParams.nPowTargetSpacing+1, nBits);
+    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+    powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+    
+    printf("*** BEGIN - Check First Window\n");
+    printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
+    powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+    printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
+    printf("*** END - Check First Window\n");
+    BOOST_CHECK_EQUAL( nBits, powLimitBits ); // 0x1f07ffff
+    /* END - First Window */
+
+    /* BEGIN - HUGE ATACK */
+    printf("*** HUGE ATTACK: Add many blocks: attack: with 0 interval: insanely higher\n");
+    for ( int j = 0 + i; j < maxBlockIndex; j++ ) {
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
+        nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
+        
+        if ( (unsigned)nBits == 0 ) {
+            break;
+        }
+    }
+    BOOST_CHECK_EQUAL( nBits, powLimitBits );
     // 0xc0deca3 == 202239139 == 00000000000000000000000000000000000000000deca3000000000000000000
     printf("*** HUGE ATTACK is finished\n");
     /* END - HUGE ATACK */
