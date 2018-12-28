@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE(ishikawa_test) {
     BOOST_CHECK_EQUAL( nBits, 0x1e7f90f4 ); // 511676660
 }
 
-BOOST_AUTO_TEST_CASE(sugarchain_test) {
+BOOST_AUTO_TEST_CASE(cryptozeny_test) {
     // Copyright (c) 2018 cryptozeny of the Sugarchain Core developers
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
     const Consensus::Params &mainnetParams = chainParams->GetConsensus();
@@ -294,9 +294,8 @@ BOOST_AUTO_TEST_CASE(sugarchain_test) {
     /* END - SMALL ATACK */
     
     /* BEGIN - HUGE ATACK */
-    // Add 5000 blocks: small attack: with 0 interval
-    printf("*** HUGE ATTACK: Add 5000 blocks: attack: with 0 interval: insanely higher\n");
-    for ( int j = 0; j < 5000; j++ ) {
+    printf("*** HUGE ATTACK: Add 7412 blocks: attack: with 0 interval: insanely higher\n");
+    for ( int j = 0; j < 7412; j++ ) {
         blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
         nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
         printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
@@ -307,68 +306,6 @@ BOOST_AUTO_TEST_CASE(sugarchain_test) {
     // 0xc0deca3 == 202239139 == 00000000000000000000000000000000000000000deca3000000000000000000
     printf("*** HUGE ATTACK is finished\n");
     /* END - HUGE ATACK */
-    
-    /* BEGIN - RESTORE */
-    // Add 3210 blocks: with normal interval
-    printf("*** RESTORE: Add 3210 blocks: with longer interval\n");
-    for ( int j = 0; j < 3210; j++ ) {
-        blocks[i] = GetBlockIndex(&blocks[i - 1], 15*99999999, nBits);
-        nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-        printf("%-12s %-5d %u / %x\n",  "currentBits",  i-1, (unsigned)nBits, (unsigned)nBits);
-        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
-        printf("%-12s %-5d %s\n",       "powLimit2",    i-1, powLimitFromBits.GetHex().c_str());
-    }
-    BOOST_CHECK_EQUAL( nBits, powLimitBits );
-    // 0xc0deca3 == 202239139 == 00000000000000000000000000000000000000000deca3000000000000000000
-    printf("*** RESTORE is finished\n");
-    /* END - RESTORE */
-    
-
-    
-    
-    
-    
-    /*
-    // Add another block with a normal timestamp.
-    blocks[i] = GetBlockIndex(&blocks[i - 1], 2 * 600 - 6000, nBits);
-    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-    // The difficulty is now just a little bit lower, again.
-    BOOST_CHECK_EQUAL( nBits, 0x1f031f09 ); // 520298249
-
-    // And another block with a regular timestamp.
-    blocks[i] = GetBlockIndex(&blocks[i - 1], 600, nBits);
-    // The difficulty has lowered yet again, by a fraction.
-    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-    BOOST_CHECK_EQUAL( nBits, 0x1f032ade ); // 520301278
-
-    // Simulate a hash attack, add a window with very low increase.
-    for ( int j = 0; j < 10; j++ ) {
-        // first, add one block with 0.125 second interval
-        blocks[i] = GetBlockIndex(&blocks[i - 1], 0.125, nBits);
-        nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-	// then add 20 more with zero second interval
-        for ( int k = 0; k < 20; k++ ) {
-            blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
-            nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-        }
-        // and do that ten times.  That gives us 200 block window with very high frequency
-        // of blocks.
-    }
-    // The difficulty is now significantly higher.
-    BOOST_CHECK_EQUAL( nBits, 0x1e2eaf51 ); // 506376017
-
-    // Add one more block with a significant delay.
-    blocks[i] = GetBlockIndex(&blocks[i - 1], 4 * 3600, nBits);
-    // The difficulty has lowered significantly.
-    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-    BOOST_CHECK_EQUAL( nBits, 0x1e577959 ); // 509049177
-
-    // One more block with little less delay.
-    blocks[i] = GetBlockIndex(&blocks[i - 1], 2 * 3600, nBits);
-    // The difficulty has lowered again.
-    nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
-    BOOST_CHECK_EQUAL( nBits, 0x1e7f90f4 ); // 511676660
-    */
 }
 
 // /* Test calculation of next difficulty target with no constraints applying */
