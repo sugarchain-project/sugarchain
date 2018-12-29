@@ -192,6 +192,36 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     
     printf("\n*** Add one block\n\n");
     sleep(3);
+    
+    /* BEGIN - SMALL ATACK */
+    printf("*** SMALL ATTACK: Add 99999999 blocks: with 0 interval: difficulty higher\n");
+    sleep(3);
+    i++;
+    for (i = i; i <= 99999999; i++ ) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+        // Calculate
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
+        nBits = DarkGravityWave(&blocks[i], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        chain = CreateChainWithNbits((unsigned)nBits);
+        difficulty = GetDifficulty(chain, &blocks[i]);
+        printf("%-12s %-5d %.15e\n",       "difficulty",   i, difficulty);
+        // printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
+        // printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
+
+        // Break test if the MaxPowLimit is 0
+        if ( (unsigned)nBits == 0 ) {
+            break;
+        }
+    }
+    BOOST_CHECK_EQUAL( nBits, 0x1f008d1b );
+    // 520129819 == 00008d1b00000000000000000000000000000000000000000000000000000000
+    
+    printf("\n*** SMALL ATTACK (99999999) is finished\n\n");
+    sleep(3);
+    /* END - SMALL ATACK */
 }
 
 #if 0
