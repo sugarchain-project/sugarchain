@@ -12,8 +12,10 @@
 
 unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params) {
     /* current difficulty formula, dash - DarkGravity v3, written by Evan Duffield - evan@dash.org */
+    assert(pindexLast != nullptr);
+
+    unsigned int nProofOfWorkLimit = UintToArith256(params.powLimit).GetCompact();
     const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
-    // int64_t nPastBlocks = 24;
     int64_t nPastBlocks = params.difficultyAveragingWindowSize;
 
     // make sure we have at least (nPastBlocks + 1) blocks, otherwise just return powLimit
@@ -21,18 +23,19 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
         return bnPowLimit.GetCompact();
     }
 
-    if (params.fPowAllowMinDifficultyBlocks) {
-        // recent block is more than 2 hours old
-        if (pblock->GetBlockTime() > pindexLast->GetBlockTime() + 2 * 60 * 60) {
-            return bnPowLimit.GetCompact();
-        }
-        // recent block is more than 10 minutes old
-        if (pblock->GetBlockTime() > pindexLast->GetBlockTime() + params.nPowTargetSpacing * 4) {
-            arith_uint256 bnNew = arith_uint256().SetCompact(pindexLast->nBits) * 10;
-            if (bnNew > bnPowLimit) {
-                bnNew = bnPowLimit;
-            }
-            return bnNew.GetCompact();
+    if (params.fPowAllowMinDifficultyBlocks && params.fPowNoRetargeting) {
+        // Special difficulty rule for testnet:
+        // If the new block's timestamp is more than 2* 15 seconds
+        // then allow mining of a min-difficulty block.
+        if (pblock->GetBlockTime() > pindexLast->GetBlockTime() + params.nPowTargetSpacing*2)
+            return nProofOfWorkLimit;
+        else
+        {
+            // Return the last non-special-min-difficulty-rules-block
+            const CBlockIndex *pindex = pindexLast;
+            while (pindex->pprev && pindex->nHeight % params.DifficultyAdjustmentInterval() != 0 && pindex->nBits == nProofOfWorkLimit)
+                pindex = pindex->pprev;
+            return pindex->nBits;
         }
     }
 
@@ -43,7 +46,8 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
         arith_uint256 bnTarget = arith_uint256().SetCompact(pindex->nBits);
         if (nCountBlocks == 1) {
             bnPastTargetAvg = bnTarget;
-        } else {
+        }
+        else {
             // NOTE: that's not an average really...
             bnPastTargetAvg = (bnPastTargetAvg * nCountBlocks + bnTarget) / (nCountBlocks + 1);
         }
