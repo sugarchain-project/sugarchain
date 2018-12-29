@@ -540,7 +540,19 @@ BOOST_AUTO_TEST_CASE(cryptozenyDarkGravityWave_test) {
     // Init nBits
     // uint32_t nBits = DarkGravityWave(&blocks[0], NULL, chainParams->GetConsensus());
     uint32_t nBits = powLimitBits;
-        
+
+    printf("\n\n\n\n\n\n\n\n\n\n");
+    printf("*** Show mainnetParams\n");
+    printf("%-12s %-5ld\n",         "T", mainnetParams.nPowTargetSpacing);
+    printf("%-12s %-5ld\n\n",       "N", mainnetParams.difficultyAveragingWindowSize);
+    sleep(3);
+    
+    printf("*** Check Genesis\n");
+    printf("%-12s %-5s %s\n",       "Parameter", "Block", "Value");
+    printf("%-12s %-5d %u / %x\n",  "powLimitBits", i, (unsigned)powLimitBits, (unsigned)powLimitBits);
+    printf("%-12s %-5d %s\n\n",     "powLimit",     i, powLimit.ToString().c_str()); // 0x1f07ffff
+    sleep(3);
+    
     /* BEGIN - First Window */
     for (i = 1; i <= 199; i++) {
         // Check pindexLast is NOT nullptr!
@@ -556,7 +568,10 @@ BOOST_AUTO_TEST_CASE(cryptozenyDarkGravityWave_test) {
         BOOST_CHECK_EQUAL( nBits, powLimitBits ); // 0x1f07ffff
     }
     // /* END - First Window */
-        
+    
+    printf("\n*** First Window Filled\n\n");
+    sleep(3);
+    
     // Add one block
     // i++;
     // Check pindexLast is NOT nullptr!
@@ -571,6 +586,9 @@ BOOST_AUTO_TEST_CASE(cryptozenyDarkGravityWave_test) {
     BOOST_CHECK_EQUAL( nBits, 0x1f02aaaa );
     // 520268458 == 0002aaaa00000000000000000000000000000000000000000000000000000000
 
+    printf("\n*** Add one block\n\n");
+    sleep(3);
+    
     // Add one block
     i++;
     // Check pindexLast is NOT nullptr!
@@ -585,16 +603,20 @@ BOOST_AUTO_TEST_CASE(cryptozenyDarkGravityWave_test) {
     BOOST_CHECK_EQUAL( nBits, 0x1f02a623 );
     // 520267299 == 0002a62300000000000000000000000000000000000000000000000000000000
     
-    /* BEGIN - HUGE ATACK */
-    printf("*** HUGE ATTACK: Add many blocks: attack: with 0 interval: insanely higher\n");
-    // for (i < maxBlockIndex; i++ ) {
-    for (i=i; i < 203; i++ ) {
+    printf("\n*** Add one block\n\n");
+    sleep(3);
+    
+    /* BEGIN - SMALL ATACK */
+    printf("*** SMALL ATTACK: Add 200 blocks: with 0 interval: difficulty higher\n");
+    sleep(3);
+    i++;
+    for (i = i; i <= 401; i++ ) {
         // Check pindexLast is NOT nullptr!
         BOOST_CHECK( &blocks[i - 1] != nullptr );
         assert( &blocks[i - 1] != nullptr);
         // Calculate
         blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
-        nBits = DarkGravityWave(&blocks[i++], NULL, chainParams->GetConsensus());
+        nBits = DarkGravityWave(&blocks[i], NULL, chainParams->GetConsensus());
         powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
         printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
         printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
@@ -604,10 +626,91 @@ BOOST_AUTO_TEST_CASE(cryptozenyDarkGravityWave_test) {
             break;
         }
     }
-    printf("*** HUGE ATTACK is finished\n");
-    /* END - HUGE ATACK */
+    BOOST_CHECK_EQUAL( nBits, 0x1f008d1b );
+    // 520129819 == 00008d1b00000000000000000000000000000000000000000000000000000000
+    
+    printf("\n*** SMALL ATTACK (200) is finished\n\n");
+    sleep(3);
+    /* END - SMALL ATACK */
+    
+    /* BEGIN - SMALL RESTORE */
+    printf("*** SMALL RESTORE: Add some blocks: with slower (15*10) interval: difficulty is going back to powLimit\n");
+    sleep(3);
+    // for (i < maxBlockIndex; i++ ) {
+    for (i = i; i <= 508; i++ ) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+        // Calculate
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 15*10, nBits);
+        nBits = DarkGravityWave(&blocks[i], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
+        printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
+
+        // Break test if the MaxPowLimit is 0
+        if ( (unsigned)nBits == powLimitBits ) {
+            break;
+        }
+    }
     BOOST_CHECK_EQUAL( nBits, powLimitBits );
-    // 0xc0deca3 == 202239139 == 00000000000000000000000000000000000000000deca3000000000000000000
+    
+    printf("\n*** SMALL RESTORE is finished\n\n");
+    sleep(3);
+    /* END - SMALL RESTORE */
+    
+    /* BEGIN - HUGE ATACK */
+    printf("*** HUGE ATTACK: Add 4000 blocks: with 0 interval: difficulty insanely higher\n");
+    sleep(3);
+    i++;
+    for (i = i; i <= 4508; i++ ) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+        // Calculate
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
+        nBits = DarkGravityWave(&blocks[i], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
+        printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
+
+        // Break test if the MaxPowLimit is 0
+        if ( (unsigned)nBits == 0 ) {
+            break;
+        }
+    }
+    BOOST_CHECK_EQUAL( nBits, 0x1836a38c );
+    // 406233996 == 000000000000000036a38c000000000000000000000000000000000000000000
+    
+    printf("\n*** HUGE ATTACK (4000) is finished\n\n");
+    sleep(3);
+    /* END - HUGE ATACK */
+    
+    /* BEGIN - HUGE RESTORE */
+    printf("*** HUGE RESTORE: Add some blocks: with slower (15*100) interval: difficulty is going back to powLimit\n");
+    sleep(3);
+    // for (i < maxBlockIndex; i++ ) {
+    for (i = i; i <= 99999999; i++ ) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+        // Calculate
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 15*100, nBits);
+        nBits = DarkGravityWave(&blocks[i], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
+        printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
+
+        // Break test if the MaxPowLimit is 0
+        if ( (unsigned)nBits == powLimitBits ) {
+            break;
+        }
+    }
+    BOOST_CHECK_EQUAL( nBits, powLimitBits );
+    
+    printf("\n*** HUGE RESTORE is finished\n\n");
+    sleep(3);
+    /* END - HUGE RESTORE */
 }
 // #endif
 
