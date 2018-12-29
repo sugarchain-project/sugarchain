@@ -491,7 +491,7 @@ BOOST_AUTO_TEST_CASE(dgwRidiculous_test) {
 }
 #endif
 
-// #if 0
+#if 0
 BOOST_AUTO_TEST_CASE(cryptozenyDarkGravityWave_test) {
     // Copyright (c) 2018 cryptozeny of the Sugarchain Core developers
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
@@ -690,7 +690,7 @@ BOOST_AUTO_TEST_CASE(cryptozenyDarkGravityWave_test) {
     printf("*** HUGE RESTORE: Add some blocks: with slower (15*100) interval: difficulty is going back to powLimit\n");
     sleep(3);
     // for (i < maxBlockIndex; i++ ) {
-    for (i = i; i <= 99999999; i++ ) {
+    for (i = i; i <= 6996; i++ ) {
         // Check pindexLast is NOT nullptr!
         BOOST_CHECK( &blocks[i - 1] != nullptr );
         assert( &blocks[i - 1] != nullptr);
@@ -701,7 +701,7 @@ BOOST_AUTO_TEST_CASE(cryptozenyDarkGravityWave_test) {
         printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
         printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
 
-        // Break test if the MaxPowLimit is 0
+        // Break test if the nBits is powLimit
         if ( (unsigned)nBits == powLimitBits ) {
             break;
         }
@@ -711,8 +711,112 @@ BOOST_AUTO_TEST_CASE(cryptozenyDarkGravityWave_test) {
     printf("\n*** HUGE RESTORE is finished\n\n");
     sleep(3);
     /* END - HUGE RESTORE */
+    
+    /* BEGIN - SMALL DELAY */
+    printf("*** SMALL DELAY: Add 300 blocks: with long delay (15*9999) interval: difficulty must stay at powLimit\n");
+    sleep(3);
+    for (i = i; i <= 7296; i++ ) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+        // Calculate
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 15*9999, nBits);
+        nBits = DarkGravityWave(&blocks[i], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
+        printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
+
+        // Break test if the MaxPowLimit is 0
+        if ( (unsigned)nBits == 0 ) {
+            break;
+        }
+    }
+    BOOST_CHECK_EQUAL( nBits, powLimitBits );
+    
+    printf("\n*** SMALL DELAY (300) is finished\n\n");
+    sleep(3);
+    /* END - SMALL DELAY */
+    
+    /* BEGIN - HUGE DELAY */
+    printf("*** HUGE DELAY: Add 6000 blocks: with long delay (15*9999999999999999) interval: difficulty must stay at powLimit\n");
+    sleep(3);
+    for (i = i; i <= 13296; i++ ) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+        // Calculate
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 15*9999999999999999, nBits);
+        nBits = DarkGravityWave(&blocks[i], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
+        printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
+
+        // Break test if the MaxPowLimit is 0
+        if ( (unsigned)nBits == 0 ) {
+            break;
+        }
+    }
+    BOOST_CHECK_EQUAL( nBits, powLimitBits );
+    
+    printf("\n*** HUGE DELAY (6000) is finished\n\n");
+    sleep(3);
+    /* END - SMALL DELAY */
+    
+    /* BEGIN - INCREDIBLY HUGE ATACK */
+    printf("*** INCREDIBLY HUGE ATTACK: Add 17481-200 blocks: with 0 interval: difficulty much insanely higher\n");
+    sleep(3);
+    i++;
+    // for (i = i; i <= 28296; i++ ) {
+    for (i = i; i <= 30777-200; i++ ) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+        // Calculate
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
+        nBits = DarkGravityWave(&blocks[i], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
+        printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
+
+        // Break test if the MaxPowLimit is 0
+        if ( (unsigned)nBits == 0 ) {
+            break;
+        }
+    }
+    BOOST_CHECK_EQUAL( nBits, 0x200c900 );
+    // 33605888 == 00000000000000000000000000000000000000000000000000000000000000c9
+    
+    printf("\n*** INCREDIBLY HUGE ATTACK (17481-200) is finished\n\n");
+    sleep(3);
+    /* END - INCREDIBLY HUGE ATACK */
+    
+    /* BEGIN - INCREDIBLY HUGE RESTORE */
+    printf("*** INCREDIBLY HUGE RESTORE: Add some blocks: with slower (15*9999999999999999) interval: difficulty is going back to powLimit\n");
+    sleep(3);
+    // for (i < maxBlockIndex; i++ ) {
+    for (i = i; i <= 30777-200+99999999; i++ ) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+        // Calculate
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 15*9999999999999999, nBits);
+        nBits = DarkGravityWave(&blocks[i], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
+        printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
+    
+        // Break test if the nBits is powLimit
+        if ( (unsigned)nBits == powLimitBits ) {
+            break;
+        }
+    }
+    BOOST_CHECK_EQUAL( nBits, powLimitBits );
+    
+    printf("\n*** INCREDIBLY HUGE RESTORE is finished\n\n");
+    sleep(3);
+    /* END - INCREDIBLY HUGE RESTORE */
 }
-// #endif
+#endif
 
 // /* Test calculation of next difficulty target with no constraints applying */
 // BOOST_AUTO_TEST_CASE(get_next_work)
