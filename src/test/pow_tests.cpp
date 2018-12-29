@@ -13,6 +13,18 @@
 
 BOOST_FIXTURE_TEST_SUITE(pow_tests, BasicTestingSetup)
 
+static CBlockIndex GetBlockIndex(CBlockIndex *pindexPrev, int64_t nTimeInterval, uint32_t nBits) {
+    CBlockIndex block;
+    block.pprev = pindexPrev;
+    block.nHeight = pindexPrev->nHeight + 1;
+    block.nTime = pindexPrev->nTime + nTimeInterval;
+    block.nBits = nBits;
+
+    block.nChainWork = pindexPrev->nChainWork + GetBlockProof(block);
+    return block;
+}
+
+#if 0
 BOOST_AUTO_TEST_CASE(h4x3rotab_test)
 {
     // Copyright (c) 2017-2018 h4x3rotab of the Bitcoin Gold
@@ -29,18 +41,9 @@ BOOST_AUTO_TEST_CASE(h4x3rotab_test)
     int bits = Lwma3CalculateNextWorkRequired(&blocks.back(), chainParams->GetConsensus());
     BOOST_CHECK_EQUAL(bits, 0x1f07fffe); // 0x1f07fffe = 520617983(0x1f07ffff) - 1 = 520617982
 }
+#endif
 
-static CBlockIndex GetBlockIndex(CBlockIndex *pindexPrev, int64_t nTimeInterval, uint32_t nBits) {
-    CBlockIndex block;
-    block.pprev = pindexPrev;
-    block.nHeight = pindexPrev->nHeight + 1;
-    block.nTime = pindexPrev->nTime + nTimeInterval;
-    block.nBits = nBits;
-
-    block.nChainWork = pindexPrev->nChainWork + GetBlockProof(block);
-    return block;
-}
-
+#if 0
 BOOST_AUTO_TEST_CASE(ishikawa_test) {
     // Copyright (c) 2018 ishikawa-pss9 of the Susucoin Core developers
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
@@ -64,7 +67,7 @@ BOOST_AUTO_TEST_CASE(ishikawa_test) {
     size_t i;
 
     // Create the first window for lwma, with blocks every 10 minutes.
-    // consensus.lwmaAveragingWindow = 200; 
+    // consensus.difficultyAveragingWindowSize = 200; 
     // N=200 for T=15: Lwma3CalculateNextWorkRequired
     for (i = 1; i < 202; i++) {
         blocks[i] = GetBlockIndex(&blocks[i - 1], 600, initialBits); // 0x1f07ffff
@@ -122,6 +125,7 @@ BOOST_AUTO_TEST_CASE(ishikawa_test) {
     nBits = Lwma3CalculateNextWorkRequired(&blocks[i++], chainParams->GetConsensus());
     BOOST_CHECK_EQUAL( nBits, 0x1e7f90f4 ); // 511676660
 }
+#endif
 
 #if 0
 BOOST_AUTO_TEST_CASE(cryptozeny_test) {
@@ -140,7 +144,7 @@ BOOST_AUTO_TEST_CASE(cryptozeny_test) {
     
     printf("*** Show mainnetParams\n");
     printf("%-12s %-5ld\n",         "T", mainnetParams.nPowTargetSpacing);
-    printf("%-12s %-5ld\n",         "N", mainnetParams.lwmaAveragingWindow);
+    printf("%-12s %-5ld\n",         "N", mainnetParams.difficultyAveragingWindowSize);
     printf("*** Check Genesis\n");
     printf("%-12s %-5s %s\n",       "Parameter", "Block", "Value");
     printf("%-12s %-5d %u / %x\n",  "powLimitBits", i, (unsigned)powLimitBits, (unsigned)powLimitBits);
@@ -191,7 +195,7 @@ BOOST_AUTO_TEST_CASE(cryptozeny_test) {
     blocks[0].nChainWork = GetBlockProof(blocks[0]);
 
     // Create the first window for lwma, with blocks every 15 seconds.
-    // consensus.lwmaAveragingWindow = 200; 
+    // consensus.difficultyAveragingWindowSize = 200; 
     // N=200 for T=15: Lwma3CalculateNextWorkRequired
     
     /* Begin - First Window */
@@ -353,12 +357,12 @@ BOOST_AUTO_TEST_CASE(lwmaRidiculous_test) {
     blocks[0].nBits = powLimitBits;
     blocks[0].nChainWork = GetBlockProof(blocks[0]);
 
-    uint32_t nBits = Lwma3CalculateNextWorkRequired(&blocks[mainnetParams.lwmaAveragingWindow + 1], chainParams->GetConsensus());
+    uint32_t nBits = Lwma3CalculateNextWorkRequired(&blocks[mainnetParams.difficultyAveragingWindowSize + 1], chainParams->GetConsensus());
 
     /* BEGIN - First Window */
-    // mainnetParams.lwmaAveragingWindow = 200
+    // mainnetParams.difficultyAveragingWindowSize = 200
     // mainnetParams.nPowTargetSpacing = 15
-    for (i = 1; i <= mainnetParams.lwmaAveragingWindow + 1; i++) {
+    for (i = 1; i <= mainnetParams.difficultyAveragingWindowSize + 1; i++) {
         blocks[i] = GetBlockIndex(&blocks[i - 1], mainnetParams.nPowTargetSpacing, powLimitBits); // 0x1f07ffff
     }
 
@@ -395,7 +399,7 @@ BOOST_AUTO_TEST_CASE(lwmaRidiculous_test) {
 }
 #endif
 
-// #if 0
+#if 0
 BOOST_AUTO_TEST_CASE(dgwRidiculous_test) {
     // Copyright (c) 2018 cryptozeny of the Sugarchain Core developers
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
@@ -449,7 +453,7 @@ BOOST_AUTO_TEST_CASE(dgwRidiculous_test) {
     uint32_t nBits = DarkGravityWave(&blocks[24 + 1], NULL, chainParams->GetConsensus());
     
     /* BEGIN - First Window */
-    // mainnetParams.lwmaAveragingWindow = 200
+    // mainnetParams.difficultyAveragingWindowSize = 200
     // mainnetParams.nPowTargetSpacing = 15
     for (i = 1; i <= 24 + 1; i++) {
         blocks[i] = GetBlockIndex(&blocks[i - 1], mainnetParams.nPowTargetSpacing, powLimitBits); // 0x1f07ffff
@@ -484,6 +488,126 @@ BOOST_AUTO_TEST_CASE(dgwRidiculous_test) {
     // 0xc0deca3 == 202239139 == 00000000000000000000000000000000000000000deca3000000000000000000
     printf("*** HUGE ATTACK is finished\n");
     /* END - HUGE ATACK */
+}
+#endif
+
+// #if 0
+BOOST_AUTO_TEST_CASE(cryptozenyDarkGravityWave_test) {
+    // Copyright (c) 2018 cryptozeny of the Sugarchain Core developers
+    const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
+    const Consensus::Params &mainnetParams = chainParams->GetConsensus();
+
+    // int maxBlockIndex = 2147483647 / 1024;
+    int maxBlockIndex = INT_MAX / 1024;
+    std::vector<CBlockIndex> blocks(maxBlockIndex);
+    
+    // Block counter.
+    int i = 0;
+    
+    // powLimit
+    const arith_uint256 powLimit = UintToArith256(chainParams->GetConsensus().powLimit);
+    uint32_t powLimitBits = powLimit.GetCompact();
+
+    // SetCompact
+    // https://en.bitcoin.it/wiki/Difficulty
+    // https://en.bitcoin.it/wiki/Target
+    arith_uint256 powLimitFromBits;
+    bool fNegative;
+    bool fOverflow;
+    powLimitFromBits.SetCompact((unsigned)powLimitBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+
+    // BEGIN - Check nBits
+    // arith_uint256 left = UintToArith256(uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+    arith_uint256 left = powLimit;
+    uint32_t leftBits = left.GetCompact();
+    // arith_uint256 right = UintToArith256(uint256S("0007ffff00000000000000000000000000000000000000000000000000000000"));
+    arith_uint256 right = powLimitFromBits;
+    uint32_t rightBits = right.GetCompact();
+    powLimitFromBits.SetCompact((unsigned)powLimitBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+    BOOST_CHECK_EQUAL( leftBits, rightBits ); // 0x1f07ffff
+
+    // Genesis block.
+    blocks[0] = CBlockIndex();
+    blocks[0].nHeight = 0;
+    blocks[0].nTime = 1541009400;
+    blocks[0].nBits = powLimitBits;
+    blocks[0].nChainWork = GetBlockProof(blocks[0]);
+    
+    // Shorting the variable names
+    int firstWindowSize = mainnetParams.difficultyAveragingWindowSize;
+    int interval = mainnetParams.nPowTargetSpacing;
+    
+    // Init nBits
+    // uint32_t nBits = DarkGravityWave(&blocks[0], NULL, chainParams->GetConsensus());
+    uint32_t nBits = powLimitBits;
+        
+    /* BEGIN - First Window */
+    for (i = 1; i <= 199; i++) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+        
+        // Loop
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
+        nBits = DarkGravityWave(&blocks[i], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow);
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
+        printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
+        BOOST_CHECK_EQUAL( nBits, powLimitBits ); // 0x1f07ffff
+    }
+    // /* END - First Window */
+        
+    // Add one block
+    // i++;
+    // Check pindexLast is NOT nullptr!
+    BOOST_CHECK( &blocks[i - 1] != nullptr );
+    assert( &blocks[i - 1] != nullptr);
+    // Calculate
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
+    nBits = DarkGravityWave(&blocks[i], NULL, chainParams->GetConsensus());
+    powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow);
+    printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
+    printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
+    BOOST_CHECK_EQUAL( nBits, 0x1f02aaaa );
+    // 520268458 == 0002aaaa00000000000000000000000000000000000000000000000000000000
+
+    // Add one block
+    i++;
+    // Check pindexLast is NOT nullptr!
+    BOOST_CHECK( &blocks[i - 1] != nullptr );
+    assert( &blocks[i - 1] != nullptr);
+    // Calculate
+    blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
+    nBits = DarkGravityWave(&blocks[i], NULL, chainParams->GetConsensus());
+    powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow);
+    printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
+    printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
+    BOOST_CHECK_EQUAL( nBits, 0x1f02a623 );
+    // 520267299 == 0002a62300000000000000000000000000000000000000000000000000000000
+    
+    /* BEGIN - HUGE ATACK */
+    printf("*** HUGE ATTACK: Add many blocks: attack: with 0 interval: insanely higher\n");
+    // for (i < maxBlockIndex; i++ ) {
+    for (i=i; i < 203; i++ ) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+        // Calculate
+        blocks[i] = GetBlockIndex(&blocks[i - 1], 0, nBits);
+        nBits = DarkGravityWave(&blocks[i++], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+        printf("%-12s %-5d %u / %x\n",  "currentBits",  i, (unsigned)nBits, (unsigned)nBits);
+        printf("%-12s %-5d %s\n",       "powLimit2",    i, powLimitFromBits.GetHex().c_str());
+
+        // Break test if the MaxPowLimit is 0
+        if ( (unsigned)nBits == 0 ) {
+            break;
+        }
+    }
+    printf("*** HUGE ATTACK is finished\n");
+    /* END - HUGE ATACK */
+    BOOST_CHECK_EQUAL( nBits, powLimitBits );
+    // 0xc0deca3 == 202239139 == 00000000000000000000000000000000000000000deca3000000000000000000
 }
 // #endif
 
