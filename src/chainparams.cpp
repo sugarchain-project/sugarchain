@@ -84,7 +84,7 @@ public:
         consensus.BIP66Height = 0;  // always on
         consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f07ffff
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600 // before DGW3
-        consensus.lwmaAveragingWindow = 200; // N=200 for T=15: Lwma3CalculateNextWorkRequired
+        consensus.difficultyAveragingWindowSize = 200; // N=200 for T=15
         consensus.nPowTargetSpacing = 0.25 * 60; // 15 sec. // 40x bitcoin // 10 * 60 / 40 = 15
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
@@ -189,7 +189,7 @@ public:
         consensus.BIP66Height = 0; // always on
         consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f07ffff
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600 // before DGW3
-        consensus.lwmaAveragingWindow = 200; // N=200 for T=15: Lwma3CalculateNextWorkRequired
+        consensus.difficultyAveragingWindowSize = 200; // N=200 for T=15
         consensus.nPowTargetSpacing = 0.25 * 60; // 15 sec. // 40x bitcoin // 10 * 60 / 40 = 15
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
@@ -286,7 +286,7 @@ public:
         consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in rpc activation tests)
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600 // before DGW3
-        consensus.lwmaAveragingWindow = 200; // N=200 for T=15: Lwma3CalculateNextWorkRequired
+        consensus.difficultyAveragingWindowSize = 200; // N=200 for T=15
         consensus.nPowTargetSpacing = 0.25 * 60; // 15 sec. // 40x bitcoin // 10 * 60 / 40 = 15
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;

@@ -14,7 +14,7 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
     /* current difficulty formula, dash - DarkGravity v3, written by Evan Duffield - evan@dash.org */
     const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
     // int64_t nPastBlocks = 24;
-    int64_t nPastBlocks = params.lwmaAveragingWindow;;
+    int64_t nPastBlocks = params.difficultyAveragingWindowSize;
 
     // make sure we have at least (nPastBlocks + 1) blocks, otherwise just return powLimit
     if (!pindexLast || pindexLast->nHeight < nPastBlocks) {
@@ -94,7 +94,7 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
 unsigned int Lwma3CalculateNextWorkRequired(const CBlockIndex* pindexLast, const Consensus::Params& params)
 {
     const int64_t T = params.nPowTargetSpacing;
-    const int64_t N = params.lwmaAveragingWindow;
+    const int64_t N = params.difficultyAveragingWindowSize;
     const int64_t k = N * (N + 1) * T / 2;
     const int64_t height = pindexLast->nHeight;
     const arith_uint256 powLimit = UintToArith256(params.powLimit);
