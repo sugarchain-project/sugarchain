@@ -11,6 +11,9 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <ctime> // unix_timestamp()
+#include <iostream> // unix_timestamp()
+
 BOOST_FIXTURE_TEST_SUITE(pow_tests, BasicTestingSetup)
 
 static CBlockIndex GetBlockIndex(CBlockIndex *pindexPrev, int64_t nTimeInterval, uint32_t nBits) {
@@ -84,6 +87,13 @@ CChain CreateChainWithNbits(uint32_t nbits)
     return chain;
 }
 
+long int unix_timestamp()
+{
+    time_t t = std::time(0);
+    long int now = static_cast<long int> (t);
+    return now;
+}
+
 BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     // Copyright (c) 2018 cryptozeny of the Sugarchain Core developers
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
@@ -118,7 +128,7 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     uint32_t rightBits = right.GetCompact();
     powLimitFromBits.SetCompact((unsigned)powLimitBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
     BOOST_CHECK_EQUAL( leftBits, rightBits ); // 0x1f07ffff
-
+    
     // Genesis Block.
     blocks[0] = CBlockIndex();
     blocks[0].nHeight = 0;
@@ -144,24 +154,31 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     printf("\n");
     sleep(1);
     
+    // Now Timestamp
+    long int getCurrentTimestamp = unix_timestamp();
+    
+    // Attack Interval 
+    // int interval = 1541009400;
+    long int interval = getCurrentTimestamp - 1541009400;
+    
+    // Print
     printf("*** Check Genesis\n");
-    printf("%-7s %-13s %-13s %-24s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)");
-    printf("%-7d %-13u %-13x %-24.16g\n", i, (unsigned)powLimitBits, (unsigned)powLimitBits, (double)initDifficulty);
+    printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
+    printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)interval);
     // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
     printf("\n");
     sleep(1);
     
-    /* BEGIN - First Window */
+    // BEGIN - First Window
+    // Attack Interval 
+    interval = 15;
     printf("*** First Window\n");
-    printf("%-7s %-13s %-13s %-24s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)");
+    printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
     sleep(1);
     for (i = 1; i <= 200+0; i++) {
         // Check pindexLast is NOT nullptr!
         BOOST_CHECK( &blocks[i - 1] != nullptr );
         assert( &blocks[i - 1] != nullptr);
-        
-        // Attack Interval 
-        int interval = 0;
         
         // nBits
         nBits = DarkGravityWave(&blocks[i - 1], NULL, chainParams->GetConsensus());
@@ -178,7 +195,7 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
         
         // Print
-        printf("%-7d %-13u %-13x %-24.16g\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty);
+        printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)interval);
         // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
         
         // Check
@@ -187,21 +204,20 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     }
     printf("\n*** First Window Filled\n");
     sleep(1);
-    /* END - First Window */
+    // END - First Window
     
-    // BEGIN - Add one block
+    // BEGIN - Attack one block
+    // Attack Interval 
+    interval = 0;
     if (nBits != 0) {
         // i++; // Don't add after Loop 
-        printf("\n*** Add one block\n");
-        printf("%-7s %-13s %-13s %-24s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)");
+        printf("\n*** Attack one block\n");
+        printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
         sleep(1);
         
         // Check pindexLast is NOT nullptr!
         BOOST_CHECK( &blocks[i - 1] != nullptr );
         assert( &blocks[i - 1] != nullptr);
-        
-        // Attack Interval 
-        int interval = 0;
         
         // nBits
         nBits = DarkGravityWave(&blocks[i - 1], NULL, chainParams->GetConsensus());
@@ -218,30 +234,28 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
         
         // Print
-        printf("%-7d %-13u %-13x %-24.16g\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty);
+        printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)interval);
         // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
         
         // Check
-        BOOST_CHECK_EQUAL( nBits, 0x1f02aaaa );
-        BOOST_CHECK_EQUAL( currentDifficulty, 5.7219804145691713e-06 );
+        BOOST_CHECK_EQUAL( nBits, 520615361 ); // 1f07f5c1
+        BOOST_CHECK_EQUAL( currentDifficulty, 1.916909781585764e-06 );
     }
-    // END - Add one block
+    // END - Attack one block
     
-    
-    // BEGIN - Add one block
+    // BEGIN - Attack one block
+    // Attack Interval 
+    interval = 0;
     if (nBits != 0) {
         i++;
-        printf("\n*** Add one block\n");
-        printf("%-7s %-13s %-13s %-24s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)");
+        printf("\n*** Attack one block\n");
+        printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
         sleep(1);
         
         // Check pindexLast is NOT nullptr!
         BOOST_CHECK( &blocks[i - 1] != nullptr );
         assert( &blocks[i - 1] != nullptr);
         
-        // Attack Interval 
-        int interval = 0;
-        
         // nBits
         nBits = DarkGravityWave(&blocks[i - 1], NULL, chainParams->GetConsensus());
         powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow);
@@ -257,26 +271,28 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
         
         // Print
-        printf("%-7d %-13u %-13x %-24.16g\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty);
+        printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)interval);
         // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
         
         // Check
-        BOOST_CHECK_EQUAL( nBits, 0x1f02a623 );
-        BOOST_CHECK_EQUAL( currentDifficulty, 5.760181225041834e-06 );
+        BOOST_CHECK_EQUAL( nBits, 520612714 ); // 1f07eb6a
+        BOOST_CHECK_EQUAL( currentDifficulty, 1.9266860517572369e-06 );
     }
-    // END - Add one block
+    // END - Attack one block
     
-    // BEGIN - ATTACK
-    printf("\n*** ATTACK (4000)\n");
-    printf("%-7s %-13s %-13s %-24s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)");
+    // BEGIN - ATTACK & DEFENSE
+    // Attack Interval 
+    interval = 0;
+    printf("\n*** ATTACK & DEFENSE\n");
+    printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
     sleep(1);
-    for (i = i + 1; i <= 200+2+4000; i++) {
+    for (i = i + 1; i <= 200+2+40; i++) {
         // Check pindexLast is NOT nullptr!
         BOOST_CHECK( &blocks[i - 1] != nullptr );
         assert( &blocks[i - 1] != nullptr);
         
-        // Attack Interval 
-        int interval = 0;
+        // Changing Attack Interval 
+        interval = i-(200+2+1);
         
         // nBits
         nBits = DarkGravityWave(&blocks[i - 1], NULL, chainParams->GetConsensus());
@@ -293,28 +309,34 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
         
         // Print
-        printf("%-7d %-13u %-13x %-24.16g\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty);
+        printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)interval);
         // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
+        
+        // Break Test If Fully Restored
+        if ( (unsigned)nBits == powLimitBits && (double)currentDifficulty == initDifficulty) {
+            break;
+        }
     }
     // Check
-    BOOST_CHECK_EQUAL( nBits, 0x18094d73 );
-    BOOST_CHECK_EQUAL( currentDifficulty, 118193022772.53734 ); 
+    BOOST_CHECK_EQUAL( nBits, powLimitBits ); // 0x1f07ffff
+    BOOST_CHECK_EQUAL( currentDifficulty, initDifficulty ); // 1.907323166912278e-06
     // Print
-    printf("\n*** ATTACK (4000) is finished\n");
+    printf("\n*** ATTACK & DEFENSE is finished\n");
     sleep(1);
     // END - ATTACK
     
+    #if 0
     // BEGIN - RESTORE
     printf("\n*** RESTORE\n");
-    printf("%-7s %-13s %-13s %-24s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)");
+    printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
     sleep(1);
-    for (i = i + 1; i <= 200+2+4000+9999; i++) {
+    for (i = i + 1; i <= 200+2+40+99999999; i++) {
         // Check pindexLast is NOT nullptr!
         BOOST_CHECK( &blocks[i - 1] != nullptr );
         assert( &blocks[i - 1] != nullptr);
         
         // Attack Interval 
-        int interval = INT_MAX;
+        int interval = 0 + i - 200+2+40;
         
         // nBits
         nBits = DarkGravityWave(&blocks[i - 1], NULL, chainParams->GetConsensus());
@@ -331,7 +353,7 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
         
         // Print
-        printf("%-7d %-13u %-13x %-24.16g\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty);
+        printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)interval);
         // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
         
         // Break Test If Fully Restored
@@ -346,6 +368,7 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     printf("\n*** RESTORE is finished\n");
     sleep(1);
     // END - RESTORE
+    #endif
 }
 
 #if 0
