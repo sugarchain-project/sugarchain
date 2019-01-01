@@ -138,6 +138,7 @@ unsigned int Lwma3CalculateNextWorkRequired(const CBlockIndex* pindexLast, const
     return nextTarget.GetCompact();
 }
 
+/*
 unsigned int BTC_GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
     assert(pindexLast != nullptr);
@@ -198,6 +199,7 @@ unsigned int BTC_CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_
 
     return bnNew.GetCompact();
 }
+*/
 
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
