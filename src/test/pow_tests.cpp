@@ -94,6 +94,230 @@ long int unix_timestamp()
     return now;
 }
 
+BOOST_AUTO_TEST_CASE(negativeTimeAttack_test) {
+    // Copyright (c) 2018 cryptozeny of the Sugarchain Core developers
+    const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
+    const Consensus::Params &mainnetParams = chainParams->GetConsensus();
+
+    // int maxBlockIndex = 2147483647 / 1024;
+    int maxBlockIndex = INT_MAX / 1024;
+    std::vector<CBlockIndex> blocks(maxBlockIndex);
+    
+    // Block counter.
+    int i = 0;
+    
+    // powLimit
+    const arith_uint256 powLimit = UintToArith256(chainParams->GetConsensus().powLimit);
+    uint32_t powLimitBits = powLimit.GetCompact();
+
+    // SetCompact
+    // https://en.bitcoin.it/wiki/Difficulty
+    // https://en.bitcoin.it/wiki/Target
+    arith_uint256 powLimitFromBits;
+    uint32_t nBits = powLimitBits;
+    bool fNegative;
+    bool fOverflow;
+    powLimitFromBits.SetCompact((unsigned)powLimitBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+
+    // BEGIN - Check nBits
+    // arith_uint256 left = UintToArith256(uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+    arith_uint256 left = powLimit;
+    uint32_t leftBits = left.GetCompact();
+    // arith_uint256 right = UintToArith256(uint256S("0007ffff00000000000000000000000000000000000000000000000000000000"));
+    arith_uint256 right = powLimitFromBits;
+    uint32_t rightBits = right.GetCompact();
+    powLimitFromBits.SetCompact((unsigned)powLimitBits, &fNegative, &fOverflow); // powLimitBits == 0x1f07ffff
+    BOOST_CHECK_EQUAL( leftBits, rightBits ); // 0x1f07ffff
+    
+    // Genesis Block.
+    blocks[0] = CBlockIndex();
+    blocks[0].nHeight = 0;
+    blocks[0].nTime = 1541009400;
+    blocks[0].nBits = 0x1f07fffe;
+    blocks[0].nChainWork = GetBlockProof(blocks[0]);
+    
+    // Make First Block
+    blocks[1] = GetBlockIndex(&blocks[0], 15, nBits); // 15 is the first interval
+    
+    // Init Difficulty
+    CChain chain = CreateChainWithNbits(nBits); // 0x1f07fffe
+    double initDifficulty = (double)GetDifficulty(chain, &blocks[0 + 1]);
+    double currentDifficulty = (double)initDifficulty;
+    double currentDifficultyRatio = (double)currentDifficulty / (double)initDifficulty;
+
+    printf("\n\n\n\n\n\n\n\n\n\n");
+    printf("*** Show mainnetParams\n");
+    printf("T = %ld\n", mainnetParams.nPowTargetSpacing);
+    printf("N = %ld\n", mainnetParams.difficultyAveragingWindowSize);
+    printf("powLimit =\n");
+    printf("%s\n", powLimit.ToString().c_str()); // 0x1f07ffff
+    printf("%s\n", powLimitFromBits.GetHex().c_str()); // 0x1f07ffff
+    printf("\n");
+    sleep(1);
+    
+    // Get Current Timestamp
+    long int getCurrentTimestamp = unix_timestamp();
+    
+    // Get Genesis Interval 
+    // int interval = 1541009400;
+    long int genesisInterval = getCurrentTimestamp - 1541009400;
+    int interval;
+    
+    // Print
+    printf("*** Check Genesis\n");
+    printf("%-7s %-13s %-13s %-24s %-7s %-14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Diff(%)", "Interval");
+    printf("%-7d %-13u %-13x %-24.16g %-7.3f %-14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (double)currentDifficultyRatio, (int)genesisInterval);
+    // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
+    printf("\n");
+    sleep(1);
+    
+    // BEGIN - First Window
+    // Attack Interval 
+    interval = 15;
+    printf("*** First Window\n");
+    printf("%-7s %-13s %-13s %-24s %-7s %-14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Diff(%)", "Interval");
+    sleep(1);
+    for (i = 1; i <= 200+0; i++) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+        
+        // nBits
+        nBits = DarkGravityWave(&blocks[i - 1], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow);
+        
+        // Calculate Current Block
+        blocks[i] = GetBlockIndex(&blocks[i - 1], interval, nBits); // 0 is Interval
+        
+        // Make Next Block
+        blocks[i + 1] = GetBlockIndex(&blocks[i + 0], interval, nBits); // 0 is Interval
+        
+        // GetDifficulty from Next Block
+        chain = CreateChainWithNbits((unsigned)nBits);
+        currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
+        currentDifficultyRatio = (double)currentDifficulty / (double)initDifficulty;
+        
+        // Print
+        printf("%-7d %-13u %-13x %-24.16g %-7.3f %-14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (double)currentDifficultyRatio, (int)interval);
+        // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
+        
+        // Check
+        BOOST_CHECK_EQUAL( nBits, powLimitBits ); // 0x1f07ffff
+        BOOST_CHECK_EQUAL( currentDifficulty, initDifficulty ); // 1.907323166912278e-06
+    }
+    printf("\n*** First Window Filled\n");
+    sleep(1);
+    // END - First Window
+    
+    // BEGIN - ATTACK
+    // Attack Interval 
+    // interval = -9999;
+    printf("\n*** ATTACK: NegativeRandom\n");
+    printf("%-7s %-13s %-13s %-24s %-7s %-14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Diff(%)", "Interval");
+    sleep(1);
+    for (i = i + 1; i <= 200+9999; i++) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+        
+        // Changing Attack Interval 
+        int varInterval;
+        // output = min + (rand() % static_cast<int>(max - min + 1))
+        int min = -15;
+        int max = 15;
+        varInterval = min + (rand() % static_cast<int>(max - min + 1));
+        
+        // nBits
+        nBits = DarkGravityWave(&blocks[i - 1], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow);
+        
+        // Calculate Current Block
+        blocks[i] = GetBlockIndex(&blocks[i - 1], varInterval, nBits); // 0 is Interval
+        
+        // Make Next Block
+        blocks[i + 1] = GetBlockIndex(&blocks[i + 0], varInterval, nBits); // 0 is Interval
+        
+        // GetDifficulty from Next Block
+        chain = CreateChainWithNbits((unsigned)nBits);
+        currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
+        currentDifficultyRatio = (double)currentDifficulty / (double)initDifficulty;
+        
+        // Print
+        printf("%-7d %-13u %-13x %-24.16g %-7.3f %-14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (double)currentDifficultyRatio, (int)varInterval);
+        // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
+        
+        // Break Test If Fully Restored
+        // if ( (unsigned)nBits == powLimitBits && (double)currentDifficulty == initDifficulty) {
+        if ( (double)currentDifficultyRatio >= 2.0 ) {
+            printf("\n*** currentDifficultyRatio >= 2.0\n");
+            sleep(1);
+            break;
+        }
+    }
+    // Check
+    // BOOST_CHECK_EQUAL( nBits, 486619892 ); // 1d013af4
+    BOOST_CHECK( currentDifficultyRatio >= 2.0 );
+    // BOOST_CHECK_EQUAL( nBits, 504667824 ); // 1e149eb0
+    // BOOST_CHECK_EQUAL( currentDifficulty, 0.00018943813991848115 );
+    // Print
+    printf("\n*** ATTACK: NegativeRandom is finished\n");
+    sleep(1);
+    // END - ATTACK
+    
+    // BEGIN - DEFENSE
+    // Attack Interval 
+    // interval = 0;
+    printf("\n*** DEFENSE: Random\n");
+    printf("%-7s %-13s %-13s %-24s %-7s %-14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Diff(%)", "Interval");
+    sleep(1);
+    for (i = i + 1; i <= 200+9999+9999; i++) {
+        // Check pindexLast is NOT nullptr!
+        BOOST_CHECK( &blocks[i - 1] != nullptr );
+        assert( &blocks[i - 1] != nullptr);
+    
+        // Changing Attack Interval 
+        int varInterval;
+        // output = min + (rand() % static_cast<int>(max - min + 1))
+        int min = -15;
+        int max = 150;
+        varInterval = min + (rand() % static_cast<int>(max - min + 1));
+    
+        // nBits
+        nBits = DarkGravityWave(&blocks[i - 1], NULL, chainParams->GetConsensus());
+        powLimitFromBits.SetCompact((unsigned)nBits, &fNegative, &fOverflow);
+    
+        // Calculate Current Block
+        blocks[i] = GetBlockIndex(&blocks[i - 1], varInterval, nBits); // 0 is Interval
+    
+        // Make Next Block
+        blocks[i + 1] = GetBlockIndex(&blocks[i + 0], varInterval, nBits); // 0 is Interval
+    
+        // GetDifficulty from Next Block
+        chain = CreateChainWithNbits((unsigned)nBits);
+        currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
+        currentDifficultyRatio = (double)currentDifficulty / (double)initDifficulty;
+    
+        // Print
+        printf("%-7d %-13u %-13x %-24.16g %-7.3f %-14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (double)currentDifficultyRatio, (int)varInterval);
+        // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
+    
+        // Break Test If Fully Restored
+        if ( (unsigned)nBits == powLimitBits && (double)currentDifficulty == initDifficulty) {
+            printf("\n*** currentDifficulty == initDifficulty\n");
+            sleep(1);
+            break;
+        }
+    }
+    // Check
+    BOOST_CHECK_EQUAL( nBits, powLimitBits ); // 0x1f07ffff
+    BOOST_CHECK_EQUAL( currentDifficulty, initDifficulty ); // 1.907323166912278e-06
+    // Print
+    printf("\n*** DEFENSE: Random is finished\n");
+    sleep(1);
+    // END - DEFENSE
+}
+
+/*
 BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     // Copyright (c) 2018 cryptozeny of the Sugarchain Core developers
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
@@ -143,6 +367,7 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     CChain chain = CreateChainWithNbits(nBits); // 0x1f07fffe
     double initDifficulty = (double)GetDifficulty(chain, &blocks[0 + 1]);
     double currentDifficulty = (double)initDifficulty;
+    double currentDifficultyRatio = (double)currentDifficulty / (double)initDifficulty;
 
     printf("\n\n\n\n\n\n\n\n\n\n");
     printf("*** Show mainnetParams\n");
@@ -164,8 +389,8 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     
     // Print
     printf("*** Check Genesis\n");
-    printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
-    printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)genesisInterval);
+    printf("%-7s %-13s %-13s %-24s %-7s %-14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Diff(%)", "Interval");
+    printf("%-7d %-13u %-13x %-24.16g %-7.3f %-14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (double)currentDifficultyRatio, (int)genesisInterval);
     // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
     printf("\n");
     sleep(1);
@@ -174,7 +399,7 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     // Attack Interval 
     interval = 15;
     printf("*** First Window\n");
-    printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
+    printf("%-7s %-13s %-13s %-24s %-7s %-14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Diff(%)", "Interval");
     sleep(1);
     for (i = 1; i <= 200+0; i++) {
         // Check pindexLast is NOT nullptr!
@@ -194,9 +419,10 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         // GetDifficulty from Next Block
         chain = CreateChainWithNbits((unsigned)nBits);
         currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
+        currentDifficultyRatio = (double)currentDifficulty / (double)initDifficulty;
         
         // Print
-        printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)interval);
+        printf("%-7d %-13u %-13x %-24.16g %-7.3f %-14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (double)currentDifficultyRatio, (int)interval);
         // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
         
         // Check
@@ -207,13 +433,14 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     sleep(1);
     // END - First Window
     
+    #if 0
     // BEGIN - Attack one block
     // Attack Interval 
     interval = 0;
     if (nBits != 0) {
         // i++; // Don't add after Loop 
         printf("\n*** Attack one block\n");
-        printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
+        printf("%-7s %-13s %-13s %-24s %-7s %-14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Diff(%)", "Interval");
         sleep(1);
         
         // Check pindexLast is NOT nullptr!
@@ -233,9 +460,10 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         // GetDifficulty from Next Block
         chain = CreateChainWithNbits((unsigned)nBits);
         currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
+        currentDifficultyRatio = (double)currentDifficulty / (double)initDifficulty;
         
         // Print
-        printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)interval);
+        printf("%-7d %-13u %-13x %-24.16g %-7.3f %-14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (double)currentDifficultyRatio, (int)interval);
         // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
         
         // Check
@@ -250,7 +478,7 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     if (nBits != 0) {
         i++;
         printf("\n*** Attack one block\n");
-        printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
+        printf("%-7s %-13s %-13s %-24s %-7s %-14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Diff(%)", "Interval");
         sleep(1);
         
         // Check pindexLast is NOT nullptr!
@@ -270,9 +498,10 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         // GetDifficulty from Next Block
         chain = CreateChainWithNbits((unsigned)nBits);
         currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
+        currentDifficultyRatio = (double)currentDifficulty / (double)initDifficulty;
         
         // Print
-        printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)interval);
+        printf("%-7d %-13u %-13x %-24.16g %-7.3f %-14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (double)currentDifficultyRatio, (int)interval);
         // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
         
         // Check
@@ -280,24 +509,25 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         BOOST_CHECK_EQUAL( currentDifficulty, 1.9266860517572369e-06 );
     }
     // END - Attack one block
+    #endif 
     
     // BEGIN - ATTACK
     // Attack Interval 
     // interval = -9999;
     printf("\n*** ATTACK: NegativeRandom\n");
-    printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
+    printf("%-7s %-13s %-13s %-24s %-7s %-14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Diff(%)", "Interval");
     sleep(1);
-    for (i = i + 1; i <= 200+2+9999; i++) {
+    for (i = i + 1; i <= 200+9999; i++) {
         // Check pindexLast is NOT nullptr!
         BOOST_CHECK( &blocks[i - 1] != nullptr );
         assert( &blocks[i - 1] != nullptr);
         
         // Changing Attack Interval 
         int varInterval;
-        // varInterval = (i-(200+2+1300));
-        // int random = rand() % max + min;
-        // varInterval = -1 * ( rand() % INT_MAX + 0 );
-        varInterval = -1 * ( rand() % genesisInterval + 0 );
+        // output = min + (rand() % static_cast<int>(max - min + 1))
+        int min = -15;
+        int max = 15;
+        varInterval = min + (rand() % static_cast<int>(max - min + 1));
         
         // nBits
         nBits = DarkGravityWave(&blocks[i - 1], NULL, chainParams->GetConsensus());
@@ -312,22 +542,25 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         // GetDifficulty from Next Block
         chain = CreateChainWithNbits((unsigned)nBits);
         currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
+        currentDifficultyRatio = (double)currentDifficulty / (double)initDifficulty;
         
         // Print
-        printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)varInterval);
+        printf("%-7d %-13u %-13x %-24.16g %-7.3f %-14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (double)currentDifficultyRatio, (int)varInterval);
         // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
         
         // Break Test If Fully Restored
         // if ( (unsigned)nBits == powLimitBits && (double)currentDifficulty == initDifficulty) {
-        if ( (double)currentDifficulty >= 1.0 ) {
-            printf("\n*** currentDifficulty >= 1.0\n");
+        if ( (double)currentDifficultyRatio >= 2.0 ) {
+            printf("\n*** currentDifficultyRatio >= 2.0\n");
             sleep(1);
             break;
         }
     }
     // Check
     // BOOST_CHECK_EQUAL( nBits, 486619892 ); // 1d013af4
-    BOOST_CHECK( currentDifficulty >= 1.0 );
+    BOOST_CHECK( currentDifficultyRatio >= 2.0 );
+    // BOOST_CHECK_EQUAL( nBits, 504667824 ); // 1e149eb0
+    // BOOST_CHECK_EQUAL( currentDifficulty, 0.00018943813991848115 );
     // Print
     printf("\n*** ATTACK: NegativeRandom is finished\n");
     sleep(1);
@@ -337,20 +570,19 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     // Attack Interval 
     // interval = 0;
     printf("\n*** DEFENSE: Random\n");
-    printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
+    printf("%-7s %-13s %-13s %-24s %-7s %-14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Diff(%)", "Interval");
     sleep(1);
-    for (i = i + 1; i <= 200+2+9999+99999; i++) {
+    for (i = i + 1; i <= 200+9999+9999; i++) {
         // Check pindexLast is NOT nullptr!
         BOOST_CHECK( &blocks[i - 1] != nullptr );
         assert( &blocks[i - 1] != nullptr);
     
         // Changing Attack Interval 
-        // int varInterval;
-        // varInterval = abs( pow( 2.0, (i-(200+2+1500+1)) ) - 1);
         int varInterval;
-        // varInterval = pow( 1.25, (i-(200+2+1300+1)) );
-        // int random = rand() % max + min;
-        varInterval = rand() % INT_MAX + 0;
+        // output = min + (rand() % static_cast<int>(max - min + 1))
+        int min = -15;
+        int max = 150;
+        varInterval = min + (rand() % static_cast<int>(max - min + 1));
     
         // nBits
         nBits = DarkGravityWave(&blocks[i - 1], NULL, chainParams->GetConsensus());
@@ -365,9 +597,10 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         // GetDifficulty from Next Block
         chain = CreateChainWithNbits((unsigned)nBits);
         currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
+        currentDifficultyRatio = (double)currentDifficulty / (double)initDifficulty;
     
         // Print
-        printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)varInterval);
+        printf("%-7d %-13u %-13x %-24.16g %-7.3f %-14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (double)currentDifficultyRatio, (int)varInterval);
         // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
     
         // Break Test If Fully Restored
@@ -388,7 +621,7 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     #if 0
     // BEGIN - RESTORE
     printf("\n*** RESTORE\n");
-    printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
+    printf("%-7s %-13s %-13s %-24s %-7s %-14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Diff(%)", "Interval");
     sleep(1);
     for (i = i + 1; i <= 200+2+40+99999999; i++) {
         // Check pindexLast is NOT nullptr!
@@ -413,7 +646,7 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         currentDifficulty = (double)GetDifficulty(chain, &blocks[i + 1]);
         
         // Print
-        printf("%-7d %-13u %-13x %-24.16g %14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (int)interval);
+        printf("%-7d %-13u %-13x %-24.16g %-7.3f %-14d\n", i, (unsigned)nBits, (unsigned)nBits, (double)currentDifficulty, (double)currentDifficultyRatio, (int)interval);
         // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
         
         // Break Test If Fully Restored
@@ -430,6 +663,7 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     // END - RESTORE
     #endif
 }
+*/
 
 #if 0
 BOOST_AUTO_TEST_CASE(h4x3rotab_test)
