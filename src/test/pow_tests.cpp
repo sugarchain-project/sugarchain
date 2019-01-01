@@ -284,17 +284,20 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     // BEGIN - ATTACK
     // Attack Interval 
     // interval = -9999;
-    printf("\n*** ATTACK (1300)\n");
+    printf("\n*** ATTACK: NegativeRandom\n");
     printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
     sleep(1);
-    for (i = i + 1; i <= 200+2+1300; i++) {
+    for (i = i + 1; i <= 200+2+9999; i++) {
         // Check pindexLast is NOT nullptr!
         BOOST_CHECK( &blocks[i - 1] != nullptr );
         assert( &blocks[i - 1] != nullptr);
         
         // Changing Attack Interval 
         int varInterval;
-        varInterval = (i-(200+2+1300));
+        // varInterval = (i-(200+2+1300));
+        // int random = rand() % max + min;
+        // varInterval = -1 * ( rand() % INT_MAX + 0 );
+        varInterval = -1 * ( rand() % genesisInterval + 0 );
         
         // nBits
         nBits = DarkGravityWave(&blocks[i - 1], NULL, chainParams->GetConsensus());
@@ -315,25 +318,28 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         // printf("%-7s %s\n", "", powLimitFromBits.ToString().c_str());
         
         // Break Test If Fully Restored
-        if ( (unsigned)nBits == powLimitBits && (double)currentDifficulty == initDifficulty) {
+        // if ( (unsigned)nBits == powLimitBits && (double)currentDifficulty == initDifficulty) {
+        if ( (double)currentDifficulty >= 1.0 ) {
+            printf("\n*** currentDifficulty >= 1.0\n");
+            sleep(1);
             break;
         }
     }
     // Check
-    BOOST_CHECK_EQUAL( nBits, 486619892 ); // 1d013af4
-    BOOST_CHECK_EQUAL( currentDifficulty, 0.81280696532222052 );
+    // BOOST_CHECK_EQUAL( nBits, 486619892 ); // 1d013af4
+    BOOST_CHECK( currentDifficulty >= 1.0 );
     // Print
-    printf("\n*** ATTACK (1300) is finished\n");
+    printf("\n*** ATTACK: NegativeRandom is finished\n");
     sleep(1);
     // END - ATTACK
     
     // BEGIN - DEFENSE
     // Attack Interval 
     // interval = 0;
-    printf("\n*** DEFENSE\n");
+    printf("\n*** DEFENSE: Random\n");
     printf("%-7s %-13s %-13s %-24s %14s\n", "Block", "Target(uint)", "Target(hex)", "Diff(double)", "Interval(SEC)");
     sleep(1);
-    for (i = i + 1; i <= 200+2+1300+99999; i++) {
+    for (i = i + 1; i <= 200+2+9999+99999; i++) {
         // Check pindexLast is NOT nullptr!
         BOOST_CHECK( &blocks[i - 1] != nullptr );
         assert( &blocks[i - 1] != nullptr);
@@ -343,6 +349,7 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
         // varInterval = abs( pow( 2.0, (i-(200+2+1500+1)) ) - 1);
         int varInterval;
         // varInterval = pow( 1.25, (i-(200+2+1300+1)) );
+        // int random = rand() % max + min;
         varInterval = rand() % INT_MAX + 0;
     
         // nBits
@@ -365,6 +372,8 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     
         // Break Test If Fully Restored
         if ( (unsigned)nBits == powLimitBits && (double)currentDifficulty == initDifficulty) {
+            printf("\n*** currentDifficulty == initDifficulty\n");
+            sleep(1);
             break;
         }
     }
@@ -372,7 +381,7 @@ BOOST_AUTO_TEST_CASE(getdifficulty_test) {
     BOOST_CHECK_EQUAL( nBits, powLimitBits ); // 0x1f07ffff
     BOOST_CHECK_EQUAL( currentDifficulty, initDifficulty ); // 1.907323166912278e-06
     // Print
-    printf("\n*** DEFENSE is finished\n");
+    printf("\n*** DEFENSE: Random is finished\n");
     sleep(1);
     // END - DEFENSE
     
