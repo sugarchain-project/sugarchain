@@ -477,7 +477,7 @@ class CTransaction():
     def is_valid(self):
         self.calc_sha256()
         for tout in self.vout:
-            if tout.nValue < 0 or tout.nValue > 840000000 * COIN:   # // 40x bitcoin // 21000000 * 40 = 840000000
+            if tout.nValue < 0 or tout.nValue > 1260000000 * COIN:   # // 60x bitcoin // 21000000 * 60 = 1260000000
                 return False
         return True
 
