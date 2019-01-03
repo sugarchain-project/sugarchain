@@ -196,6 +196,11 @@ void PaymentServerTests::paymentServerTests()
     QVERIFY(r.paymentRequest.IsInitialized());
     // Extract address and amount from the request
     QList<std::pair<CScript, CAmount> > sendingTos = r.paymentRequest.getPayTo();
+
+    // BEGIN - DELME.SUGAR: just for debugging
+    printf( "\n\n\n\n\n\n\n\n\n\n %s \n\n\n", paymentrequest5_cert2_BASE64 );
+    // END - DELME.SUGAR: just for debugging
+
     for (const std::pair<CScript, CAmount>& sendingTo : sendingTos) {
         CTxDestination dest;
         if (ExtractDestination(sendingTo.first, dest))
