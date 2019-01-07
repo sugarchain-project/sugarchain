@@ -187,7 +187,7 @@ public:
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
         consensus.BIP65Height = 0; // always on
         consensus.BIP66Height = 0; // always on
-        consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f07ffff
+        consensus.powLimit = uint256S("007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f7fffff **caution**
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
         consensus.difficultyAveragingWindowSize = 200; // N=200 for difficulty
         consensus.nPowTargetSpacing = 10 * 60 / 60; // 10 sec. // 60x bitcoin // 10 * 60 / 60 = 10
@@ -213,7 +213,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x0cd2892e2d72806e550ffb8730870ce88ee53dbefe8eb882d17b23e3d34321f1"); // genesis
+        consensus.defaultAssumeValid = uint256S("0xfd848e7312b097c0f2c5c968153e37c6f5fbca7d0c42d3bb7ddd86dcf4920b3e"); // genesis // 0x1f7fffff **caution**
 
         pchMessageStart[0] = 0xb0;
         pchMessageStart[1] = 0x11;
@@ -222,14 +222,15 @@ public:
         nDefaultPort = 17979;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1541009401, 12765, 0x1f07ffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541009401, 394, 0x1f7fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         // printf("***\n");
         // printf("genesis.GetHash.TESTNET = %s\n", genesis.GetHash().ToString().c_str());
         // printf("genesis.GetPoWHash.TESTNET = %s\n", genesis.GetPoWHash().ToString().c_str());
         // printf("genesis.hashMerkleRoot.TESTNET %s\n",genesis.hashMerkleRoot.ToString().c_str());
         // printf("***\n");
-        assert(consensus.hashGenesisBlock == uint256S("0x0cd2892e2d72806e550ffb8730870ce88ee53dbefe8eb882d17b23e3d34321f1"));
+        assert(consensus.hashGenesisBlock == uint256S("0xfd848e7312b097c0f2c5c968153e37c6f5fbca7d0c42d3bb7ddd86dcf4920b3e")); // genesis // 0x1f7fffff **caution**
+        assert(genesis.GetPoWHash() == uint256S("0x00133bad1ca029db690e3f70bd393fa939d1df0995a46ff978454e3f493ecfdb")); // genesis // 0x1f7fffff **caution**
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         vFixedSeeds.clear();
