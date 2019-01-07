@@ -10,6 +10,8 @@
 #include <primitives/block.h>
 #include <uint256.h>
 
+#include <util.h> // LogPrintf
+
 unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params) {
     /* current difficulty formula, dash - DarkGravity v3, written by Evan Duffield - evan@dash.org */
     assert(pindexLast != nullptr);
@@ -63,6 +65,17 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
     int64_t nActualTimespan = pindexLast->GetBlockTime() - pindex->GetBlockTime();
     // NOTE: is this accurate? nActualTimespan counts it for (nPastBlocks - 1) blocks only...
     int64_t nTargetTimespan = nPastBlocks * params.nPowTargetSpacing;
+
+    // BEGIN - DELME.SUGAR
+    LogPrintf("\n\n");
+    LogPrintf("*** DarkGravityWave\n");
+    LogPrintf("%s %ld\n", "nActualTimespan = ", nActualTimespan);
+    LogPrintf("%s %ld\n", "nTargetTimespan = ", nTargetTimespan);
+    LogPrintf("%s %ld\n", "nPastBlocks = ", nPastBlocks);
+    LogPrintf("%s %ld\n", "params.nPowTargetSpacing = ", params.nPowTargetSpacing);
+    LogPrintf("***\n");
+    LogPrintf("\n\n");
+    // END - DELME.SUGAR
 
     if (nActualTimespan < nTargetTimespan/3)
         nActualTimespan = nTargetTimespan/3;
