@@ -71,6 +71,11 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
         } else {
             // NOTE: just a simple moving average
             bnPastTargetAvg += bnTarget/nPastBlocks; // simple average
+
+            // BEGIN - DEBUG.SUGAR
+            LogPrintf("*** DarkGravityWave: TARGET\n"); // UP: Red
+            LogPrintf("\033[36;1m%s\033[0m\n", bnTarget.ToString().c_str());
+            // END - DEBUG.SUGAR
         }
 
         if(nCountBlocks != nPastBlocks) {
