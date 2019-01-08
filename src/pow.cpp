@@ -44,14 +44,33 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
     const CBlockIndex *pindex = pindexLast;
     arith_uint256 bnPastTargetAvg;
 
+    // for (unsigned int nCountBlocks = 1; nCountBlocks <= nPastBlocks; nCountBlocks++) {
+    //     arith_uint256 bnTarget = arith_uint256().SetCompact(pindex->nBits);
+    //     if (nCountBlocks == 1) {
+    //         bnPastTargetAvg = bnTarget;
+    //     }
+    //     else {
+    //         // NOTE: that's not an average really...
+    //         bnPastTargetAvg = (bnPastTargetAvg * nCountBlocks + bnTarget) / (nCountBlocks + 1);
+    //     }
+    //
+    //     if(nCountBlocks != nPastBlocks) {
+    //         assert(pindex->pprev); // should never fail
+    //         pindex = pindex->pprev;
+    //     }
+    // }
+
     for (unsigned int nCountBlocks = 1; nCountBlocks <= nPastBlocks; nCountBlocks++) {
+        // zawy12
+        // https://github.com/zawy12/difficulty-algorithms/issues/31
+
         arith_uint256 bnTarget = arith_uint256().SetCompact(pindex->nBits);
+
         if (nCountBlocks == 1) {
             bnPastTargetAvg = bnTarget;
-        }
-        else {
-            // NOTE: that's not an average really...
-            bnPastTargetAvg = (bnPastTargetAvg * nCountBlocks + bnTarget) / (nCountBlocks + 1);
+        } else {
+            // NOTE: just a simple moving average
+            bnPastTargetAvg += bnTarget/nPastBlocks; // simple average
         }
 
         if(nCountBlocks != nPastBlocks) {
