@@ -67,7 +67,7 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
     int64_t nTargetTimespan = nPastBlocks * params.nPowTargetSpacing;
     
     // BEGIN - DEBUG.SUGAR
-    LogPrintf("*** DarkGravityWave\n");
+    LogPrintf("*** DarkGravityWave: INFO\n");
     LogPrintf("%-5s %-5s %-10s %-10s %-5s\n", "N", "ST", "nActualTS", "nTargetTS", "A/T");
     LogPrintf("%-5ld %-5ld %-10ld %-10ld \033[36;1m%-5g\033[0m\n", nPastBlocks, params.nPowTargetSpacing, nActualTimespan, nTargetTimespan, (double)nActualTimespan/(double)nTargetTimespan); // Cyan
     // END - DEBUG.SUGAR
@@ -96,6 +96,18 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
     if (bnNew > bnPowLimit) {
         bnNew = bnPowLimit;
     }
+
+    // BEGIN - DEBUG.SUGAR
+    LogPrintf("*** DarkGravityWave: DIFFICULTY\n");
+    LogPrintf("%s %s %s %s %s\n", "nBits", "powLimit", "pindexLast", "bnPastTargetAvg", "bnNew");
+    LogPrintf("%x %s %g %s %s\n",
+        nProofOfWorkLimit, // 1f7fffff
+        bnPowLimit.ToString().c_str(), // 007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+        pindexLast, // 0x7f9428dab860
+        bnPastTargetAvg.ToString().c_str(), // 000eb1cbca6b29aca6b29aca6b29aca6b29aca6b29aca6b29aca6b29aca6b24c
+        bnNew.ToString().c_str() // 000012f0c17b7fc921f56d35f66110d009e8173e0f254aeb2fc5528a069298ce
+    );
+    // END - DEBUG.SUGAR
 
     return bnNew.GetCompact();
 }
