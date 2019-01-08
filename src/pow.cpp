@@ -65,22 +65,29 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
     int64_t nActualTimespan = pindexLast->GetBlockTime() - pindex->GetBlockTime();
     // NOTE: is this accurate? nActualTimespan counts it for (nPastBlocks - 1) blocks only...
     int64_t nTargetTimespan = nPastBlocks * params.nPowTargetSpacing;
-
-    // BEGIN - DELME.SUGAR
-    LogPrintf("\n\n");
+    
+    // BEGIN - DEBUG.SUGAR
     LogPrintf("*** DarkGravityWave\n");
-    LogPrintf("%s %ld\n", "nActualTimespan = ", nActualTimespan);
-    LogPrintf("%s %ld\n", "nTargetTimespan = ", nTargetTimespan);
-    LogPrintf("%s %ld\n", "nPastBlocks = ", nPastBlocks);
-    LogPrintf("%s %ld\n", "params.nPowTargetSpacing = ", params.nPowTargetSpacing);
-    LogPrintf("***\n");
-    LogPrintf("\n\n");
-    // END - DELME.SUGAR
+    LogPrintf("%-5s %-5s %-10s %-10s %-5s\n", "N", "ST", "nActualTS", "nTargetTS", "A/T");
+    LogPrintf("%-5ld %-5ld %-10ld %-10ld %-5g\n", nPastBlocks, params.nPowTargetSpacing, nActualTimespan, nTargetTimespan, (double)nActualTimespan/(double)nTargetTimespan);
+    // END - DEBUG.SUGAR
 
-    if (nActualTimespan < nTargetTimespan/3)
+    if (nActualTimespan < nTargetTimespan/3) {
+        // BEGIN - DEBUG.SUGAR
+        LogPrintf("*** DarkGravityWave: DOWN\n");
+        LogPrintf("%-10ld < %-10g\n", nActualTimespan, (double)nTargetTimespan/3);
+        LogPrintf("%-10ld = %-10g\n", nActualTimespan, (double)nTargetTimespan/3);
+        // END - DEBUG.SUGAR
         nActualTimespan = nTargetTimespan/3;
-    if (nActualTimespan > nTargetTimespan*3)
+    }
+    if (nActualTimespan > nTargetTimespan*3) {
+        // BEGIN - DEBUG.SUGAR
+        LogPrintf("*** DarkGravityWave: UP\n");
+        LogPrintf("%-10ld > %-10g\n", nActualTimespan, (double)nTargetTimespan*3);
+        LogPrintf("%-10ld = %-10g\n", nActualTimespan, (double)nTargetTimespan*3);
+        // END - DEBUG.SUGAR
         nActualTimespan = nTargetTimespan*3;
+    }
 
     // Retarget
     bnNew *= nActualTimespan;
