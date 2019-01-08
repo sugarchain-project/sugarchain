@@ -69,12 +69,12 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
     // BEGIN - DEBUG.SUGAR
     LogPrintf("*** DarkGravityWave\n");
     LogPrintf("%-5s %-5s %-10s %-10s %-5s\n", "N", "ST", "nActualTS", "nTargetTS", "A/T");
-    LogPrintf("%-5ld %-5ld %-10ld %-10ld %-5g\n", nPastBlocks, params.nPowTargetSpacing, nActualTimespan, nTargetTimespan, (double)nActualTimespan/(double)nTargetTimespan);
+    LogPrintf("%-5ld %-5ld %-10ld %-10ld \033[36;1m%-5g\033[0m\n", nPastBlocks, params.nPowTargetSpacing, nActualTimespan, nTargetTimespan, (double)nActualTimespan/(double)nTargetTimespan); // Cyan
     // END - DEBUG.SUGAR
 
     if (nActualTimespan < nTargetTimespan/3) {
         // BEGIN - DEBUG.SUGAR
-        LogPrintf("*** DarkGravityWave: DOWN\n");
+        LogPrintf("*** DarkGravityWave: \033[32;1mDOWN\033[0m\n"); // Green
         LogPrintf("%-10ld < %-10g\n", nActualTimespan, (double)nTargetTimespan/3);
         LogPrintf("%-10ld = %-10g\n", nActualTimespan, (double)nTargetTimespan/3);
         // END - DEBUG.SUGAR
@@ -82,7 +82,7 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
     }
     if (nActualTimespan > nTargetTimespan*3) {
         // BEGIN - DEBUG.SUGAR
-        LogPrintf("*** DarkGravityWave: UP\n");
+        LogPrintf("*** DarkGravityWave: \033[31;1mUP\033[0m\n"); // Red
         LogPrintf("%-10ld > %-10g\n", nActualTimespan, (double)nTargetTimespan*3);
         LogPrintf("%-10ld = %-10g\n", nActualTimespan, (double)nTargetTimespan*3);
         // END - DEBUG.SUGAR
