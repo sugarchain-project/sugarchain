@@ -74,17 +74,17 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
 
     if (nActualTimespan < nTargetTimespan/3) {
         // BEGIN - DEBUG.SUGAR
-        LogPrintf("*** DarkGravityWave: \033[32;1mDOWN\033[0m\n"); // Green
-        LogPrintf("%-10ld < %-10g\n", nActualTimespan, (double)nTargetTimespan/3);
-        LogPrintf("%-10ld = %-10g\n", nActualTimespan, (double)nTargetTimespan/3);
+        LogPrintf("*** DarkGravityWave: \033[32;1mDOWN\033[0m\n"); // DOWN: Green
+        LogPrintf("%ld < %g\n", nActualTimespan, (double)nTargetTimespan/3);
+        LogPrintf("%ld = %g\n", nActualTimespan, (double)nTargetTimespan/3);
         // END - DEBUG.SUGAR
         nActualTimespan = nTargetTimespan/3;
     }
     if (nActualTimespan > nTargetTimespan*3) {
         // BEGIN - DEBUG.SUGAR
-        LogPrintf("*** DarkGravityWave: \033[31;1mUP\033[0m\n"); // Red
-        LogPrintf("%-10ld > %-10g\n", nActualTimespan, (double)nTargetTimespan*3);
-        LogPrintf("%-10ld = %-10g\n", nActualTimespan, (double)nTargetTimespan*3);
+        LogPrintf("*** DarkGravityWave: \033[31;1mUP\033[0m\n"); // UP: Red
+        LogPrintf("%ld > %g\n", nActualTimespan, (double)nTargetTimespan*3);
+        LogPrintf("%ld = %g\n", nActualTimespan, (double)nTargetTimespan*3);
         // END - DEBUG.SUGAR
         nActualTimespan = nTargetTimespan*3;
     }
