@@ -84,7 +84,7 @@ public:
         consensus.BIP66Height = 0;  // always on
         consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f07ffff
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
-        consensus.difficultyAveragingWindowSize = 300; // N=300 for difficulty
+        consensus.difficultyAveragingWindowSize = 360; // N=360 for difficulty
         consensus.nPowTargetSpacing = 10 * 60 / 60; // 10 sec. // 60x bitcoin // 10 * 60 / 60 = 10
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
@@ -189,7 +189,7 @@ public:
         consensus.BIP66Height = 0; // always on
         consensus.powLimit = uint256S("007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f7fffff **caution**
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
-        consensus.difficultyAveragingWindowSize = 300; // N=300 for difficulty
+        consensus.difficultyAveragingWindowSize = 360; // N=360 for difficulty
         consensus.nPowTargetSpacing = 10 * 60 / 60; // 10 sec. // 60x bitcoin // 10 * 60 / 60 = 10
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
@@ -287,7 +287,7 @@ public:
         consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in rpc activation tests)
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
-        consensus.difficultyAveragingWindowSize = 300; // N=300 for difficulty
+        consensus.difficultyAveragingWindowSize = 360; // N=360 for difficulty
         consensus.nPowTargetSpacing = 10 * 60 / 60; // 10 sec. // 60x bitcoin // 10 * 60 / 60 = 10
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
