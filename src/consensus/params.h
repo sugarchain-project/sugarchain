@@ -11,6 +11,8 @@
 #include <map>
 #include <string>
 
+#include <boost/optional.hpp>
+
 namespace Consensus {
 
 enum DeploymentPos
@@ -75,7 +77,15 @@ struct Params {
     int64_t DifficultyAdjustmentInterval() const { return nPowTargetTimespan / nPowTargetSpacing; }
     uint256 nMinimumChainWork;
     uint256 defaultAssumeValid;
+    
     int64_t difficultyAveragingWindowSize;
+    boost::optional<uint32_t> nPowAllowMinDifficultyBlocksAfterHeight;
+    int64_t nPowAveragingWindow;
+    int64_t AveragingWindowTimespan() const { return nPowAveragingWindow * nPowTargetSpacing; }
+    int64_t MinActualTimespan() const { return (AveragingWindowTimespan() * (100 - nPowMaxAdjustUp  )) / 100; }
+    int64_t MaxActualTimespan() const { return (AveragingWindowTimespan() * (100 + nPowMaxAdjustDown)) / 100; }
+    int64_t nPowMaxAdjustDown;
+    int64_t nPowMaxAdjustUp;
 };
 } // namespace Consensus
 
