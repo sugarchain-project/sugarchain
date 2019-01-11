@@ -144,6 +144,7 @@ unsigned int CalculateNextWorkRequired(arith_uint256 bnAvg,
     /// debug print
     LogPrint(BCLog::POW, "GetNextWorkRequired RETARGET\n");
     LogPrint(BCLog::POW, "params.AveragingWindowTimespan() = %d    nActualTimespan = %d\n", params.AveragingWindowTimespan(), nActualTimespan);
+    LogPrint(BCLog::POW, "Timespan ratio: %d / %d = \033[31;1m%.3g\033[0m\n", params.AveragingWindowTimespan(), nActualTimespan, (double)params.AveragingWindowTimespan()/(double)nActualTimespan); // Timespan ratio: Red
     LogPrint(BCLog::POW, "Current average: %08x  %s\n", bnAvg.GetCompact(), bnAvg.ToString());
     LogPrint(BCLog::POW, "After:  %08x  %s\n", bnNew.GetCompact(), bnNew.ToString());
 
