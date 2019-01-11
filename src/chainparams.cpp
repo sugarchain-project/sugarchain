@@ -200,8 +200,16 @@ public:
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
         consensus.difficultyAveragingWindowSize = 360; // N=360 for difficulty
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
-        consensus.nPowAveragingWindow = 17;
+        consensus.nPowAveragingWindow = 255; // 2550 / nPowTargetSpacing(10) = 255
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
+
+        printf("\n\n\n\n\n");
+        printf("*** BEGIN - DEBUG\n");
+        printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
+        printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
+        assert(maxUint/UintToArith256(consensus.powLimit) == 512); // 0x0000000000000000000000000000000000000000000000000000000000000200 == 512
+        printf("*** END - DEBUG\n");
+
         consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
         consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
         consensus.nPowTargetSpacing = 10 * 60 / 60; // 10 sec. // 60x bitcoin // 10 * 60 / 60 = 10
