@@ -80,7 +80,7 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        consensus.nSubsidyHalvingInterval = 12600000; // 60x bitcoin // 210000 * 60
+        consensus.nSubsidyHalvingInterval = 210000 * 120; // 120x bitcoin // 210000 * 120 = 25200000
         consensus.BIP16Height = 0;  // always on
         consensus.BIP34Height = 17; // FIXME.SUGAR
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
@@ -94,11 +94,11 @@ public:
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
         consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
         consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
-        consensus.nPowTargetSpacing = 10 * 60 / 60; // 10 sec. // 60x bitcoin // 10 * 60 / 60 = 10
+        consensus.nPowTargetSpacing = 10 * 60 / 120; // 5 sec. // 120x bitcoin
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
-        consensus.nRuleChangeActivationThreshold = 90720; // 75% of 2 weeks: 1209600 / 10 * 0.75
-        consensus.nMinerConfirmationWindow = 120960; // nPowTargetTimespan / nPowTargetSpacing: 1209600 / 10
+        consensus.nRuleChangeActivationThreshold = 1512 * 120; // 75% of 2016 // 120x bitcoin // 1512 * 120 = 181440
+        consensus.nMinerConfirmationWindow = 2016 * 120; // nPowTargetTimespan / nPowTargetSpacing // 120x bitcoin // 2016 * 120 = 241920
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
@@ -190,7 +190,7 @@ class CTestNetParams : public CChainParams {
 public:
     CTestNetParams() {
         strNetworkID = "test";
-        consensus.nSubsidyHalvingInterval = 12600000; // 60x bitcoin // 210000 * 60
+        consensus.nSubsidyHalvingInterval = 210000 * 120; // 120x bitcoin // 210000 * 120 = 25200000
         consensus.BIP16Height = 0;  // always on
         consensus.BIP34Height = 17; // FIXME.SUGAR
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
@@ -212,11 +212,11 @@ public:
 
         consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
         consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
-        consensus.nPowTargetSpacing = 10 * 60 / 60; // 10 sec. // 60x bitcoin // 10 * 60 / 60 = 10
+        consensus.nPowTargetSpacing = 10 * 60 / 120; // 5 sec. // 120x bitcoin
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
-        consensus.nRuleChangeActivationThreshold = 90720; // 75% of 2 weeks: 1209600 / 10 * 0.75
-        consensus.nMinerConfirmationWindow = 120960; // nPowTargetTimespan / nPowTargetSpacing: 1209600 / 10
+        consensus.nRuleChangeActivationThreshold = 1512 * 120; // 75% of 2016 // 120x bitcoin // 1512 * 120 = 181440
+        consensus.nMinerConfirmationWindow = 2016 * 120; // nPowTargetTimespan / nPowTargetSpacing // 120x bitcoin // 2016 * 120 = 241920
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
@@ -301,25 +301,25 @@ class CRegTestParams : public CChainParams {
 public:
     CRegTestParams() {
         strNetworkID = "regtest";
-        consensus.nSubsidyHalvingInterval = 9000;    // 60x bitcoin // 150 * 60
+        consensus.nSubsidyHalvingInterval = 150 * 120;    // 120x bitcoin // 150 * 120 = 18000
         consensus.BIP16Height = 0; // always enforce P2SH BIP16 on regtest
         consensus.BIP34Height = 100000000; // BIP34 has not activated on regtest (far in the future so block v1 are not rejected in tests)
         consensus.BIP34Hash = uint256();
         consensus.BIP65Height = 1351; // BIP65 activated on regtest (Used in rpc activation tests)
         consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in rpc activation tests)
-        consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // FIXME.SUGAR // FIXME.ASAP
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
         consensus.difficultyAveragingWindowSize = 360; // N=360 for difficulty
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
         consensus.nPowAveragingWindow = 17;
-        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
+        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // FIXME.SUGAR // FIXME.ASAP
         consensus.nPowMaxAdjustDown = 0; // Turn off adjustment down
         consensus.nPowMaxAdjustUp = 0; // Turn off adjustment up
-        consensus.nPowTargetSpacing = 10 * 60 / 60; // 10 sec. // 60x bitcoin // 10 * 60 / 60 = 10
+        consensus.nPowTargetSpacing = 10 * 60 / 120; // 5 sec. // 120x bitcoin
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
-        consensus.nRuleChangeActivationThreshold = 6480; // 75% for testchains // 60x bitcoin // 108 * 60 == 8640 * 0.75
-        consensus.nMinerConfirmationWindow = 8640; // Faster than normal for regtest (144 instead of 2016) // 60x bitcoin // 144 * 60
+        consensus.nRuleChangeActivationThreshold = 108 * 120; // 75% for testchains // 120x bitcoin // 108 * 120 = 12960
+        consensus.nMinerConfirmationWindow = 144 * 120; // Faster than normal for regtest (144 instead of 2016) // 120x bitcoin // 144 * 120 = 17280
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 0;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
@@ -343,7 +343,7 @@ public:
         nDefaultPort = 17799;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1541009402, 0, 0x207fffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541009402, 0, 0x207fffff, 1, 50 * COIN); // FIXME.SUGAR // FIXME.ASAP
         consensus.hashGenesisBlock = genesis.GetHash();
         // printf("***\n");
         // printf("genesis.GetHash.REGTEST = %s\n", genesis.GetHash().ToString().c_str());

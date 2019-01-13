@@ -49,13 +49,13 @@ BOOST_AUTO_TEST_CASE(subsidy_limit_test)
 {
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
     CAmount nSum = 0;
-    for (int nHeight = 0; nHeight < 840000000; nHeight += 1000) { // 60x bitcoin // 14000000 * 60
+    for (int nHeight = 0; nHeight < 14000000 * 120; nHeight += 1000) { // 120x bitcoin // 14000000 * 120 = 1680000000
         CAmount nSubsidy = GetBlockSubsidy(nHeight, chainParams->GetConsensus());
         BOOST_CHECK(nSubsidy <= 50 * COIN);
         nSum += nSubsidy * 1000;
         BOOST_CHECK(MoneyRange(nSum));
     }
-    BOOST_CHECK_EQUAL(nSum, CAmount{125999999861400000}); // 60x bitcoin // 2099999997690000 * 60
+    BOOST_CHECK_EQUAL(nSum, CAmount{251999999722800000}); // 120x bitcoin // 2100000000000000*120 -277200000// ./src/test/test_sugarchain test_bitcoin --log_level=test_suite --run_test=compress_tests
 }
 
 bool ReturnFalse() { return false; }
