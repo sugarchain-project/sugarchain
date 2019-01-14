@@ -421,7 +421,7 @@ BOOST_AUTO_TEST_CASE(caddrinfo_get_tried_bucket)
 
 
     // BOOST_CHECK_EQUAL(info1.GetTriedBucket(nKey1), 40);
-    BOOST_CHECK_EQUAL(info1.GetTriedBucket(nKey1), 14); // FIXME.SUGAR
+    BOOST_CHECK_EQUAL(info1.GetTriedBucket(nKey1), 14); // FIXME.SUGAR // SURE?
 
     // Test: Make sure key actually randomizes bucket placement. A fail on
     //  this test could be a security issue.

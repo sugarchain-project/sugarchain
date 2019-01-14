@@ -45,7 +45,7 @@ BOOST_FIXTURE_TEST_SUITE(miner_tests, TestingSetup)
     {
         unsigned char extranonce;
         unsigned int nonce;
-    } blockinfo[] = { // FIXME.SUGAR
+    } blockinfo[] = { // FIXME.SUGAR // TESTS_DISABLED
             // {3, 0x1147b7d},  {1, 0x115c9f0},  {6, 0x11c6644},  {1, 0x1377d45},
             // {1, 0x1050f1c},  {6, 0x1092cdb},  {5, 0x1201fdf},  {4, 0x1081b87},
             // {1, 0x10ecd8e},  {5, 0x1124186},  {2, 0x16556d5},  {1, 0x1445631},

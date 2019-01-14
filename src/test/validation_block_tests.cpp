@@ -134,7 +134,7 @@ BOOST_AUTO_TEST_CASE(processnewblock_signals_ordering)
     std::transform(blocks.begin(), blocks.end(), std::back_inserter(headers), [](std::shared_ptr<const CBlock> b) { return b->GetBlockHeader(); });
 
     // Process all the headers so we understand the toplogy of the chain
-    // BOOST_CHECK(ProcessNewBlockHeaders(headers, state, Params())); // FIXME.SUGAR
+    // BOOST_CHECK(ProcessNewBlockHeaders(headers, state, Params())); // FIXME.SUGAR // TESTS_DISABLED
 
     // Connect the genesis block and drain any outstanding events
     ProcessNewBlock(Params(), std::make_shared<CBlock>(Params().GenesisBlock()), true, &ignored);
@@ -165,7 +165,7 @@ BOOST_AUTO_TEST_CASE(processnewblock_signals_ordering)
             for (auto block : blocks) {
                 if (block->vtx.size() == 1) {
                     bool processed = ProcessNewBlock(Params(), block, true, &ignored);
-                    // assert(processed); // FIXME.SUGAR
+                    // assert(processed); // FIXME.SUGAR // TESTS_DISABLED
                 }
             }
         });

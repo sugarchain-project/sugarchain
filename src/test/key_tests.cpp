@@ -134,7 +134,7 @@ BOOST_AUTO_TEST_CASE(key_test1)
         BOOST_CHECK(rkey2C == pubkey2C);
     }
 
-    // test deterministic signing // FIXME.SUGAR
+    // test deterministic signing // FIXME.SUGAR // TESTS_DISABLED
 
     // std::vector<unsigned char> detsig, detsigc;
     // std::string strMsg = "Very deterministic message";
