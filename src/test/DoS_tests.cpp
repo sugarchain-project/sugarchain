@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(stale_tip_peer_management)
     // Now tip should definitely be stale, and we should look for an extra
     // outbound peer
     peerLogic->CheckForStaleTipAndEvictPeers(consensusParams);
-    BOOST_CHECK(connman->GetTryNewOutboundPeer());
+    BOOST_CHECK(connman->GetTryNewOutboundPeer()); // FIXME.SUGAR // <net_processing.h> STALE_CHECK_INTERVAL
 
     // Still no peers should be marked for disconnection
     for (const CNode *node : vNodes) {
@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE(stale_tip_peer_management)
         BOOST_CHECK(vNodes[i]->fDisconnect == false);
     }
     // Last added node should get marked for eviction
-    BOOST_CHECK(vNodes.back()->fDisconnect == true);
+    BOOST_CHECK(vNodes.back()->fDisconnect == true); // FIXME.SUGAR // <net_processing.h> MINIMUM_CONNECT_TIME
 
     vNodes.back()->fDisconnect = false;
 
@@ -164,7 +164,7 @@ BOOST_AUTO_TEST_CASE(stale_tip_peer_management)
     for (int i=0; i<nMaxOutbound-1; ++i) {
         BOOST_CHECK(vNodes[i]->fDisconnect == false);
     }
-    BOOST_CHECK(vNodes[nMaxOutbound-1]->fDisconnect == true);
+    BOOST_CHECK(vNodes[nMaxOutbound-1]->fDisconnect == true); // FIXME.SUGAR // <net_processing.h> MINIMUM_CONNECT_TIME
     BOOST_CHECK(vNodes.back()->fDisconnect == false);
 
     bool dummy;

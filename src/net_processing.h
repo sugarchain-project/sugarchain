@@ -28,12 +28,14 @@ static constexpr int64_t HEADERS_DOWNLOAD_TIMEOUT_PER_HEADER = 1000; // 1ms/head
 static constexpr int32_t MAX_OUTBOUND_PEERS_TO_PROTECT_FROM_DISCONNECT = 4;
 /** Timeout for (unprotected) outbound peers to sync to our chainwork, in seconds */
 static constexpr int64_t CHAIN_SYNC_TIMEOUT = 20 * 60; // 20 minutes
+
+// FIXME.SUGAR // SURE?
 /** How frequently to check for stale tips, in seconds */
-static constexpr int64_t STALE_CHECK_INTERVAL = 10 * 60; // 10 minutes // FIXME.SUGAR
+static constexpr int64_t STALE_CHECK_INTERVAL = 5; // 10*60/120=5 // FIXME.SUGAR
 /** How frequently to check for extra outbound peers and disconnect, in seconds */
-static constexpr int64_t EXTRA_PEER_CHECK_INTERVAL = 45; // FIXME.SUGAR
+static constexpr int64_t EXTRA_PEER_CHECK_INTERVAL = 3; // bitcoin: 600/45=13.333... litecoin: 150/45=3.333... // 5/3=1.666... // FIXME.SUGAR // SURE?
 /** Minimum time an outbound-peer-eviction candidate must be connected for, in order to evict, in seconds */
-static constexpr int64_t MINIMUM_CONNECT_TIME = 30;
+static constexpr int64_t MINIMUM_CONNECT_TIME = 15; // 30/2=15 // FIXME.SUGAR // SURE?
 
 class PeerLogicValidation : public CValidationInterface, public NetEventsInterface {
 private:
