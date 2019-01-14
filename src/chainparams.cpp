@@ -88,7 +88,6 @@ public:
         consensus.BIP66Height = 0;  // always on
         consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f07ffff
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
-        consensus.difficultyAveragingWindowSize = 360; // N=360 for difficulty
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
         consensus.nPowAveragingWindow = 17;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
@@ -198,7 +197,6 @@ public:
         consensus.BIP66Height = 0; // always on
         consensus.powLimit = uint256S("007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f7fffff **caution**
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
-        consensus.difficultyAveragingWindowSize = 360; // N=360 for difficulty
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
         consensus.nPowAveragingWindow = 255; // 2550 / nPowTargetSpacing(10) = 255
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
@@ -309,7 +307,6 @@ public:
         consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in rpc activation tests)
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // FIXME.SUGAR // FIXME.ASAP
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
-        consensus.difficultyAveragingWindowSize = 360; // N=360 for difficulty
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
         consensus.nPowAveragingWindow = 17;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // FIXME.SUGAR // FIXME.ASAP
