@@ -92,8 +92,7 @@ public:
         consensus.nPowAveragingWindow = 17;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
 
-        printf("\n\n\n\n\n");
-        printf("*** BEGIN - DEBUG\n");
+        printf("\n*** BEGIN - DEBUG: MAIN\n");
         printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
         printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
         assert(maxUint/UintToArith256(consensus.powLimit) == 8192); // 0000000000000000000000000000000000000000000000000000000000002000 == 8192
@@ -209,8 +208,7 @@ public:
         consensus.nPowAveragingWindow = 255; // 2550 / nPowTargetSpacing(10) = 255
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
 
-        printf("\n\n\n\n\n");
-        printf("*** BEGIN - DEBUG\n");
+        printf("\n*** BEGIN - DEBUG: TESTNET\n");
         printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
         printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
         assert(maxUint/UintToArith256(consensus.powLimit) == 512); // 0x0000000000000000000000000000000000000000000000000000000000000200 == 512
@@ -319,8 +317,7 @@ public:
         consensus.nPowAveragingWindow = 17;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
 
-        printf("\n\n\n\n\n");
-        printf("*** BEGIN - DEBUG\n");
+        printf("\n*** BEGIN - DEBUG: REGTEST\n");
         printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
         printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
         assert(maxUint/UintToArith256(consensus.powLimit) == 17); // 0x0000000000000000000000000000000000000000000000000000000000000011 == 17
