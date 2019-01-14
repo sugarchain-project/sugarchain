@@ -82,7 +82,7 @@ public:
         strNetworkID = "main";
         consensus.nSubsidyHalvingInterval = 210000 * 120; // 120x bitcoin // 210000 * 120 = 25200000
         consensus.BIP16Height = 0;  // always on
-        consensus.BIP34Height = 17; // FIXME.SUGAR
+        consensus.BIP34Height = 17;
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
         consensus.BIP65Height = 0;  // always on
         consensus.BIP66Height = 0;  // always on
@@ -198,7 +198,7 @@ public:
         strNetworkID = "test";
         consensus.nSubsidyHalvingInterval = 210000 * 120; // 120x bitcoin // 210000 * 120 = 25200000
         consensus.BIP16Height = 0;  // always on
-        consensus.BIP34Height = 17; // FIXME.SUGAR
+        consensus.BIP34Height = 17;
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
         consensus.BIP65Height = 0; // always on
         consensus.BIP66Height = 0; // always on
