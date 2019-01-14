@@ -91,6 +91,14 @@ public:
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
         consensus.nPowAveragingWindow = 17;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
+
+        printf("\n\n\n\n\n");
+        printf("*** BEGIN - DEBUG\n");
+        printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
+        printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
+        assert(maxUint/UintToArith256(consensus.powLimit) == 8192); // 0000000000000000000000000000000000000000000000000000000000002000 == 8192
+        printf("*** END - DEBUG\n");
+
         consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
         consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
         consensus.nPowTargetSpacing = 10 * 60 / 120; // 5 sec. // 120x bitcoin
