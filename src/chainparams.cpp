@@ -92,12 +92,12 @@ public:
         consensus.nPowAveragingWindow = 17;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
 
-        printf("\n*** BEGIN - DEBUG: MAIN\n");
-        printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
-        printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
-        assert(maxUint/UintToArith256(consensus.powLimit) == 8192); // 0000000000000000000000000000000000000000000000000000000000002000 == 8192
-        printf("*** END - DEBUG\n");
+        // printf("\n*** BEGIN - DEBUG: MAIN\n");
+        // printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
+        // printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
+        // printf("*** END - DEBUG\n");
 
+        assert(maxUint/UintToArith256(consensus.powLimit) == 8192); // 0000000000000000000000000000000000000000000000000000000000002000 == 8192
         consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
         consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
         consensus.nPowTargetSpacing = 10 * 60 / 120; // 5 sec. // 120x bitcoin
@@ -208,12 +208,12 @@ public:
         consensus.nPowAveragingWindow = 255; // 2550 / nPowTargetSpacing(10) = 255
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
 
-        printf("\n*** BEGIN - DEBUG: TESTNET\n");
-        printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
-        printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
-        assert(maxUint/UintToArith256(consensus.powLimit) == 512); // 0x0000000000000000000000000000000000000000000000000000000000000200 == 512
-        printf("*** END - DEBUG\n");
+        // printf("\n*** BEGIN - DEBUG: TESTNET\n");
+        // printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
+        // printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
+        // printf("*** END - DEBUG\n");
 
+        assert(maxUint/UintToArith256(consensus.powLimit) == 512); // 0x0000000000000000000000000000000000000000000000000000000000000200 == 512
         consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
         consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
         consensus.nPowTargetSpacing = 10 * 60 / 120; // 5 sec. // 120x bitcoin
@@ -317,12 +317,12 @@ public:
         consensus.nPowAveragingWindow = 17;
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
 
-        printf("\n*** BEGIN - DEBUG: REGTEST\n");
-        printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
-        printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
-        assert(maxUint/UintToArith256(consensus.powLimit) == 17); // 0x0000000000000000000000000000000000000000000000000000000000000011 == 17
-        printf("*** END - DEBUG\n");
+        // printf("\n*** BEGIN - DEBUG: REGTEST\n");
+        // printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
+        // printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
+        // printf("*** END - DEBUG\n");
 
+        assert(maxUint/UintToArith256(consensus.powLimit) == 17); // 0x0000000000000000000000000000000000000000000000000000000000000011 == 17
         consensus.nPowMaxAdjustDown = 0; // Turn off adjustment down
         consensus.nPowMaxAdjustUp = 0; // Turn off adjustment up
         consensus.nPowTargetSpacing = 10 * 60 / 120; // 5 sec. // 120x bitcoin
