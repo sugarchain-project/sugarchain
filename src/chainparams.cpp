@@ -63,6 +63,9 @@ void CChainParams::UpdateVersionBitsParameters(Consensus::DeploymentPos d, int64
     consensus.vDeployments[d].nTimeout = nTimeout;
 }
 
+// DigiShield_ZEC
+const arith_uint256 maxUint = UintToArith256(uint256S("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+
 /**
  * Main network
  */
@@ -73,9 +76,6 @@ void CChainParams::UpdateVersionBitsParameters(Consensus::DeploymentPos d, int64
  *    timestamp before)
  * + Contains no strange transactions
  */
-
-const arith_uint256 maxUint = UintToArith256(uint256S("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
-
 class CMainParams : public CChainParams {
 public:
     CMainParams() {
@@ -90,7 +90,6 @@ public:
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
         consensus.nPowAveragingWindow = 17;
-        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
 
         // printf("\n*** BEGIN - DEBUG: MAIN\n");
         // printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
@@ -98,6 +97,8 @@ public:
         // printf("*** END - DEBUG\n");
 
         assert(maxUint/UintToArith256(consensus.powLimit) == 8192); // 0000000000000000000000000000000000000000000000000000000000002000 == 8192
+        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // true: 8192 >= 17
+
         consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
         consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
         consensus.nPowTargetSpacing = 10 * 60 / 120; // 5 sec. // 120x bitcoin
@@ -144,7 +145,8 @@ public:
         // printf("genesis.GetPoWHash.MAIN = %s\n", genesis.GetPoWHash().ToString().c_str());
         // printf("genesis.hashMerkleRoot.MAIN %s\n",genesis.hashMerkleRoot.ToString().c_str());
         // printf("***\n");
-        assert(consensus.hashGenesisBlock == uint256S("0x10603e42df8af98b64d8a4bc9699b59faa6ae37dfece4d9a060be44f5a7aee97"));
+        assert(genesis.GetPoWHash() == uint256S("0x0000e686c2a6eed9c8999c7d33a39fcd825a695fdd2c0a11021b279cb27d35b7")); // genesis
+        assert(consensus.hashGenesisBlock == uint256S("0x10603e42df8af98b64d8a4bc9699b59faa6ae37dfece4d9a060be44f5a7aee97")); // genesis
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         // Note that of those which support the service bits prefix, most only support a subset of
@@ -206,7 +208,6 @@ public:
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
         consensus.nPowAveragingWindow = 255; // 2550 / nPowTargetSpacing(10) = 255
-        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
 
         // printf("\n*** BEGIN - DEBUG: TESTNET\n");
         // printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
@@ -214,6 +215,8 @@ public:
         // printf("*** END - DEBUG\n");
 
         assert(maxUint/UintToArith256(consensus.powLimit) == 512); // 0x0000000000000000000000000000000000000000000000000000000000000200 == 512
+        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // true: 512 >= 255
+
         consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
         consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
         consensus.nPowTargetSpacing = 10 * 60 / 120; // 5 sec. // 120x bitcoin
@@ -239,7 +242,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0xfd848e7312b097c0f2c5c968153e37c6f5fbca7d0c42d3bb7ddd86dcf4920b3e"); // genesis // 0x1f7fffff **caution**
+        consensus.defaultAssumeValid = uint256S("0xfd848e7312b097c0f2c5c968153e37c6f5fbca7d0c42d3bb7ddd86dcf4920b3e"); // genesis
 
         pchMessageStart[0] = 0xb0;
         pchMessageStart[1] = 0x11;
@@ -248,15 +251,15 @@ public:
         nDefaultPort = 17979;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1541009401, 394, 0x1f7fffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541009401, 394, 0x1f7fffff, 1, 50 * COIN); // 0x1f7fffff **caution**
         consensus.hashGenesisBlock = genesis.GetHash();
         // printf("***\n");
         // printf("genesis.GetHash.TESTNET = %s\n", genesis.GetHash().ToString().c_str());
         // printf("genesis.GetPoWHash.TESTNET = %s\n", genesis.GetPoWHash().ToString().c_str());
         // printf("genesis.hashMerkleRoot.TESTNET %s\n",genesis.hashMerkleRoot.ToString().c_str());
         // printf("***\n");
-        assert(consensus.hashGenesisBlock == uint256S("0xfd848e7312b097c0f2c5c968153e37c6f5fbca7d0c42d3bb7ddd86dcf4920b3e")); // genesis // 0x1f7fffff **caution**
-        assert(genesis.GetPoWHash() == uint256S("0x00133bad1ca029db690e3f70bd393fa939d1df0995a46ff978454e3f493ecfdb")); // genesis // 0x1f7fffff **caution**
+        assert(genesis.GetPoWHash() == uint256S("0x00133bad1ca029db690e3f70bd393fa939d1df0995a46ff978454e3f493ecfdb")); // genesis
+        assert(consensus.hashGenesisBlock == uint256S("0xfd848e7312b097c0f2c5c968153e37c6f5fbca7d0c42d3bb7ddd86dcf4920b3e")); // genesis
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         vFixedSeeds.clear();
@@ -284,7 +287,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x0cd2892e2d72806e550ffb8730870ce88ee53dbefe8eb882d17b23e3d34321f1")}, // genesis
+                {0, uint256S("0xfd848e7312b097c0f2c5c968153e37c6f5fbca7d0c42d3bb7ddd86dcf4920b3e")}, // genesis
             }
         };
 
@@ -311,11 +314,10 @@ public:
         consensus.BIP34Hash = uint256();
         consensus.BIP65Height = 1351; // BIP65 activated on regtest (Used in rpc activation tests)
         consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in rpc activation tests)
-        consensus.powLimit = uint256S("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f");
+        consensus.powLimit = uint256S("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f"); // 0x200f0f0f
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
         consensus.nPowAveragingWindow = 17;
-        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow);
 
         // printf("\n*** BEGIN - DEBUG: REGTEST\n");
         // printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
@@ -323,6 +325,8 @@ public:
         // printf("*** END - DEBUG\n");
 
         assert(maxUint/UintToArith256(consensus.powLimit) == 17); // 0x0000000000000000000000000000000000000000000000000000000000000011 == 17
+        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // true: 17 >= 17
+
         consensus.nPowMaxAdjustDown = 0; // Turn off adjustment down
         consensus.nPowMaxAdjustUp = 0; // Turn off adjustment up
         consensus.nPowTargetSpacing = 10 * 60 / 120; // 5 sec. // 120x bitcoin
@@ -360,8 +364,8 @@ public:
         // printf("genesis.GetPoWHash.REGTEST = %s\n", genesis.GetPoWHash().ToString().c_str());
         // printf("genesis.hashMerkleRoot.REGTEST %s\n",genesis.hashMerkleRoot.ToString().c_str());
         // printf("***\n");
-        assert(consensus.hashGenesisBlock == uint256S("0x06987ba59cfabc0744c59b66085b82e997e20e103f65176057cab988ee434f91"));
         assert(genesis.GetPoWHash() == uint256S("0x04cce2b90cbc73e95d05c0b6d9ba82147655c39361fe648f860f71fe14439dbe"));
+        assert(consensus.hashGenesisBlock == uint256S("0x06987ba59cfabc0744c59b66085b82e997e20e103f65176057cab988ee434f91")); // genesis
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
