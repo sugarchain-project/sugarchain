@@ -207,7 +207,7 @@ public:
         consensus.powLimit = uint256S("007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f7fffff **caution**
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
-        consensus.nPowAveragingWindow = 255; // 2550 / nPowTargetSpacing(10) = 255
+        consensus.nPowAveragingWindow = 510; // 2550 / nPowTargetSpacing(5) = 510
 
         // printf("\n*** BEGIN - DEBUG: TESTNET\n");
         // printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
