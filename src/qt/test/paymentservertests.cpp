@@ -198,7 +198,12 @@ void PaymentServerTests::paymentServerTests()
     QList<std::pair<CScript, CAmount> > sendingTos = r.paymentRequest.getPayTo();
 
     // BEGIN - DELME.SUGAR: just for debugging
-    printf( "\n\n\n\n\n\n\n\n\n\n %s \n\n\n", paymentrequest5_cert2_BASE64 );
+    printf( "\n\n\n" );
+    printf( "%s =\n", "src/qt/test/paymentrequestdata.h/paymentrequest5_cert2_BASE64" );
+    printf( "***\n" );
+    printf( "%s\n", paymentrequest5_cert2_BASE64 );
+    printf( "***\n" );
+    printf( "\n\n\n" );
     // END - DELME.SUGAR: just for debugging
 
     for (const std::pair<CScript, CAmount>& sendingTo : sendingTos) {
