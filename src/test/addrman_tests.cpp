@@ -420,8 +420,32 @@ BOOST_AUTO_TEST_CASE(caddrinfo_get_tried_bucket)
     uint256 nKey2 = (uint256)(CHashWriter(SER_GETHASH, 0) << 2).GetHash();
 
 
-    // BOOST_CHECK_EQUAL(info1.GetTriedBucket(nKey1), 40);
     BOOST_CHECK_EQUAL(info1.GetTriedBucket(nKey1), 14); // FIXME.SUGAR // SURE?
+
+    // BEGIN - DELME.SUGAR: just for debugging
+    printf("addr1 = %s\n", addr1.ToString().c_str());
+    printf("source1 = %s\n", source1.ToString().c_str());
+    printf("CAddrInfo(addr1, source1) = %s\n", CAddrInfo(addr1, source1).ToString().c_str());
+    printf("info1 = %s\n", info1.ToString().c_str());
+    printf("nKey1 = %s\n", nKey1.ToString().c_str());
+    printf("info1.GetTriedBucket(nKey1) = %d\n", info1.GetTriedBucket(nKey1));
+    BOOST_CHECK_EQUAL(CAddrInfo(addr1, source1).GetTriedBucket( (uint256)(CHashWriter(SER_GETHASH, 0) << 1).GetHash() ), 14); // DOUBLE CHECK
+    // END - DELME.SUGAR: just for debugging
+
+    // BEGIN - ADDITIONAL CHECK: BTC
+    CAddress addr1_BTC = CAddress(ResolveService("250.1.1.1", 8333), NODE_NONE);
+    CAddress addr2_BTC = CAddress(ResolveService("250.1.1.1", 9999), NODE_NONE);
+    CNetAddr source1_BTC = ResolveIP("250.1.1.1");
+    CAddrInfo info1_BTC = CAddrInfo(addr1_BTC, source1_BTC);
+    CAddrInfo info2_BTC = CAddrInfo(addr2_BTC, source1_BTC);
+    uint256 nKey1_BTC = (uint256)(CHashWriter(SER_GETHASH, 0) << 1).GetHash();
+    uint256 nKey2_BTC = (uint256)(CHashWriter(SER_GETHASH, 0) << 2).GetHash();
+
+    BOOST_CHECK_EQUAL(info1_BTC.GetTriedBucket(nKey1_BTC), 40); // Additional Check2
+    BOOST_CHECK_EQUAL(info2_BTC.GetTriedBucket(nKey1_BTC), 113); // Additional Check2 // FIXME.SUGAR // SURE? // It should be 40?
+    BOOST_CHECK_EQUAL(info1_BTC.GetTriedBucket(nKey2_BTC), 191); // Additional Check2
+    BOOST_CHECK_EQUAL(info2_BTC.GetTriedBucket(nKey2_BTC), 191); // Additional Check2
+    // END - ADDITIONAL CHECK: BTC
 
     // Test: Make sure key actually randomizes bucket placement. A fail on
     //  this test could be a security issue.
