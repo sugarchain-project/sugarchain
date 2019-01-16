@@ -314,18 +314,24 @@ public:
         consensus.BIP34Hash = uint256();
         consensus.BIP65Height = 1351; // BIP65 activated on regtest (Used in rpc activation tests)
         consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in rpc activation tests)
-        consensus.powLimit = uint256S("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f"); // 0x200f0f0f
+        consensus.powLimit = uint256S("0080808080808080808080808080808080808080808080808080808080808080"); // 0x20008080 for nPowAveragingWindowRatio
+
+        printf("\n*** BEGIN - DEBUG: REGTEST\n");
+        uint32_t powLimitTOnBits = UintToArith256(consensus.powLimit).GetCompact();
+        printf("powLimitTOnBits = 0x%x\n", powLimitTOnBits);
+        printf("*** END - DEBUG\n");
+
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
-        consensus.nPowAveragingWindow = 17;
+        consensus.nPowAveragingWindow = 510; // 2550 / nPowTargetSpacing(5) = 510
 
-        // printf("\n*** BEGIN - DEBUG: REGTEST\n");
-        // printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
-        // printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
-        // printf("*** END - DEBUG\n");
+        printf("\n*** BEGIN - DEBUG: REGTEST\n");
+        printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
+        printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
+        printf("*** END - DEBUG\n");
 
-        assert(maxUint/UintToArith256(consensus.powLimit) == 17); // 0x0000000000000000000000000000000000000000000000000000000000000011 == 17
-        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // true: 17 >= 17
+        assert(maxUint/UintToArith256(consensus.powLimit) == 510); // 0x00000000000000000000000000000000000000000000000000000000000001fe == 510
+        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // true: 510 >= 510
 
         consensus.nPowMaxAdjustDown = 0; // Turn off adjustment down
         consensus.nPowMaxAdjustUp = 0; // Turn off adjustment up
@@ -348,7 +354,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x06987ba59cfabc0744c59b66085b82e997e20e103f65176057cab988ee434f91"); // genesis
+        consensus.defaultAssumeValid = uint256S("0x506e8056635e9af2ad86768d48df50b267b95e3d879c5793ec58593b78155961"); // genesis
 
         pchMessageStart[0] = 0xaf;
         pchMessageStart[1] = 0xfb;
@@ -357,15 +363,15 @@ public:
         nDefaultPort = 17799;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1541009402, 46, 0x200f0f0f, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541009402, 646, 0x20008080, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         // printf("***\n");
         // printf("genesis.GetHash.REGTEST = %s\n", genesis.GetHash().ToString().c_str());
         // printf("genesis.GetPoWHash.REGTEST = %s\n", genesis.GetPoWHash().ToString().c_str());
         // printf("genesis.hashMerkleRoot.REGTEST %s\n",genesis.hashMerkleRoot.ToString().c_str());
         // printf("***\n");
-        assert(genesis.GetPoWHash() == uint256S("0x04cce2b90cbc73e95d05c0b6d9ba82147655c39361fe648f860f71fe14439dbe"));
-        assert(consensus.hashGenesisBlock == uint256S("0x06987ba59cfabc0744c59b66085b82e997e20e103f65176057cab988ee434f91")); // genesis
+        assert(genesis.GetPoWHash() == uint256S("0x000f4501bf51b6a1fbf82186430565e2acced79485702e1ed8b77984d4831907")); // genesis
+        assert(consensus.hashGenesisBlock == uint256S("0x506e8056635e9af2ad86768d48df50b267b95e3d879c5793ec58593b78155961")); // genesis
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
@@ -377,7 +383,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x06987ba59cfabc0744c59b66085b82e997e20e103f65176057cab988ee434f91")}, // genesis
+                {0, uint256S("0x506e8056635e9af2ad86768d48df50b267b95e3d879c5793ec58593b78155961")}, // genesis
             }
         };
 
