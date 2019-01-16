@@ -91,6 +91,8 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     if (params.fPowNoRetargeting && params.fPowAllowMinDifficultyBlocks) {
         // Special difficulty rule for REGTEST: NO RETARGET
         // It fixs test/validation_block_tests/processnewblock_signals_ordering
+        LogPrint(BCLog::POW, "GetNextWorkRequired \033[31;1mNO DIFFICULTY RETARGET\033[0m\n"); // NO DIFFICULTY RETARGET: red
+        LogPrint(BCLog::POW, "pindexLast->nBits = 0x%x\n", pindexLast->nBits);
         return pindexLast->nBits;
     }
 
