@@ -206,19 +206,19 @@ public:
         consensus.BIP66Height = 0; // always on
         consensus.powLimit = uint256S("0080808080808080808080808080808080808080808080808080808080808080"); // 0x20008080 for nPowAveragingWindowRatio
 
-        printf("\n*** BEGIN - DEBUG: TESTNET\n");
-        uint32_t powLimitTOnBits = UintToArith256(consensus.powLimit).GetCompact();
-        printf("powLimitTOnBits = 0x%x\n", powLimitTOnBits);
-        printf("*** END - DEBUG\n");
+        // printf("\n*** BEGIN - DEBUG: TESTNET\n");
+        // uint32_t powLimitTOnBits = UintToArith256(consensus.powLimit).GetCompact();
+        // printf("powLimitTOnBits = 0x%x\n", powLimitTOnBits);
+        // printf("*** END - DEBUG\n");
 
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
         consensus.nPowAveragingWindow = 510; // 2550 / nPowTargetSpacing(5) = 510
 
-        printf("\n*** BEGIN - DEBUG: TESTNET\n");
-        printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
-        printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
-        printf("*** END - DEBUG\n");
+        // printf("\n*** BEGIN - DEBUG: TESTNET\n");
+        // printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
+        // printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
+        // printf("*** END - DEBUG\n");
 
         assert(maxUint/UintToArith256(consensus.powLimit) == 510); // 0x00000000000000000000000000000000000000000000000000000000000001fe == 510
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // true: 510 >= 510
