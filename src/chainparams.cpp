@@ -320,7 +320,7 @@ public:
         consensus.BIP34Hash = uint256();
         consensus.BIP65Height = 1351; // BIP65 activated on regtest (Used in rpc activation tests)
         consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in rpc activation tests)
-        consensus.powLimit = uint256S("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // 0x2100ffff == UintToArith256(consensus.powLimit).GetCompact()
+        consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // 0x207fffff == UintToArith256(consensus.powLimit).GetCompact()
 
         // printf("\n*** BEGIN - DEBUG: REGTEST\n");
         // uint32_t powLimitTOnBits = UintToArith256(consensus.powLimit).GetCompact();
@@ -336,7 +336,7 @@ public:
         // printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
         // printf("*** END - DEBUG\n");
 
-        assert(maxUint/UintToArith256(consensus.powLimit) == 1); // 0x0000000000000000000000000000000000000000000000000000000000000001 == 1
+        assert(maxUint/UintToArith256(consensus.powLimit) == 2); // 0x0000000000000000000000000000000000000000000000000000000000000002 == 2
 
         /* // BEGIN - ASSERT_DISABLED
         // Disable Assert on REGTEST
@@ -364,7 +364,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x9312ee3d8ca44e65acd8e81539e89ffaa541c26390c3535e224f73e419093474"); // genesis
+        consensus.defaultAssumeValid = uint256S("0x263837a52ecfb31c0d80c23e41404e6e7dc659cb2c3a5956bb0f57f193d024ac"); // genesis
 
         pchMessageStart[0] = 0xaf;
         pchMessageStart[1] = 0xfb;
@@ -373,15 +373,15 @@ public:
         nDefaultPort = 17799;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1541009402, 0, 0x2100ffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541009402, 0, 0x207fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         // printf("***\n");
         // printf("genesis.GetHash.REGTEST = %s\n", genesis.GetHash().ToString().c_str());
         // printf("genesis.GetPoWHash.REGTEST = %s\n", genesis.GetPoWHash().ToString().c_str());
         // printf("genesis.hashMerkleRoot.REGTEST %s\n",genesis.hashMerkleRoot.ToString().c_str());
         // printf("***\n");
-        assert(genesis.GetPoWHash() == uint256S("0xef0c3637136567712e3bc84c97478bb45451c4b8fb38f5727cdde4491cf1e359")); // genesis
-        assert(consensus.hashGenesisBlock == uint256S("0x9312ee3d8ca44e65acd8e81539e89ffaa541c26390c3535e224f73e419093474")); // genesis
+        assert(genesis.GetPoWHash() == uint256S("0x2833bfce80f20a1b845be8b09a6227b46dceab3c3be554593c64a7300fb103a7")); // genesis
+        assert(consensus.hashGenesisBlock == uint256S("0x263837a52ecfb31c0d80c23e41404e6e7dc659cb2c3a5956bb0f57f193d024ac")); // genesis
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
@@ -393,7 +393,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x9312ee3d8ca44e65acd8e81539e89ffaa541c26390c3535e224f73e419093474")}, // genesis
+                {0, uint256S("0x263837a52ecfb31c0d80c23e41404e6e7dc659cb2c3a5956bb0f57f193d024ac")}, // genesis
             }
         };
 
