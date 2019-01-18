@@ -129,6 +129,10 @@ unsigned int CalculateNextWorkRequired(arith_uint256 bnAvg,
                                        int64_t nLastBlockTime, int64_t nFirstBlockTime,
                                        const Consensus::Params& params)
 {
+    // BEGIN - DEBUG for <pow_tests.cpp>
+    LogPrint(BCLog::POW, "\n\nbnAvg=%s nLastBlockTime=%d nFirstBlockTime=%d params=%s\n\n", bnAvg.ToString(), nLastBlockTime, nFirstBlockTime, &params);
+    // END - DEBUG for <pow_tests.cpp>
+
     // Limit adjustment step
     // Use medians to prevent time-warp attacks
     int64_t nActualTimespan = nLastBlockTime - nFirstBlockTime;
@@ -156,6 +160,10 @@ unsigned int CalculateNextWorkRequired(arith_uint256 bnAvg,
     LogPrint(BCLog::POW, "Timespan ratio: %d / %d = \033[31;1m%.3g\033[0m\n", params.AveragingWindowTimespan(), nActualTimespan, (double)params.AveragingWindowTimespan()/(double)nActualTimespan); // Timespan ratio: Red
     LogPrint(BCLog::POW, "Current average: %08x  %s\n", bnAvg.GetCompact(), bnAvg.ToString());
     LogPrint(BCLog::POW, "After:  %08x  %s\n", bnNew.GetCompact(), bnNew.ToString());
+
+    // BEGIN - DEBUG for <pow_tests.cpp>
+    LogPrint(BCLog::POW, "\n\nbnNew.GetCompact()=%s\n\n", bnNew.GetCompact());
+    // END - DEBUG for <pow_tests.cpp>
 
     return bnNew.GetCompact();
 }
