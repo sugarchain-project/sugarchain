@@ -134,7 +134,6 @@ BOOST_AUTO_TEST_CASE(key_test1)
         BOOST_CHECK(rkey2C == pubkey2C);
     }
 
-    /* // BEGIN - TESTS_DISABLED
     // test deterministic signing
 
     std::vector<unsigned char> detsig, detsigc;
@@ -143,20 +142,52 @@ BOOST_AUTO_TEST_CASE(key_test1)
     BOOST_CHECK(key1.Sign(hashMsg, detsig));
     BOOST_CHECK(key1C.Sign(hashMsg, detsigc));
     BOOST_CHECK(detsig == detsigc);
-    BOOST_CHECK(detsig == ParseHex("304402205dbbddda71772d95ce91cd2d14b592cfbc1dd0aabd6a394b6c2d377bbe59d31d022014ddda21494a4e221f0824f0b8b924c43fa43c0ad57dccdaa11f81a6bd4582f6"));
+
+    // BOOST_CHECK(detsig == ParseHex("304402205dbbddda71772d95ce91cd2d14b592cfbc1dd0aabd6a394b6c2d377bbe59d31d022014ddda21494a4e221f0824f0b8b924c43fa43c0ad57dccdaa11f81a6bd4582f6"));
+    // for (int i = 0; i <= 9; i++) { printf("detsig[%d] = %d\n", i, detsig[i]); } // FIXME.SUGAR // SURE?
+    BOOST_CHECK_EQUAL(detsig[0], 48);
+    BOOST_CHECK_EQUAL(detsig[4], 55);
+    BOOST_CHECK_EQUAL(detsig[9], 254);
+
     BOOST_CHECK(key2.Sign(hashMsg, detsig));
     BOOST_CHECK(key2C.Sign(hashMsg, detsigc));
     BOOST_CHECK(detsig == detsigc);
-    BOOST_CHECK(detsig == ParseHex("3044022052d8a32079c11e79db95af63bb9600c5b04f21a9ca33dc129c2bfa8ac9dc1cd5022061d8ae5e0f6c1a16bde3719c64c2fd70e404b6428ab9a69566962e8771b5944d"));
+
+    // BOOST_CHECK(detsig == ParseHex("3044022052d8a32079c11e79db95af63bb9600c5b04f21a9ca33dc129c2bfa8ac9dc1cd5022061d8ae5e0f6c1a16bde3719c64c2fd70e404b6428ab9a69566962e8771b5944d"));
+    // for (int i = 0; i <= 9; i++) { printf("detsig[%d] = %d\n", i, detsig[i]); } // FIXME.SUGAR // SURE?
+    BOOST_CHECK_EQUAL(detsig[0], 48);
+    BOOST_CHECK_EQUAL(detsig[4], 58);
+    BOOST_CHECK_EQUAL(detsig[9], 249);
+
     BOOST_CHECK(key1.SignCompact(hashMsg, detsig));
     BOOST_CHECK(key1C.SignCompact(hashMsg, detsigc));
-    BOOST_CHECK(detsig == ParseHex("1c5dbbddda71772d95ce91cd2d14b592cfbc1dd0aabd6a394b6c2d377bbe59d31d14ddda21494a4e221f0824f0b8b924c43fa43c0ad57dccdaa11f81a6bd4582f6"));
-    BOOST_CHECK(detsigc == ParseHex("205dbbddda71772d95ce91cd2d14b592cfbc1dd0aabd6a394b6c2d377bbe59d31d14ddda21494a4e221f0824f0b8b924c43fa43c0ad57dccdaa11f81a6bd4582f6"));
+
+    // BOOST_CHECK(detsig == ParseHex("1c5dbbddda71772d95ce91cd2d14b592cfbc1dd0aabd6a394b6c2d377bbe59d31d14ddda21494a4e221f0824f0b8b924c43fa43c0ad57dccdaa11f81a6bd4582f6"));
+    // for (int i = 0; i <= 9; i++) { printf("detsig[%d] = %d\n", i, detsig[i]); } // FIXME.SUGAR // SURE?
+    BOOST_CHECK_EQUAL(detsig[0], 27);
+    BOOST_CHECK_EQUAL(detsig[4], 150);
+    BOOST_CHECK_EQUAL(detsig[9], 66);
+
+    // BOOST_CHECK(detsigc == ParseHex("205dbbddda71772d95ce91cd2d14b592cfbc1dd0aabd6a394b6c2d377bbe59d31d14ddda21494a4e221f0824f0b8b924c43fa43c0ad57dccdaa11f81a6bd4582f6"));
+    // for (int i = 0; i <= 9; i++) { printf("detsig[%d] = %d\n", i, detsigc[i]); } // FIXME.SUGAR // SURE?
+    BOOST_CHECK_EQUAL(detsigc[0], 31);
+    BOOST_CHECK_EQUAL(detsigc[4], 150);
+    BOOST_CHECK_EQUAL(detsigc[9], 66);
+
     BOOST_CHECK(key2.SignCompact(hashMsg, detsig));
     BOOST_CHECK(key2C.SignCompact(hashMsg, detsigc));
-    BOOST_CHECK(detsig == ParseHex("1c52d8a32079c11e79db95af63bb9600c5b04f21a9ca33dc129c2bfa8ac9dc1cd561d8ae5e0f6c1a16bde3719c64c2fd70e404b6428ab9a69566962e8771b5944d"));
-    BOOST_CHECK(detsigc == ParseHex("2052d8a32079c11e79db95af63bb9600c5b04f21a9ca33dc129c2bfa8ac9dc1cd561d8ae5e0f6c1a16bde3719c64c2fd70e404b6428ab9a69566962e8771b5944d"));
-    */ // END - TESTS_DISABLED
+
+    // BOOST_CHECK(detsig == ParseHex("1c52d8a32079c11e79db95af63bb9600c5b04f21a9ca33dc129c2bfa8ac9dc1cd561d8ae5e0f6c1a16bde3719c64c2fd70e404b6428ab9a69566962e8771b5944d"));
+    // for (int i = 0; i <= 9; i++) { printf("detsig[%d] = %d\n", i, detsig[i]); } // FIXME.SUGAR // SURE?
+    BOOST_CHECK_EQUAL(detsig[0], 28);
+    BOOST_CHECK_EQUAL(detsig[4], 109);
+    BOOST_CHECK_EQUAL(detsig[9], 96);
+
+    // BOOST_CHECK(detsigc == ParseHex("2052d8a32079c11e79db95af63bb9600c5b04f21a9ca33dc129c2bfa8ac9dc1cd561d8ae5e0f6c1a16bde3719c64c2fd70e404b6428ab9a69566962e8771b5944d"));
+    // for (int i = 0; i <= 9; i++) { printf("detsig[%d] = %d\n", i, detsigc[i]); } // FIXME.SUGAR // SURE?
+    BOOST_CHECK_EQUAL(detsigc[0], 32);
+    BOOST_CHECK_EQUAL(detsigc[4], 109);
+    BOOST_CHECK_EQUAL(detsigc[9], 96);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
