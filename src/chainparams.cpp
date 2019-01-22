@@ -87,6 +87,12 @@ public:
         consensus.BIP65Height = 0;  // always on
         consensus.BIP66Height = 0;  // always on
         consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f07ffff
+
+        // printf("\n*** BEGIN - DEBUG: MAIN\n");
+        // uint32_t powLimitTOnBits = UintToArith256(consensus.powLimit).GetCompact();
+        // printf("powLimitTOnBits = 0x%x\n", powLimitTOnBits);
+        // printf("*** END - DEBUG\n");
+
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
         consensus.nPowAveragingWindow = 510; // 2550 / nPowTargetSpacing(5) = 510
@@ -204,6 +210,18 @@ public:
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
         consensus.BIP65Height = 0; // always on
         consensus.BIP66Height = 0; // always on
+
+        // Get powLimit by python
+        /*
+        >>> "%d" % 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+        '115792089237316195423570985008687907853269984665640564039457584007913129639935'
+        >>> 115792089237316195423570985008687907853269984665640564039457584007913129639935 / 510
+        227043312230031755732492127468015505594647028756157968704818792172378685568L
+        >>> "%x" % 227043312230031755732492127468015505594647028756157968704818792172378685568L
+        '80808080808080808080808080808080808080808080808080808080808080'
+        >>>
+        */
+
         consensus.powLimit = uint256S("0080808080808080808080808080808080808080808080808080808080808080"); // 0x20008080 for nPowAveragingWindowRatio
 
         // printf("\n*** BEGIN - DEBUG: TESTNET\n");
