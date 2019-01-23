@@ -86,7 +86,19 @@ public:
         consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
         consensus.BIP65Height = 0;  // always on
         consensus.BIP66Height = 0;  // always on
-        consensus.powLimit = uint256S("0007ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");  // 0x1f07ffff
+
+        // GET powLimit by python // FIXME.SUGAR // SURE?
+        /*
+        >>> 115792089237316195423570985008687907853269984665640564039457584007913129639935 / 1024
+        113078212145816597093331040047546785012958969400039613319782796882727665663L
+        >>> "%x" % 113078212145816597093331040047546785012958969400039613319782796882727665663L
+        '3fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+        >>>
+        */
+
+        // getdifficulty() == 2.384149979653205e-07
+        // 0x1f3fffff == 0x003fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff.GetCompact()
+        consensus.powLimit = uint256S("003fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
         // printf("\n*** BEGIN - DEBUG: MAIN\n");
         // uint32_t powLimitTOnBits = UintToArith256(consensus.powLimit).GetCompact();
@@ -102,8 +114,8 @@ public:
         // printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
         // printf("*** END - DEBUG\n");
 
-        assert(maxUint/UintToArith256(consensus.powLimit) == 8192); // 0000000000000000000000000000000000000000000000000000000000002000 == 8192
-        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // true: 8192 >= 510
+        assert(maxUint/UintToArith256(consensus.powLimit) == 1024); // 0x0000000000000000000000000000000000000000000000000000000000000400 == 1024
+        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // true: 1024 >= 510
 
         consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
         consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
@@ -130,7 +142,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x00"); // FIXME.SUGAR
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x10603e42df8af98b64d8a4bc9699b59faa6ae37dfece4d9a060be44f5a7aee97"); // genesis
+        consensus.defaultAssumeValid = uint256S("0x8e8e0270b7a6bc36e42cb4dca7ffee7e7648447fe102d1e4006cbc1bc9f8cc19"); // genesis
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -144,15 +156,15 @@ public:
         nDefaultPort = 7979;
         nPruneAfterHeight = 100000;
 
-        genesis = CreateGenesisBlock(1541009400, 559, 0x1f07ffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541009400, 923, 0x1f3fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         // printf("***\n");
         // printf("genesis.GetHash.MAIN = %s\n", genesis.GetHash().ToString().c_str());
         // printf("genesis.GetPoWHash.MAIN = %s\n", genesis.GetPoWHash().ToString().c_str());
         // printf("genesis.hashMerkleRoot.MAIN %s\n",genesis.hashMerkleRoot.ToString().c_str());
         // printf("***\n");
-        assert(genesis.GetPoWHash() == uint256S("0x0000e686c2a6eed9c8999c7d33a39fcd825a695fdd2c0a11021b279cb27d35b7")); // genesis
-        assert(consensus.hashGenesisBlock == uint256S("0x10603e42df8af98b64d8a4bc9699b59faa6ae37dfece4d9a060be44f5a7aee97")); // genesis
+        assert(genesis.GetPoWHash() == uint256S("0x0029b293e4997ac10b4f10e4da3dcd0de8c1331f2e688275659a42889c705ecb")); // genesis
+        assert(consensus.hashGenesisBlock == uint256S("0x8e8e0270b7a6bc36e42cb4dca7ffee7e7648447fe102d1e4006cbc1bc9f8cc19")); // genesis
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         // Note that of those which support the service bits prefix, most only support a subset of
@@ -183,7 +195,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x10603e42df8af98b64d8a4bc9699b59faa6ae37dfece4d9a060be44f5a7aee97")}, // genesis
+                {0, uint256S("0x8e8e0270b7a6bc36e42cb4dca7ffee7e7648447fe102d1e4006cbc1bc9f8cc19")}, // genesis
             }
         };
 
@@ -211,7 +223,7 @@ public:
         consensus.BIP65Height = 0; // always on
         consensus.BIP66Height = 0; // always on
 
-        // Get powLimit by python
+        // GET powLimit by python // FIXME.SUGAR // SURE?
         /*
         >>> "%d" % 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
         '115792089237316195423570985008687907853269984665640564039457584007913129639935'
