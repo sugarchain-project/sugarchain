@@ -350,7 +350,21 @@ public:
         consensus.BIP34Hash = uint256();
         consensus.BIP65Height = 1351; // BIP65 activated on regtest (Used in rpc activation tests)
         consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in rpc activation tests)
-        consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // 0x207fffff == UintToArith256(consensus.powLimit).GetCompact()
+
+        // GET powLimit by python // FIXME.SUGAR // SURE?
+        /*
+        >>> "%d" % 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+        '115792089237316195423570985008687907853269984665640564039457584007913129639935'
+        >>> 115792089237316195423570985008687907853269984665640564039457584007913129639935 / 17
+        6811299366900952671974763824040465167839410862684739061144563765171360567055L
+        >>> "%x" % 6811299366900952671974763824040465167839410862684739061144563765171360567055L
+        'f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f'
+        >>>
+        */
+
+        // getdifficulty() == 3.958060781902051e-09
+        // 0x200f0f0f == 0x0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f.GetCompact()
+        consensus.powLimit = uint256S("0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f");
 
         // printf("\n*** BEGIN - DEBUG: REGTEST\n");
         // uint32_t powLimitTOnBits = UintToArith256(consensus.powLimit).GetCompact();
@@ -359,25 +373,25 @@ public:
 
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none;
-        consensus.nPowAveragingWindow = 510; // 2550 / nPowTargetSpacing(5) = 510
+        consensus.nPowAveragingWindow = 17; // EXCEPTION FOR REGTEST // 85 / nPowTargetSpacing(5) = 17
 
         // printf("\n*** BEGIN - DEBUG: REGTEST\n");
         // printf("nPowAveragingWindowRatio = %s\n", (maxUint/UintToArith256(consensus.powLimit)).ToString().c_str());
         // printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
         // printf("*** END - DEBUG\n");
 
-        assert(maxUint/UintToArith256(consensus.powLimit) == 2); // 0x0000000000000000000000000000000000000000000000000000000000000002 == 2
+        assert(maxUint/UintToArith256(consensus.powLimit) == 17); // 0x0000000000000000000000000000000000000000000000000000000000000011 == 17
+        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // true: 17 >= 17
 
-        /* // BEGIN - ASSERT_DISABLED
-        // Disable Assert on REGTEST
-        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // false: 1 >= 510
-        */ // BEGIN - ASSERT_DISABLED
-
-        consensus.nPowMaxAdjustDown = 0; // Turn off adjustment down
-        consensus.nPowMaxAdjustUp = 0; // Turn off adjustment up
+        // consensus.nPowMaxAdjustDown = 0; // Turn off adjustment down
+        // consensus.nPowMaxAdjustUp = 0; // Turn off adjustment up
+        consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
+        consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
         consensus.nPowTargetSpacing = 10 * 60 / 120; // 5 sec. // 120x bitcoin
-        consensus.fPowAllowMinDifficultyBlocks = true;
-        consensus.fPowNoRetargeting = true;
+        // consensus.fPowAllowMinDifficultyBlocks = true;
+        // consensus.fPowNoRetargeting = true;
+        consensus.fPowAllowMinDifficultyBlocks = false;
+        consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 108 * 120; // 75% for testchains // 120x bitcoin // 108 * 120 = 12960
         consensus.nMinerConfirmationWindow = 144 * 120; // Faster than normal for regtest (144 instead of 2016) // 120x bitcoin // 144 * 120 = 17280
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
@@ -394,7 +408,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x263837a52ecfb31c0d80c23e41404e6e7dc659cb2c3a5956bb0f57f193d024ac"); // genesis
+        consensus.defaultAssumeValid = uint256S("0x06987ba59cfabc0744c59b66085b82e997e20e103f65176057cab988ee434f91"); // genesis
 
         pchMessageStart[0] = 0xaf;
         pchMessageStart[1] = 0xfb;
@@ -403,15 +417,15 @@ public:
         nDefaultPort = 17799;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1541009402, 0, 0x207fffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541009402, 46, 0x200f0f0f, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         // printf("***\n");
         // printf("genesis.GetHash.REGTEST = %s\n", genesis.GetHash().ToString().c_str());
         // printf("genesis.GetPoWHash.REGTEST = %s\n", genesis.GetPoWHash().ToString().c_str());
         // printf("genesis.hashMerkleRoot.REGTEST %s\n",genesis.hashMerkleRoot.ToString().c_str());
         // printf("***\n");
-        assert(genesis.GetPoWHash() == uint256S("0x2833bfce80f20a1b845be8b09a6227b46dceab3c3be554593c64a7300fb103a7")); // genesis
-        assert(consensus.hashGenesisBlock == uint256S("0x263837a52ecfb31c0d80c23e41404e6e7dc659cb2c3a5956bb0f57f193d024ac")); // genesis
+        assert(genesis.GetPoWHash() == uint256S("0x04cce2b90cbc73e95d05c0b6d9ba82147655c39361fe648f860f71fe14439dbe")); // genesis
+        assert(consensus.hashGenesisBlock == uint256S("0x06987ba59cfabc0744c59b66085b82e997e20e103f65176057cab988ee434f91")); // genesis
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
@@ -423,7 +437,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x263837a52ecfb31c0d80c23e41404e6e7dc659cb2c3a5956bb0f57f193d024ac")}, // genesis
+                {0, uint256S("0x06987ba59cfabc0744c59b66085b82e997e20e103f65176057cab988ee434f91")}, // genesis
             }
         };
 
