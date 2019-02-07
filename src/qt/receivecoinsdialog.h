@@ -33,7 +33,7 @@ class ReceiveCoinsDialog : public QDialog
 
 public:
     enum ColumnWidths {
-        DATE_COLUMN_WIDTH = 139,
+        DATE_COLUMN_WIDTH = 130,
         LABEL_COLUMN_WIDTH = 120,
         AMOUNT_MINIMUM_COLUMN_WIDTH = 180,
         MINIMUM_COLUMN_WIDTH = 130
