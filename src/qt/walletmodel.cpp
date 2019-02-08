@@ -113,6 +113,7 @@ void WalletModel::updateStatus()
         Q_EMIT encryptionStatusChanged(newEncryptionStatus);
 }
 
+// FIXME.SUGAR // SURE?
 void WalletModel::pollBalanceChanged()
 {
     // Get required locks upfront. This avoids the GUI from getting stuck on
@@ -129,12 +130,28 @@ void WalletModel::pollBalanceChanged()
     {
         fForceCheckBalanceChanged = false;
 
+        // BEGIN - DEBUG for checking height?
+        printf("  %d = height \n", chainActive.Height());
+        printf("  %d = cached \n", cachedNumBlocks);
+        printf("height - cached = %d \n", (int)(chainActive.Height() - cachedNumBlocks));
+        // END - DEBUG for checking height?
+
+        // FIXME.SUGAR // SURE?
+        // update every blocks >> 12 blocks // 5*12 = 60s
+        if(chainActive.Height() - cachedNumBlocks >= 12)
+        {
+            // BEGIN - DEBUG for checking polled?
+            printf("\033[0;31m  pollBalanceChanged:  \033[0m \n"); // red
+            printf("height - cached = %d \n", (int)(chainActive.Height() - cachedNumBlocks));
+            // END - DEBUG for checking polled?
+
         // Balance and number of transactions might have changed
         cachedNumBlocks = chainActive.Height();
 
         checkBalanceChanged();
         if(transactionTableModel)
             transactionTableModel->updateConfirmations();
+        }
     }
 }
 
