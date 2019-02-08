@@ -145,12 +145,12 @@ void WalletModel::pollBalanceChanged()
             printf("height - cached = %d \n", (int)(chainActive.Height() - cachedNumBlocks));
             // END - DEBUG for checking polled?
 
-        // Balance and number of transactions might have changed
-        cachedNumBlocks = chainActive.Height();
+            // Balance and number of transactions might have changed
+            cachedNumBlocks = chainActive.Height();
 
-        checkBalanceChanged();
-        if(transactionTableModel)
-            transactionTableModel->updateConfirmations();
+            checkBalanceChanged();
+            if(transactionTableModel)
+                transactionTableModel->updateConfirmations();
         }
     }
 }
