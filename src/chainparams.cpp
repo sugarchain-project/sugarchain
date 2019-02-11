@@ -383,15 +383,11 @@ public:
         assert(maxUint/UintToArith256(consensus.powLimit) == 17); // 0x0000000000000000000000000000000000000000000000000000000000000011 == 17
         assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // true: 17 >= 17
 
-        // consensus.nPowMaxAdjustDown = 0; // Turn off adjustment down
-        // consensus.nPowMaxAdjustUp = 0; // Turn off adjustment up
-        consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
-        consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
+        consensus.nPowMaxAdjustDown = 0; // Turn off adjustment down
+        consensus.nPowMaxAdjustUp = 0; // Turn off adjustment up
         consensus.nPowTargetSpacing = 10 * 60 / 120; // 5 sec. // 120x bitcoin
-        // consensus.fPowAllowMinDifficultyBlocks = true;
-        // consensus.fPowNoRetargeting = true;
-        consensus.fPowAllowMinDifficultyBlocks = false;
-        consensus.fPowNoRetargeting = false;
+        consensus.fPowAllowMinDifficultyBlocks = true;
+        consensus.fPowNoRetargeting = true;
         consensus.nRuleChangeActivationThreshold = 108 * 120; // 75% for testchains // 120x bitcoin // 108 * 120 = 12960
         consensus.nMinerConfirmationWindow = 144 * 120; // Faster than normal for regtest (144 instead of 2016) // 120x bitcoin // 144 * 120 = 17280
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
