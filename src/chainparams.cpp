@@ -229,14 +229,14 @@ public:
         /*
         >>> "%d" % 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
         '115792089237316195423570985008687907853269984665640564039457584007913129639935'
-        >>> 115792089237316195423570985008687907853269984665640564039457584007913129639935 / 510
-        227043312230031755732492127468015505594647028756157968704818792172378685568L
-        >>> "%x" % 227043312230031755732492127468015505594647028756157968704818792172378685568L
-        '80808080808080808080808080808080808080808080808080808080808080'
+        >>> 115792089237316195423570985008687907853269984665640564039457584007913129639935 / 512
+        226156424291633194186662080095093570025917938800079226639565593765455331327L
+        >>> "%x" % 226156424291633194186662080095093570025917938800079226639565593765455331327L
+        '7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
         >>>
         */
 
-        consensus.powLimit = uint256S("0080808080808080808080808080808080808080808080808080808080808080"); // 0x20008080 for nPowAveragingWindowRatio
+        consensus.powLimit = uint256S("007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // 0x1f7fffff for nPowAveragingWindowRatio
 
         // printf("\n*** BEGIN - DEBUG: TESTNET\n");
         // uint32_t powLimitTOnBits = UintToArith256(consensus.powLimit).GetCompact();
@@ -252,8 +252,8 @@ public:
         // printf("nPowAveragingWindow = %ld\n", consensus.nPowAveragingWindow);
         // printf("*** END - DEBUG\n");
 
-        assert(maxUint/UintToArith256(consensus.powLimit) == 510); // 0x00000000000000000000000000000000000000000000000000000000000001fe == 510
-        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // true: 510 >= 510
+        assert(maxUint/UintToArith256(consensus.powLimit) == 512); // 0x0000000000000000000000000000000000000000000000000000000000000200 == 512
+        assert(maxUint/UintToArith256(consensus.powLimit) >= consensus.nPowAveragingWindow); // true: 512 >= 510
 
         consensus.nPowMaxAdjustDown = 32; // 32% adjustment down
         consensus.nPowMaxAdjustUp = 16; // 16% adjustment up
@@ -280,7 +280,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x78bb49dda56d9817c85508bd1e8d21ca7840bb1aff625690f2c282dd1214e7a8"); // genesis
+        consensus.defaultAssumeValid = uint256S("0xfd848e7312b097c0f2c5c968153e37c6f5fbca7d0c42d3bb7ddd86dcf4920b3e"); // genesis
 
         pchMessageStart[0] = 0xb0;
         pchMessageStart[1] = 0x11;
@@ -289,15 +289,15 @@ public:
         nDefaultPort = 17979;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1541009401, 441, 0x20008080, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541009401, 394, 0x1f7fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         // printf("***\n");
         // printf("genesis.GetHash.TESTNET = %s\n", genesis.GetHash().ToString().c_str());
         // printf("genesis.GetPoWHash.TESTNET = %s\n", genesis.GetPoWHash().ToString().c_str());
         // printf("genesis.hashMerkleRoot.TESTNET %s\n",genesis.hashMerkleRoot.ToString().c_str());
         // printf("***\n");
-        assert(genesis.GetPoWHash() == uint256S("0x0019d7c9045149f8074734166535eef81b38a3109e164e76593b3e3a2384dba0")); // genesis
-        assert(consensus.hashGenesisBlock == uint256S("0x78bb49dda56d9817c85508bd1e8d21ca7840bb1aff625690f2c282dd1214e7a8")); // genesis
+        assert(genesis.GetPoWHash() == uint256S("0x00133bad1ca029db690e3f70bd393fa939d1df0995a46ff978454e3f493ecfdb")); // genesis
+        assert(consensus.hashGenesisBlock == uint256S("0xfd848e7312b097c0f2c5c968153e37c6f5fbca7d0c42d3bb7ddd86dcf4920b3e")); // genesis
         assert(genesis.hashMerkleRoot == uint256S("0x09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76"));
 
         vFixedSeeds.clear();
@@ -325,7 +325,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x78bb49dda56d9817c85508bd1e8d21ca7840bb1aff625690f2c282dd1214e7a8")}, // genesis
+                {0, uint256S("0xfd848e7312b097c0f2c5c968153e37c6f5fbca7d0c42d3bb7ddd86dcf4920b3e")}, // genesis
             }
         };
 
