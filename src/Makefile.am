@@ -1,6 +1,4 @@
 # Copyright (c) 2013-2016 The Bitcoin Core developers
-# Copyright (c) 2014-2018 The BitZeny developers
-# Copyright (c) 2018 The Sugarchain developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -280,8 +278,7 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/sha512.cpp \
   crypto/sha512.h \
   crypto/yespower-1.0.0/sha256.c \
-  crypto/yespower-1.0.0/yespower-opt.c \
-  crypto/yespower-sugarchain.c
+  crypto/yespower-1.0.0/yespower-opt.c
 
 if USE_ASM
 crypto_libbitcoin_crypto_a_SOURCES += crypto/sha256_sse4.cpp

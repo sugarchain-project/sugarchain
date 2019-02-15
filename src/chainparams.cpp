@@ -1,6 +1,5 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2017 The Bitcoin Core developers
-// Copyright (c) 2018 The Sugarchain developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -236,6 +235,8 @@ public:
         >>>
         */
 
+        // getdifficulty() == 1.192074847720173e-07
+        // 0x1f7fffff == 0x007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff.GetCompact()
         consensus.powLimit = uint256S("007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // 0x1f7fffff for nPowAveragingWindowRatio
 
         // printf("\n*** BEGIN - DEBUG: TESTNET\n");
