@@ -45,25 +45,23 @@ BOOST_AUTO_TEST_CASE(get_next_work)
 BOOST_AUTO_TEST_CASE(get_next_work_pow_limit)
 {
     /*
-    bnAvg=0080800000000000000000000000000000000000000000000000000000000000 nLastBlockTime=1547748480 nFirstBlockTime=1541009401 params=0x55767541a610
+    bnAvg=007fffff00000000000000000000000000000000000000000000000000000000 nLastBlockTime=1549943394 nFirstBlockTime=1541009401 params=0x55e4b192c170
 
-    2019-01-18 22:18:47   nActualTimespan = 6739079  before dampening
-    2019-01-18 22:18:47   nActualTimespan = 1686682  before bounds
-    2019-01-18 22:18:47 GetNextWorkRequired RETARGET
-    2019-01-18 22:18:47 params.AveragingWindowTimespan() = 2550    nActualTimespan = 3366
-    2019-01-18 22:18:47 Timespan ratio: 2550 / 3366 = [31;1m0.758[0m
-    2019-01-18 22:18:47 Current average: 20008080  0080800000000000000000000000000000000000000000000000000000000000
-    2019-01-18 22:18:47 After:  20008080  0080808080808080808080808080808080808080808080808080808080808080
-    2019-01-18 22:18:47 
-
-    bnNew.GetCompact()=536903808
+    2019-02-12 03:50:14   nActualTimespan = 8933993  before dampening
+    2019-02-12 03:50:14   nActualTimespan = 2235410  before bounds
+    2019-02-12 03:50:14 GetNextWorkRequired RETARGET
+    2019-02-12 03:50:14 params.AveragingWindowTimespan() = 2550    nActualTimespan = 3366
+    2019-02-12 03:50:14 Timespan ratio: 2550 / 3366 = [31;1m0.758[0m
+    2019-02-12 03:50:14 Current average: 1f7fffff  007fffff00000000000000000000000000000000000000000000000000000000
+    2019-02-12 03:50:14 After:  1f7fffff  007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff  528482303
+    2019-02-12 03:50:14 UpdateTip: new best=6f6dbe3cdbb77c3abef7cfaa114ecafc37b094033a073080602d29f560c82065 height=511 version=0x20000000 log2_work=18 tx=518 date='2019-02-12 03:50:11' progress=1.000000 cache=0.1MiB(1033txo)
     */
 
     const auto chainParams = CreateChainParams(CBaseChainParams::TESTNET); // height=511 (N=510)
-    arith_uint256 bnAvg = arith_uint256("0080800000000000000000000000000000000000000000000000000000000000");
-    int64_t nLastBlockTime = 1547748480;
+    arith_uint256 bnAvg = arith_uint256("007fffff00000000000000000000000000000000000000000000000000000000");
+    int64_t nLastBlockTime = 1549943394;
     int64_t nFirstBlockTime = 1541009401;
-    BOOST_CHECK_EQUAL(CalculateNextWorkRequired(bnAvg, nLastBlockTime, nFirstBlockTime, chainParams->GetConsensus()), 536903808);
+    BOOST_CHECK_EQUAL(CalculateNextWorkRequired(bnAvg, nLastBlockTime, nFirstBlockTime, chainParams->GetConsensus()), 528482303);
 }
 
 /* Test the constraint on the lower bound for actual time taken */
