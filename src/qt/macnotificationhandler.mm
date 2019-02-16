@@ -13,7 +13,7 @@
 - (NSString *)__bundleIdentifier
 {
     if (self == [NSBundle mainBundle]) {
-        return @"org.sugarchain.Sugarchain-Qt";
+        return @"org.sugarchainfoundation.Sugarchain-Qt";
     } else {
         return [self __bundleIdentifier];
     }

@@ -48,7 +48,7 @@ unsigned int GetNextWorkRequired_BTC(const CBlockIndex* pindexLast, const CBlock
     return CalculateNextWorkRequired_BTC(pindexLast, pindexFirst->GetBlockTime(), params);
 }
 
-// DigiShield_ZEC
+// DigiShieldZEC
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
     unsigned int nProofOfWorkLimit = UintToArith256(params.powLimit).GetCompact();
@@ -124,7 +124,7 @@ unsigned int CalculateNextWorkRequired_BTC(const CBlockIndex* pindexLast, int64_
     return bnNew.GetCompact();
 }
 
-// DigiShield_ZEC
+// DigiShieldZEC
 unsigned int CalculateNextWorkRequired(arith_uint256 bnAvg,
                                        int64_t nLastBlockTime, int64_t nFirstBlockTime,
                                        const Consensus::Params& params)

@@ -17,7 +17,7 @@ class uint256;
 unsigned int GetNextWorkRequired_BTC(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params&);
 unsigned int CalculateNextWorkRequired_BTC(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, const Consensus::Params&);
 
-// DigiShield_ZEC
+// DigiShieldZEC
 class arith_uint256;
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params&);
 unsigned int CalculateNextWorkRequired(arith_uint256 bnAvg,
