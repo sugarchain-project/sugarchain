@@ -38,7 +38,7 @@
   <true/>
 
   <key>CFBundleIdentifier</key>
-  <string>org.sugarchain.Sugarchain-Qt</string>
+  <string>org.sugarchainfoundation.Sugarchain-Qt</string>
 
   <key>CFBundleURLTypes</key>
   <array>
