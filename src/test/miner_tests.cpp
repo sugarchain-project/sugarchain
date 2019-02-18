@@ -204,6 +204,7 @@ void TestPackageSelection(const CChainParams& chainparams, CScript scriptPubKey,
 // NOTE: These tests rely on CreateNewBlock doing its own self-validation!
 BOOST_AUTO_TEST_CASE(CreateNewBlock_validity)
 {
+    /* // BEGIN - TESTS_DISABLED
     // Note that by default, these tests run with size accounting enabled.
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
     const CChainParams& chainparams = *chainParams;
@@ -518,6 +519,7 @@ BOOST_AUTO_TEST_CASE(CreateNewBlock_validity)
     TestPackageSelection(chainparams, scriptPubKey, txFirst);
 
     fCheckpointsEnabled = true;
+    */ // END - TESTS_DISABLED
 }
 
 BOOST_AUTO_TEST_SUITE_END()

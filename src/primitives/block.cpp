@@ -10,9 +10,34 @@
 #include <utilstrencodings.h>
 #include <crypto/common.h>
 
+// yespower
+#include <stdlib.h>
+#include "crypto/yespower-1.0.0/yespower.h"
+#include "streams.h"
+#include "version.h"
+
 uint256 CBlockHeader::GetHash() const
 {
     return SerializeHash(*this);
+}
+
+// yespower
+uint256 CBlockHeader::GetPoWHash() const
+{
+    uint256 thash;
+    CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
+    ss << *this;
+    yespower_params_t yespower_1_0_sugarchain = {
+        .version = YESPOWER_1_0,
+        .N = 2048,
+        .r = 32,
+        .pers = (const uint8_t *)"Sugarchain: Decentralized Cryptocurrency for one-CPU-one-vote",
+        .perslen = 61
+    };
+    if (yespower_tls( (unsigned char *)&ss[0], ss.size(), &yespower_1_0_sugarchain, (yespower_binary_t *)&thash) ) {
+        abort();
+    }
+    return thash;
 }
 
 std::string CBlock::ToString() const

@@ -18,7 +18,21 @@
  * Maximum amount of time that a block timestamp is allowed to exceed the
  * current network-adjusted time before the block will be accepted.
  */
-static const int64_t MAX_FUTURE_BLOCK_TIME = 2 * 60 * 60;
+
+/*
+FTL must be changed to 300 or N*T/20 whichever is higher. FTL in BTC clones is MAX_FUTURE_BLOCK_TIME in chain.h.
+
+Option1: N*T/21.25 = 510*5/21.25 = 120 (or)
+Option2: N*T/42.5 = 510*5/42.5 = 60
+
+120x bitcoin
+7200 / 120 = 60(sec)
+60(sec) = 12(blocks)
+Bitcoin: 7200s == 12 blocks (blocktime: 600s)
+Sugarchain: 60s == 12 blocks (blocktime: 5s)
+*/
+
+static const int64_t MAX_FUTURE_BLOCK_TIME = 2 * 60 * 60 / 120; // 7200/120=60(sec) // 12(blocks) // FIXME.SUGAR // SURE?
 
 /**
  * Timestamp window used as a grace period by code that compares external
@@ -292,6 +306,11 @@ public:
     uint256 GetBlockHash() const
     {
         return *phashBlock;
+    }
+
+    uint256 GetBlockPoWHash() const
+    {
+        return GetBlockHeader().GetPoWHash();
     }
 
     int64_t GetBlockTime() const

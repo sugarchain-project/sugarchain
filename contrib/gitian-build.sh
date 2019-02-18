@@ -16,7 +16,7 @@ osx=true
 SIGNER=
 VERSION=
 commit=false
-url=https://github.com/bitcoin/bitcoin
+url=https://github.com/sugarchain-project/sugarchain
 proc=2
 mem=2000
 lxc=true
@@ -30,7 +30,7 @@ commitFiles=true
 read -d '' usage <<- EOF
 Usage: $scriptName [-c|u|v|b|s|B|o|h|j|m|] signer version
 
-Run this script from the directory containing the bitcoin, gitian-builder, gitian.sigs, and bitcoin-detached-sigs.
+Run this script from the directory containing the sugarchain, gitian-builder, gitian.sigs.sugar, and sugarchain-detached-sigs.
 
 Arguments:
 signer          GPG signer to sign each build assert file
@@ -38,7 +38,7 @@ version		Version number, commit, or branch to build. If building a commit or bra
 
 Options:
 -c|--commit	Indicate that the version argument is for a commit or branch
--u|--url	Specify the URL of the repository. Default is https://github.com/bitcoin/bitcoin
+-u|--url	Specify the URL of the repository. Default is https://github.com/sugarchain-project/sugarchain
 -v|--verify 	Verify the Gitian build
 -b|--build	Do a Gitian build
 -s|--sign	Make signed binaries for Windows and Mac OSX
@@ -229,8 +229,8 @@ echo ${COMMIT}
 if [[ $setup = true ]]
 then
     sudo apt-get install ruby apache2 git apt-cacher-ng python-vm-builder qemu-kvm qemu-utils
-    git clone https://github.com/bitcoin-core/gitian.sigs.git
-    git clone https://github.com/bitcoin-core/bitcoin-detached-sigs.git
+    git clone https://github.com/sugarchain-project/gitian.sigs.sugar.git
+    git clone https://github.com/sugarchain-project/sugarchain-detached-sigs.git
     git clone https://github.com/devrandom/gitian-builder.git
     pushd ./gitian-builder
     if [[ -n "$USE_LXC" ]]
@@ -244,7 +244,7 @@ then
 fi
 
 # Set up build
-pushd ./bitcoin
+pushd ./sugarchain
 git fetch
 git checkout ${COMMIT}
 popd
@@ -253,7 +253,7 @@ popd
 if [[ $build = true ]]
 then
 	# Make output folder
-	mkdir -p ./bitcoin-binaries/${VERSION}
+	mkdir -p ./sugarchain-binaries/${VERSION}
 	
 	# Build Dependencies
 	echo ""
@@ -263,7 +263,7 @@ then
 	mkdir -p inputs
 	wget -N -P inputs $osslPatchUrl
 	wget -N -P inputs $osslTarUrl
-	make -C ../bitcoin/depends download SOURCES_PATH=`pwd`/cache/common
+	make -C ../sugarchain/depends download SOURCES_PATH=`pwd`/cache/common
 
 	# Linux
 	if [[ $linux = true ]]
@@ -271,9 +271,9 @@ then
             echo ""
 	    echo "Compiling ${VERSION} Linux"
 	    echo ""
-	    ./bin/gbuild -j ${proc} -m ${mem} --commit bitcoin=${COMMIT} --url bitcoin=${url} ../bitcoin/contrib/gitian-descriptors/gitian-linux.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../bitcoin/contrib/gitian-descriptors/gitian-linux.yml
-	    mv build/out/bitcoin-*.tar.gz build/out/src/bitcoin-*.tar.gz ../bitcoin-binaries/${VERSION}
+	    ./bin/gbuild -j ${proc} -m ${mem} --commit sugarchain=${COMMIT} --url sugarchain=${url} ../sugarchain/contrib/gitian-descriptors/gitian-linux.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs.sugar/ ../sugarchain/contrib/gitian-descriptors/gitian-linux.yml
+	    mv build/out/sugarchain-*.tar.gz build/out/src/sugarchain-*.tar.gz ../sugarchain-binaries/${VERSION}
 	fi
 	# Windows
 	if [[ $windows = true ]]
@@ -281,10 +281,10 @@ then
 	    echo ""
 	    echo "Compiling ${VERSION} Windows"
 	    echo ""
-	    ./bin/gbuild -j ${proc} -m ${mem} --commit bitcoin=${COMMIT} --url bitcoin=${url} ../bitcoin/contrib/gitian-descriptors/gitian-win.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs/ ../bitcoin/contrib/gitian-descriptors/gitian-win.yml
-	    mv build/out/bitcoin-*-win-unsigned.tar.gz inputs/bitcoin-win-unsigned.tar.gz
-	    mv build/out/bitcoin-*.zip build/out/bitcoin-*.exe ../bitcoin-binaries/${VERSION}
+	    ./bin/gbuild -j ${proc} -m ${mem} --commit sugarchain=${COMMIT} --url sugarchain=${url} ../sugarchain/contrib/gitian-descriptors/gitian-win.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs.sugar/ ../sugarchain/contrib/gitian-descriptors/gitian-win.yml
+	    mv build/out/sugarchain-*-win-unsigned.tar.gz inputs/sugarchain-win-unsigned.tar.gz
+	    mv build/out/sugarchain-*.zip build/out/sugarchain-*.exe ../sugarchain-binaries/${VERSION}
 	fi
 	# Mac OSX
 	if [[ $osx = true ]]
@@ -292,10 +292,10 @@ then
 	    echo ""
 	    echo "Compiling ${VERSION} Mac OSX"
 	    echo ""
-	    ./bin/gbuild -j ${proc} -m ${mem} --commit bitcoin=${COMMIT} --url bitcoin=${url} ../bitcoin/contrib/gitian-descriptors/gitian-osx.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../bitcoin/contrib/gitian-descriptors/gitian-osx.yml
-	    mv build/out/bitcoin-*-osx-unsigned.tar.gz inputs/bitcoin-osx-unsigned.tar.gz
-	    mv build/out/bitcoin-*.tar.gz build/out/bitcoin-*.dmg ../bitcoin-binaries/${VERSION}
+	    ./bin/gbuild -j ${proc} -m ${mem} --commit sugarchain=${COMMIT} --url sugarchain=${url} ../sugarchain/contrib/gitian-descriptors/gitian-osx.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs.sugar/ ../sugarchain/contrib/gitian-descriptors/gitian-osx.yml
+	    mv build/out/sugarchain-*-osx-unsigned.tar.gz inputs/sugarchain-osx-unsigned.tar.gz
+	    mv build/out/sugarchain-*.tar.gz build/out/sugarchain-*.dmg ../sugarchain-binaries/${VERSION}
 	fi
 	popd
 
@@ -322,27 +322,27 @@ then
 	echo ""
 	echo "Verifying v${VERSION} Linux"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-linux ../bitcoin/contrib/gitian-descriptors/gitian-linux.yml
+	./bin/gverify -v -d ../gitian.sigs.sugar/ -r ${VERSION}-linux ../sugarchain/contrib/gitian-descriptors/gitian-linux.yml
 	# Windows
 	echo ""
 	echo "Verifying v${VERSION} Windows"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-unsigned ../bitcoin/contrib/gitian-descriptors/gitian-win.yml
+	./bin/gverify -v -d ../gitian.sigs.sugar/ -r ${VERSION}-win-unsigned ../sugarchain/contrib/gitian-descriptors/gitian-win.yml
 	# Mac OSX	
 	echo ""
 	echo "Verifying v${VERSION} Mac OSX"
 	echo ""	
-	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../bitcoin/contrib/gitian-descriptors/gitian-osx.yml
+	./bin/gverify -v -d ../gitian.sigs.sugar/ -r ${VERSION}-osx-unsigned ../sugarchain/contrib/gitian-descriptors/gitian-osx.yml
 	# Signed Windows
 	echo ""
 	echo "Verifying v${VERSION} Signed Windows"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../bitcoin/contrib/gitian-descriptors/gitian-osx-signer.yml
+	./bin/gverify -v -d ../gitian.sigs.sugar/ -r ${VERSION}-osx-signed ../sugarchain/contrib/gitian-descriptors/gitian-osx-signer.yml
 	# Signed Mac OSX
 	echo ""
 	echo "Verifying v${VERSION} Signed Mac OSX"
 	echo ""
-	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../bitcoin/contrib/gitian-descriptors/gitian-osx-signer.yml	
+	./bin/gverify -v -d ../gitian.sigs.sugar/ -r ${VERSION}-osx-signed ../sugarchain/contrib/gitian-descriptors/gitian-osx-signer.yml	
 	popd
 fi
 
@@ -357,10 +357,10 @@ then
 	    echo ""
 	    echo "Signing ${VERSION} Windows"
 	    echo ""
-	    ./bin/gbuild -i --commit signature=${COMMIT} ../bitcoin/contrib/gitian-descriptors/gitian-win-signer.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../bitcoin/contrib/gitian-descriptors/gitian-win-signer.yml
-	    mv build/out/bitcoin-*win64-setup.exe ../bitcoin-binaries/${VERSION}
-	    mv build/out/bitcoin-*win32-setup.exe ../bitcoin-binaries/${VERSION}
+	    ./bin/gbuild -i --commit signature=${COMMIT} ../sugarchain/contrib/gitian-descriptors/gitian-win-signer.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs.sugar/ ../sugarchain/contrib/gitian-descriptors/gitian-win-signer.yml
+	    mv build/out/sugarchain-*win64-setup.exe ../sugarchain-binaries/${VERSION}
+	    mv build/out/sugarchain-*win32-setup.exe ../sugarchain-binaries/${VERSION}
 	fi
 	# Sign Mac OSX
 	if [[ $osx = true ]]
@@ -368,9 +368,9 @@ then
 	    echo ""
 	    echo "Signing ${VERSION} Mac OSX"
 	    echo ""
-	    ./bin/gbuild -i --commit signature=${COMMIT} ../bitcoin/contrib/gitian-descriptors/gitian-osx-signer.yml
-	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../bitcoin/contrib/gitian-descriptors/gitian-osx-signer.yml
-	    mv build/out/bitcoin-osx-signed.dmg ../bitcoin-binaries/${VERSION}/bitcoin-${VERSION}-osx.dmg
+	    ./bin/gbuild -i --commit signature=${COMMIT} ../sugarchain/contrib/gitian-descriptors/gitian-osx-signer.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs.sugar/ ../sugarchain/contrib/gitian-descriptors/gitian-osx-signer.yml
+	    mv build/out/sugarchain-osx-signed.dmg ../sugarchain-binaries/${VERSION}/sugarchain-${VERSION}-osx.dmg
 	fi
 	popd
 
