@@ -10,6 +10,7 @@
 #include <utilstrencodings.h>
 #include <crypto/common.h>
 
+// yespower
 #include <stdlib.h>
 #include "crypto/yespower-1.0.0/yespower.h"
 #include "streams.h"
@@ -20,6 +21,7 @@ uint256 CBlockHeader::GetHash() const
     return SerializeHash(*this);
 }
 
+// yespower
 uint256 CBlockHeader::GetPoWHash() const
 {
     uint256 thash;

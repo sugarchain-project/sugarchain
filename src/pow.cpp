@@ -10,7 +10,7 @@
 #include <primitives/block.h>
 #include <uint256.h>
 
-#include <util.h>
+#include <util.h> // DigiShieldZEC
 
 unsigned int GetNextWorkRequired_BTC(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {

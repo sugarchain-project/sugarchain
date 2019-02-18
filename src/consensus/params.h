@@ -11,7 +11,7 @@
 #include <map>
 #include <string>
 
-#include <boost/optional.hpp>
+#include <boost/optional.hpp> // DigiShieldZEC
 
 namespace Consensus {
 
