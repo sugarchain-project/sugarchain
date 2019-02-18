@@ -10,11 +10,7 @@
 #include <stdint.h>
 #include <vector>
 
-// FIXME.SUGAR
-// 120x bitcoin
-// (70 * 60 / 120) = 35
-// litecoin is 4x, but (70 * 60 / 2) is enough?
-static const int64_t DEFAULT_MAX_TIME_ADJUSTMENT = 70 * 60 / 120;
+static const int64_t DEFAULT_MAX_TIME_ADJUSTMENT = 70 * 60;
 
 class CNetAddr;
 
