@@ -114,6 +114,7 @@ void WalletModel::updateStatus()
 }
 
 // FIXME.SUGAR // SURE?
+// 120x bitcoin
 void WalletModel::pollBalanceChanged()
 {
     // Get required locks upfront. This avoids the GUI from getting stuck on

@@ -73,7 +73,7 @@ void RPCNestedTests::rpcNestedTests()
     QVERIFY(result == result2);
 
     RPCConsole::RPCExecuteCommandLine(result, "getblock(getbestblockhash())[tx][0]", &filtered);
-    QVERIFY(result == "09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76");  // genesis.hashMerkleRoot
+    QVERIFY(result == "09a754250024b34f2d2a8e0edbb43375fbb024ec6025edb243b32e50b6c20d76");  // FIXME.SUGAR // genesis.hashMerkleRoot
     QVERIFY(filtered == "getblock(getbestblockhash())[tx][0]");
 
     RPCConsole::RPCParseCommandLine(result, "importprivkey", false, &filtered);

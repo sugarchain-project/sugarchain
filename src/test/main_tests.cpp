@@ -55,7 +55,10 @@ BOOST_AUTO_TEST_CASE(subsidy_limit_test)
         nSum += nSubsidy * 1000;
         BOOST_CHECK(MoneyRange(nSum));
     }
-    BOOST_CHECK_EQUAL(nSum, CAmount{251999999722800000}); // 120x bitcoin // 2100000000000000*120 -277200000// ./src/test/test_sugarchain test_bitcoin --log_level=test_suite --run_test=compress_tests
+    // 120x bitcoin
+    // (2100000000000000 * 120) - 277200000
+    // ./src/test/test_sugarchain test_bitcoin --log_level=test_suite --run_test=compress_tests
+    BOOST_CHECK_EQUAL(nSum, CAmount{251999999722800000});
 }
 
 bool ReturnFalse() { return false; }
