@@ -523,12 +523,28 @@ std::string HelpMessage(HelpMessageMode mode)
     return strUsage;
 }
 
+// FIXME.SUGAR
+// QT About Sugarchain
 std::string LicenseInfo()
 {
     const std::string URL_SOURCE_CODE = "<https://github.com/sugarchain-project/sugarchain>";
     const std::string URL_WEBSITE = "<https://sugarchain.org>";
 
-    return CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2018, COPYRIGHT_YEAR) + " ") + "\n" +
+    // BEGIN - Adding Additional CopyrightHolders
+    const std::string Copyright_1 = strprintf(_("Copyright (C) %i-%i"), 2009, 2010) + " " + "Satoshi Nakamoto";
+    const std::string Copyright_2 = strprintf(_("Copyright (C) %i-%i"), 2009, 2018) + " " + "The Bitcoin Core developers";
+    const std::string Copyright_3 = strprintf(_("Copyright (C) %i-%i"), 2013, 2018) + " " + "Alexander Peslyak - yespower 1.0.0";
+    const std::string Copyright_4 = strprintf(_("Copyright (C) %i-%i"), 2016, 2018) + " " + "The Zcash developers - DigiShieldZEC";
+    // END - Adding Additional CopyrightHolders
+
+    return
+           // BEGIN - Ordering Additional CopyrightHolders
+           Copyright_1 + "\n" +
+           Copyright_2 + "\n" +
+           Copyright_3 + "\n" +
+           Copyright_4 + "\n" +
+           CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2018, COPYRIGHT_YEAR) + " ") + "\n" +
+           // END - Ordering Additional CopyrightHolders
            "\n" +
            strprintf(_("Please contribute if you find %s useful. "
                        "Visit %s for further information about the software."),
