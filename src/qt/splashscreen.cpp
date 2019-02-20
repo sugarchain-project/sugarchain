@@ -26,6 +26,8 @@
 #include <QPainter>
 #include <QRadialGradient>
 
+// FIXME.SUGAR
+// QT SplashScreen Sugarchain
 SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) :
     QWidget(0, f), curAlignment(0)
 {
@@ -44,7 +46,27 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     // define text to place
     QString titleText       = tr(PACKAGE_NAME);
     QString versionText     = QString("Version %1").arg(QString::fromStdString(FormatFullVersion()));
-    QString copyrightText   = QString::fromUtf8(CopyrightHolders(strprintf("\xc2\xA9 %u-%u ", 2018, COPYRIGHT_YEAR)).c_str());
+
+    // BEGIN - Adding Additional CopyrightHolders (2/2)
+    // Duplicated <init.cpp> but little bit different
+    const std::string Copyright_1 = strprintf(_("\xc2\xA9 %u-%u "), 2009, 2010) + "Satoshi Nakamoto";
+    const std::string Copyright_2 = strprintf(_("\xc2\xA9 %u-%u "), 2009, 2018) + "The Bitcoin Core developers";
+    const std::string Copyright_3 = strprintf(_("\xc2\xA9 %u-%u "), 2013, 2018) + "Alexander Peslyak - Yespower 1.0.0";
+    const std::string Copyright_4 = strprintf(_("\xc2\xA9 %u-%u "), 2016, 2018) + "The Zcash developers - DigiShieldZEC";
+    // END - Adding Additional CopyrightHolders (2/2)
+
+    // BEGIN - Placing Additional CopyrightHolders
+    QString copyrightText   = QString::fromUtf8(
+        (
+            Copyright_1 + "\n" +
+            Copyright_2 + "\n" +
+            Copyright_3 + "\n" +
+            Copyright_4 + "\n" +
+            CopyrightHolders(strprintf("\xc2\xA9 %u-%u ", 2018, COPYRIGHT_YEAR))
+        ).c_str()
+    );
+    // END - Placing Additional CopyrightHolders
+
     QString titleAddText    = networkStyle->getTitleAddText();
 
     QString font            = QApplication::font().toString();
