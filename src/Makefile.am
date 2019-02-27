@@ -174,8 +174,7 @@ BITCOIN_CORE_H = \
   zmq/zmqabstractnotifier.h \
   zmq/zmqconfig.h\
   zmq/zmqnotificationinterface.h \
-  zmq/zmqpublishnotifier.h \
-  crypto/yespower-1.0.0/yespower.h
+  zmq/zmqpublishnotifier.h
 
 
 obj/build.h: FORCE
@@ -258,7 +257,7 @@ libbitcoin_wallet_a_SOURCES = \
 # crypto primitives library
 crypto_libbitcoin_crypto_a_CPPFLAGS = $(AM_CPPFLAGS)
 crypto_libbitcoin_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-crypto_libbitcoin_crypto_a_CFLAGS = $(AM_CFLAGS) $(PIE_FLAGS) -fomit-frame-pointer
+crypto_libbitcoin_crypto_a_CFLAGS = $(PIE_FLAGS) -Wall -O2 -fomit-frame-pointer
 crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/aes.cpp \
   crypto/aes.h \
@@ -278,6 +277,7 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/sha512.cpp \
   crypto/sha512.h \
   crypto/yespower-1.0.0/sha256.c \
+  crypto/yespower-1.0.0/yespower.h \
   crypto/yespower-1.0.0/yespower-opt.c
 
 if USE_ASM
