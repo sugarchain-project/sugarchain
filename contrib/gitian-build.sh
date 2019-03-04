@@ -16,8 +16,11 @@ osx=true
 SIGNER=
 VERSION=
 commit=false
+
+# FIXME.SUGAR
 # url=https://github.com/sugarchain-project/sugarchain
-url=https://github.com/randomBox123/travisTest.git # gitian test
+url=git@github.com:cryptozeny/sugarchain-v0.16.3.git # private repo
+
 proc=2
 mem=2000
 lxc=true

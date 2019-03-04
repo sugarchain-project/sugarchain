@@ -27,10 +27,13 @@ packages:
 - "python-dev"
 - "python-setuptools"
 - "fonts-tuffy"
+
+# FIXME.SUGAR
 remotes:
 # - "url": "https://github.com/sugarchain-project/sugarchain.git"
-- "url": "https://github.com/randomBox123/travisTest.git"  # gitian test
+- "url": "git@github.com:cryptozeny/sugarchain-v0.16.3.git" # private repo
   "dir": "sugarchain"
+
 files:
 - "MacOSX10.11.sdk.tar.gz"
 script: |
