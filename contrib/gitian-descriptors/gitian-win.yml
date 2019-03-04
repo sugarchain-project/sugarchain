@@ -22,16 +22,19 @@ packages:
 - "ca-certificates"
 - "python"
 remotes:
-- "url": "https://github.com/sugarchain-project/sugarchain.git"
+# - "url": "https://github.com/sugarchain-project/sugarchain.git"
+- "url": "https://github.com/randomBox123/travisTest.git"  # gitian test
   "dir": "sugarchain"
 files: []
 script: |
   WRAP_DIR=$HOME/wrapped
   HOSTS="i686-w64-mingw32 x86_64-w64-mingw32"
-  CONFIGFLAGS="--enable-reduce-exports --disable-bench --disable-gui-tests"
+  WIN_BITCOIN_CONFIG="--disable-shared"
+  CONFIGFLAGS="--enable-reduce-exports --disable-bench --disable-gui-tests ${WIN_BITCOIN_CONFIG}"
   FAKETIME_HOST_PROGS="g++ ar ranlib nm windres strip objcopy"
   FAKETIME_PROGS="date makensis zip"
-  HOST_CFLAGS="-O2 -g"
+  YESPOWER_PATH="/home/ubuntu/build/sugarchain/src/crypto/yespower-1.0.0"
+  HOST_CFLAGS="-O2 -g -I${YESPOWER_PATH}"
   HOST_CXXFLAGS="-O2 -g"
 
   export QT_RCC_TEST=1
@@ -157,7 +160,15 @@ script: |
     rename 's/-setup\.exe$/-setup-unsigned.exe/' *-setup.exe
     cp -f sugarchain-*setup*.exe $OUTDIR/
     cd installed
-    mv ${DISTNAME}/bin/*.dll ${DISTNAME}/lib/
+
+    # BEGIN - DISABLE SHARED
+    # WIN_BITCOIN_CONFIG="--disable-shared"
+    # mv ${DISTNAME}/bin/*.dll ${DISTNAME}/lib/
+    if [ -f ${DISTNAME}/bin/*.dll ]; then
+      mv ${DISTNAME}/bin/*.dll ${DISTNAME}/lib/
+    fi
+    # END - DISABLE SHARED
+
     find . -name "lib*.la" -delete
     find . -name "lib*.a" -delete
     rm -rf ${DISTNAME}/lib/pkgconfig

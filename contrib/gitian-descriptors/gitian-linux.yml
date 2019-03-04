@@ -28,7 +28,8 @@ packages:
 - "ca-certificates"
 - "python"
 remotes:
-- "url": "https://github.com/sugarchain-project/sugarchain.git"
+# - "url": "https://github.com/sugarchain-project/sugarchain.git"
+- "url": "https://github.com/randomBox123/travisTest.git"  # gitian test
   "dir": "sugarchain"
 files: []
 script: |
@@ -38,7 +39,8 @@ script: |
   CONFIGFLAGS="--enable-glibc-back-compat --enable-reduce-exports --disable-bench --disable-gui-tests"
   FAKETIME_HOST_PROGS=""
   FAKETIME_PROGS="date ar ranlib nm"
-  HOST_CFLAGS="-O2 -g"
+  YESPOWER_PATH="/home/ubuntu/build/sugarchain/src/crypto/yespower-1.0.0"
+  HOST_CFLAGS="-O2 -g -I${YESPOWER_PATH}"
   HOST_CXXFLAGS="-O2 -g"
   HOST_LDFLAGS=-static-libstdc++
 
