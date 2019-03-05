@@ -422,7 +422,9 @@ BOOST_AUTO_TEST_CASE(caddrinfo_get_tried_bucket)
 
     BOOST_CHECK_EQUAL(info1.GetTriedBucket(nKey1), 14); // FIXME.SUGAR // SURE?
 
-    // BEGIN - DELME.SUGAR: just for debugging
+    // FIXME.SUGAR
+    // BEGIN - DEBUG
+    /*
     printf("addr1 = %s\n", addr1.ToString().c_str());
     printf("source1 = %s\n", source1.ToString().c_str());
     printf("CAddrInfo(addr1, source1) = %s\n", CAddrInfo(addr1, source1).ToString().c_str());
@@ -430,7 +432,8 @@ BOOST_AUTO_TEST_CASE(caddrinfo_get_tried_bucket)
     printf("nKey1 = %s\n", nKey1.ToString().c_str());
     printf("info1.GetTriedBucket(nKey1) = %d\n", info1.GetTriedBucket(nKey1));
     BOOST_CHECK_EQUAL(CAddrInfo(addr1, source1).GetTriedBucket( (uint256)(CHashWriter(SER_GETHASH, 0) << 1).GetHash() ), 14); // DOUBLE CHECK
-    // END - DELME.SUGAR: just for debugging
+    */
+    // END - DEBUG
 
     // BEGIN - ADDITIONAL CHECK: BTC
     CAddress addr1_BTC = CAddress(ResolveService("250.1.1.1", 8333), NODE_NONE);
