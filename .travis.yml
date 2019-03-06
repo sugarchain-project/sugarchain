@@ -23,6 +23,8 @@ env:
     - SDK_URL=https://bitcoincore.org/depends-sources/sdks
     - WINEDEBUG=fixme-all
     - YESPOWER_PATH=$TRAVIS_BUILD_DIR/src/crypto/yespower-1.0.0
+    - YESPOWER_OPTION="-fPIE -Wall -O2 -fomit-frame-pointer"
+    - YESPOWER_MSSE2_32BIT="-msse2"
     - WIN_BITCOIN_CONFIG="--disable-shared"
   matrix:
 # ARM
@@ -42,6 +44,7 @@ env:
       RUN_TESTS=true
       GOAL="install"
       BITCOIN_CONFIG="--enable-reduce-exports $WIN_BITCOIN_CONFIG"
+    # disabled (slow "make check") # YESPOWER_OPTION="$YESPOWER_OPTION $YESPOWER_MSSE2_32BIT"
 # Qt4 & system libs
     - >
       HOST=x86_64-unknown-linux-gnu
@@ -60,6 +63,7 @@ env:
       GOAL="install"
       BITCOIN_CONFIG="--enable-zmq --enable-glibc-back-compat --enable-reduce-exports LDFLAGS=-static-libstdc++"
       USE_SHELL="/bin/dash"
+      YESPOWER_OPTION="$YESPOWER_OPTION $YESPOWER_MSSE2_32BIT"
 # Win64
     - >
       HOST=x86_64-w64-mingw32
@@ -91,7 +95,7 @@ env:
       PACKAGES="cmake imagemagick libcap-dev librsvg2-bin libz-dev libbz2-dev libtiff-tools python-dev"
       BITCOIN_CONFIG="--enable-gui --enable-reduce-exports --enable-werror"
       OSX_SDK=10.11
-      GOAL="install"
+      GOAL="deploy"
 
 before_install:
     - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
@@ -126,10 +130,10 @@ script:
     - if [ -z "$NO_DEPENDS" ]; then depends/$HOST/native/bin/ccache --max-size=$CCACHE_SIZE; fi
     - test -n "$USE_SHELL" && eval '"$USE_SHELL" -c "./autogen.sh"' || ./autogen.sh
     - mkdir build && cd build
-    - ../configure CFLAGS="-I$YESPOWER_PATH" --cache-file=config.cache $BITCOIN_CONFIG_ALL $BITCOIN_CONFIG || ( cat config.log && false)
+    - ../configure CFLAGS="-I$YESPOWER_PATH $YESPOWER_OPTION" --cache-file=config.cache $BITCOIN_CONFIG_ALL $BITCOIN_CONFIG || ( cat config.log && false)
     - make distdir VERSION=$HOST
     - cd sugarchain-$HOST
-    - ./configure CFLAGS="-I$YESPOWER_PATH" --cache-file=../config.cache $BITCOIN_CONFIG_ALL $BITCOIN_CONFIG || ( cat config.log && false)
+    - ./configure CFLAGS="-I$YESPOWER_PATH $YESPOWER_OPTION" --cache-file=../config.cache $BITCOIN_CONFIG_ALL $BITCOIN_CONFIG || ( cat config.log && false)
     - make $MAKEJOBS $GOAL || ( echo "Build failure. Verbose build follows." && make $GOAL V=1 ; false )
     - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/depends/$HOST/lib
     - if [ "$RUN_TESTS" = "true" ]; then travis_wait 60 make $MAKEJOBS check VERBOSE=1; fi
