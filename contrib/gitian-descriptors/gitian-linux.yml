@@ -43,7 +43,8 @@ script: |
   FAKETIME_HOST_PROGS=""
   FAKETIME_PROGS="date ar ranlib nm"
   YESPOWER_PATH="/home/ubuntu/build/sugarchain/src/crypto/yespower-1.0.0"
-  HOST_CFLAGS="-O2 -g -I${YESPOWER_PATH}"
+  YESPOWER_OPTION="-fPIE -Wall -O2 -fomit-frame-pointer"
+  HOST_CFLAGS="-O2 -g -I${YESPOWER_PATH} ${YESPOWER_OPTION}"
   HOST_CXXFLAGS="-O2 -g"
   HOST_LDFLAGS=-static-libstdc++
 
