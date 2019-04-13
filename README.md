@@ -1,82 +1,79 @@
-Bitcoin Core integration/staging tree
-=====================================
+Sugarchain Yumekawa
+===================
 
-[![Build Status](https://travis-ci.org/bitcoin/bitcoin.svg?branch=master)](https://travis-ci.org/bitcoin/bitcoin)
+`TODO:
+[![Build Status](example.com)](example.com)`
 
-https://bitcoincore.org
+ - Copyright (c) 2009-2010 Satoshi Nakamoto
+ - Copyright (c) 2009-2018 The Bitcoin Core developers
+ - Copyright (c) 2013-2018 Alexander Peslyak - Yespower 1.0.0
+ - Copyright (c) 2016-2018 The Zcash developers - DigiShieldZEC
+ - Copyright (c) 2018-2019 The Sugarchain developers
 
-What is Bitcoin?
-----------------
+-----
 
-Bitcoin is an experimental digital currency that enables instant payments to
-anyone, anywhere in the world. Bitcoin uses peer-to-peer technology to operate
-with no central authority: managing transactions and issuing money are carried
-out collectively by the network. Bitcoin Core is the name of open source
-software which enables the use of this currency.
+## The meaning of Yumekawa
+Sugarchain's first node software is called `Yemekawa (夢川)`. It can be translated in some ways.
+ - "Yume (夢)" means dream and "Kawa (川)" means river. So its `Dream River` in japanese.
+ - The second letter "Kawa" stands for "Kawaii (可愛い)". In this case the meaning is `Dreamy Cute`.
+ - Also Yumekawa is replaces the word `Core` (ie: Bitcoin Core). It sounds a bit centralized and we don't want such [Elitism](https://en.wikipedia.org/wiki/Elitism). In this term we are Yumekawa developers, but not ~~Core developers~~.
 
-For more information, as well as an immediately useable, binary version of
-the Bitcoin Core software, see https://bitcoin.org/en/download, or read the
-[original whitepaper](https://bitcoincore.org/bitcoin.pdf).
+-----
 
-License
--------
+## Depends on BTC
+It is exactly same as the dependencies of `BTC v0.16.3`. It is not necessary if you already have.
 
-Bitcoin Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
-information or see https://opensource.org/licenses/MIT.
+```bash
+sudo add-apt-repository ppa:bitcoin/bitcoin && \
+sudo apt-get update && \
+sudo apt-get install \
+software-properties-common libdb4.8-dev libdb4.8++-dev \
+build-essential libtool autotools-dev automake pkg-config \
+libssl-dev libevent-dev bsdmainutils libboost-all-dev \
+libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
+libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
+protobuf-compiler libqrencode-dev
+```
 
-Development Process
--------------------
+## Build
+```bash
+git clone git@github.com:cryptozeny/sugarchain-v0.16.3.git && \
+cd sugarchain-v0.16.3 && \
+./autogen.sh && \
+./configure && \
+make -j$(nproc) && \
+make check -j$(nproc)
+```
 
-The `master` branch is regularly built and tested, but is not guaranteed to be
-completely stable. [Tags](https://github.com/bitcoin/bitcoin/tags) are created
-regularly to indicate new official, stable release versions of Bitcoin Core.
+## Unit Test
+Every Yumekawa developers should check this unit test. Some updates may break this tests sometimes.
 
-The contribution workflow is described in [CONTRIBUTING.md](CONTRIBUTING.md).
+ * Test All
+ ```bash
+ ./src/test/test_sugarchain test_bitcoin --log_level=test_suite
+ ```
+ 
+ * Test Partially: ie `blockencodings_tests`
+ ```bash
+ ./src/test/test_sugarchain test_bitcoin --log_level=test_suite --run_test=blockencodings_tests
+ ```
 
-The developer [mailing list](https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev)
-should be used to discuss complicated or controversial changes before working
-on a patch set.
+## Run
+The options `-rpcuser` and `-rpcpassword` can be freely choose. If you need the file `debug.log`, then drop the `-printtoconsole` out. `server=1` needed by RPC servers or cpuminer(solo-mining).
 
-Developer IRC can be found on Freenode at #bitcoin-core-dev.
+ * Testnet [debug mode]
+ > ./src/qt/sugarchain-qt -testnet -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword -addnode=explorer-testnet.cryptozeny.com -printtoconsole
 
-Testing
--------
+ * Testnet [debug mode for PoW]
+ > ./src/qt/sugarchain-qt -testnet -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword -addnode=explorer-testnet.cryptozeny.com -debug=pow -printtoconsole
 
-Testing and code review is the bottleneck for development; we get more pull
-requests than we can review and test on short notice. Please be patient and help out by testing
-other people's pull requests, and remember this is a security-critical project where any mistake might cost people
-lots of money.
+## CLI
+ * Testnet
+ > ./src/sugarchain-cli -testnet -rpcuser=rpcuser -rpcpassword=rpcpassword getblockcount
 
-### Automated Testing
+## Release process using GITIAN
 
-Developers are strongly encouraged to write [unit tests](src/test/README.md) for new code, and to
-submit new unit tests for old code. Unit tests can be compiled and run
-(assuming they weren't disabled in configure) with: `make check`. Further details on running
-and extending unit tests can be found in [/src/test/README.md](/src/test/README.md).
+https://gist.github.com/cryptozeny/3501c77750541208b9dd1a9e9719fc53
 
-There are also [regression and integration tests](/test), written
-in Python, that are run automatically on the build server.
-These tests can be run (if the [test dependencies](/test) are installed) with: `test/functional/test_runner.py`
-
-The Travis CI system makes sure that every pull request is built for Windows, Linux, and OS X, and that unit/sanity tests are run automatically.
-
-### Manual Quality Assurance (QA) Testing
-
-Changes should be tested by somebody other than the developer who wrote the
-code. This is especially important for large or high-risk changes. It is useful
-to add a test plan to the pull request description if testing the changes is
-not straightforward.
-
-Translations
-------------
-
-Changes to translations as well as new translations can be submitted to
-[Bitcoin Core's Transifex page](https://www.transifex.com/projects/p/bitcoin/).
-
-Translations are periodically pulled from Transifex and merged into the git repository. See the
-[translation process](doc/translation_process.md) for details on how this works.
-
-**Important**: We do not accept translation changes as GitHub pull requests because the next
-pull from Transifex would automatically overwrite them again.
-
-Translators should also subscribe to the [mailing list](https://groups.google.com/forum/#!forum/bitcoin-translators).
+ * Every Sugarchain Yumekawa developers should do following this GITIAN release process. This is the safest method to release.
+ * Do not trust created binaries by any others, and please use released by GITIAN and verify the PGP signatures of the Sugarchain Yumekawa developers.
