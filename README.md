@@ -1,8 +1,7 @@
 Sugarchain Yumekawa
 ===================
 
-`TODO:
-[![Build Status](example.com)](example.com)`
+[![Build Status](https://travis-ci.com/cryptozeny/sugarchain-v0.16.3.svg?token=KrYycpAcc7g95pAVRykP&branch=master-v0.16.3)](https://travis-ci.com/cryptozeny/sugarchain-v0.16.3)
 
  - Copyright (c) 2009-2010 Satoshi Nakamoto
  - Copyright (c) 2009-2018 The Bitcoin Core developers
