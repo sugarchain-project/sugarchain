@@ -57,6 +57,11 @@ Every Yumekawa developers should check this unit test. Some updates may break th
  ```bash
  ./src/test/test_sugarchain test_bitcoin --log_level=test_suite --run_test=blockencodings_tests
  ```
+ 
+ * Test QT (GUI)
+ ```bash
+ ./src/qt/test/test_sugarchain-qt
+ ```
 
 ## Run
 The options `-rpcuser` and `-rpcpassword` can be freely choose. If you need the file `debug.log`, then drop the `-printtoconsole` out. `server=1` needed by RPC servers or cpuminer(solo-mining).

@@ -16,7 +16,7 @@ BOOST_FIXTURE_TEST_SUITE(main_tests, TestingSetup)
 static void TestBlockSubsidyHalvings(const Consensus::Params& consensusParams)
 {
     int maxHalvings = 64;
-    CAmount nInitialSubsidy = 50 * COIN;
+    CAmount nInitialSubsidy = 42.94967296 * COIN; // 2^32/COIN = 42.94967296 (was 50)
 
     CAmount nPreviousSubsidy = nInitialSubsidy * 2; // for height == 0
     BOOST_CHECK_EQUAL(nPreviousSubsidy, nInitialSubsidy * 2);
@@ -49,16 +49,24 @@ BOOST_AUTO_TEST_CASE(subsidy_limit_test)
 {
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
     CAmount nSum = 0;
-    for (int nHeight = 0; nHeight < 14000000 * 120; nHeight += 1000) { // 120x bitcoin // 14000000 * 120 = 1680000000
+
+    // SUGAR-HALVING
+    // BTC: (was 14000000) oldSugar: (was 14000000 * 120)
+    // nHeight: (was 1000)
+    // 12614400 * 64 = halving interval * halving count
+    for (int nHeight = 0; nHeight < 12614400 * 64; nHeight += 3200) {
         CAmount nSubsidy = GetBlockSubsidy(nHeight, chainParams->GetConsensus());
-        BOOST_CHECK(nSubsidy <= 50 * COIN);
-        nSum += nSubsidy * 1000;
+        BOOST_CHECK(nSubsidy <= 42.94967296 * COIN); // SUGAR-HALVING // 2^32/COIN = 42.94967296 (was 50)
+        nSum += nSubsidy * 3200; // SUGAR-HALVING // (was 1000)
         BOOST_CHECK(MoneyRange(nSum));
     }
-    // 120x bitcoin
-    // (2100000000000000 * 120) - 277200000
-    // ./src/test/test_sugarchain test_bitcoin --log_level=test_suite --run_test=compress_tests
-    BOOST_CHECK_EQUAL(nSum, CAmount{251999999722800000});
+    // SUGAR-HALVING
+    // BTC: (was 2099999997690000ULL)
+    // oldSugar: was (CAmount{251999999722800000})
+    // 108356870917324800 - total supply in theory
+    // 108356870904710400 - total supply in actual
+    //           12614400 - difference
+    BOOST_CHECK_EQUAL(nSum, 108356870904710400ULL);
 }
 
 bool ReturnFalse() { return false; }

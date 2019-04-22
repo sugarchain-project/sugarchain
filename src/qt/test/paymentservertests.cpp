@@ -199,14 +199,12 @@ void PaymentServerTests::paymentServerTests()
 
     // FIXME.SUGAR
     // BEGIN - DEBUG
-    /*
     printf( "\n\n\n" );
     printf( "%s =\n", "src/qt/test/paymentrequestdata.h/paymentrequest5_cert2_BASE64" );
     printf( "***\n" );
     printf( "%s\n", paymentrequest5_cert2_BASE64 );
     printf( "***\n" );
     printf( "\n\n\n" );
-    */
     // END - DEBUG
 
     for (const std::pair<CScript, CAmount>& sendingTo : sendingTos) {

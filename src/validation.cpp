@@ -1149,9 +1149,67 @@ CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
     if (halvings >= 64)
         return 0;
 
-    CAmount nSubsidy = 50 * COIN;
+    // FIXME.SUGAR // SURE?
+    CAmount nSubsidy = 42.94967296 * COIN; // 2^32/COIN = 42.94967296 (was 50)
+
+    // DEBUG - SUGAR
+    /*if (halvings == 1) { // no output if it zero(0)
+      printf("\n*** BEGIN - DEBUG: GetBlockSubsidy\n");
+      printf("nSubsidy & COIN = %ld %ld\n", nSubsidy, COIN);
+      printf("*** END - DEBUG\n");
+    }*/
+    /* OUTPUT
+    nSubsidy & COIN = 4294967296 100000000
+    */
+
     // Subsidy is cut in half every 210,000 blocks which will occur approximately every 4 years.
     nSubsidy >>= halvings;
+
+    // DEBUG - SUGAR
+    /*if (halvings > 0) {
+      printf("\n*** BEGIN - DEBUG: nSubsidy\n");
+      printf("halvings & nSubsidy = %d %ld\n", halvings, nSubsidy);
+      printf("*** END - DEBUG\n");
+    }*/
+    /* OUTPUT
+    halvings & nSubsidy = 1 2147483648
+    halvings & nSubsidy = 2 1073741824
+    halvings & nSubsidy = 3 536870912
+    halvings & nSubsidy = 4 268435456
+    halvings & nSubsidy = 5 134217728
+    halvings & nSubsidy = 6 67108864
+    halvings & nSubsidy = 7 33554432
+    halvings & nSubsidy = 8 16777216
+    halvings & nSubsidy = 9 8388608
+    halvings & nSubsidy = 10 4194304
+    halvings & nSubsidy = 11 2097152
+    halvings & nSubsidy = 12 1048576
+    halvings & nSubsidy = 13 524288
+    halvings & nSubsidy = 14 262144
+    halvings & nSubsidy = 15 131072
+    halvings & nSubsidy = 16 65536
+    halvings & nSubsidy = 17 32768
+    halvings & nSubsidy = 18 16384
+    halvings & nSubsidy = 19 8192
+    halvings & nSubsidy = 20 4096
+    halvings & nSubsidy = 21 2048
+    halvings & nSubsidy = 22 1024
+    halvings & nSubsidy = 23 512
+    halvings & nSubsidy = 24 256
+    halvings & nSubsidy = 25 128
+    halvings & nSubsidy = 26 64
+    halvings & nSubsidy = 27 32
+    halvings & nSubsidy = 28 16
+    halvings & nSubsidy = 29 8
+    halvings & nSubsidy = 30 4
+    halvings & nSubsidy = 31 2
+    halvings & nSubsidy = 32 1
+    halvings & nSubsidy = 33 0 << zero!
+    halvings & nSubsidy = 34 0
+    (...)
+    halvings & nSubsidy = 63 0 << done: no more HALVINGS after 63rd - if (halvings >= 64) {return 0;}
+    */
+
     return nSubsidy;
 }
 

@@ -435,11 +435,11 @@ d2hj739GDLz0b5KuJ2SG6VknMRQM976w/m2qlq0ccVGaaZ2zMIGfpzL3p6adwx/5\
 ";
 
 //
-// Payment request with amount overflow (amount is set to 252000000000000001 Satoshis)
-// 120x bitcoin
-// ((21000000 * 120) * 100000000) + 1)
-// *100000000 makes BTC to Satoshis
-// OK: amount = 252000000000000001 In satoshis 2520000000*100000000+1
+// SUGAR-HALVING
+// Payment request with amount overflow (amount is set to "108356870917324800 + 1" Satoshis)
+// 108356870917324800 - total supply in theory
+// 108356870904710400 - total supply in actual
+//           12614400 - difference
 //
 const char* paymentrequest5_cert2_BASE64 =
 "\
@@ -458,11 +458,11 @@ kzw23c4WAETQItqy5Z1p0k8k3gf/Uq6MZfPYo+kqJMDdKN2R+BFtc4aX6plCyh2YzO1K9sfO4WbU\
 E4BKWVQ9q9XVMkZDLo2qkLRrNrxAYJknY76FQ9QbVpW+QpXGnzoWci3M6mapTRQFW//U+j2C54k+\
 /8PwIA1cXrkIE9f/ctQSM5iZZhNH8CYZmajeojwsipXbtQ7DQExdCl1mj14vLqrxmdGcfNhEQlnz\
 xi4RwCU2TvHDzK3TVhcWf04U89KO2jm/tF4yNR74RzUYq6j0zcH62sVXyZu86eHzT2kqunzoZSc8\
-vX+vNhJaYcOe4vTYg1H7TS9BpmuW7CJhCgRtYWluEiUIgYCYm6OV0r8DEhl2qRQrFJULjTFiDGzJ\
-I8VAinAbHsCgIIisGKCh9eEFIPil9eEFKgZfbWVtb18yDV9wYXltZW50X3VybF86D19tZXJjaGFu\
-dF9kYXRhXyqAAkzbUUeYJ4jpEIPUOoQH5U/V+qwnXE9N7IBawYhIbwpRNjIicHancKIkOx2g4UcC\
-czIPS/F7sgq9+dqk6ftlq5aLlbmbAEmAvOqhVOxkDyDuOAICyls5s7GSgN8LTAYOn9YcChTsJSZp\
-8hHqh8CI3bLAJJJ1yeI7c+LFe286hj9Eqy6dxZgy2gJGjtz1QEyXXfVHqufdS3oZN0z+3xbUwHkq\
-Po4+w/uaIrf2zWqvCPUcZa/c/yj2k4cD5pX0gpFlTrSNFImmSau+wFlp1kplRZ5vYBlYYwOEi8A4\
-7hpEra+Sp/GJdSzo6xfNMQ1G2U6pjfdfeR4vK9Q1WFCMT5h1lAs=\
+vX+vNhJaYcOe4vTYg1H7TS9BpmuW7CJhCgRtYWluEiUIgYCAgIDAvcABEhl2qRQrFJULjTFiDGzJ\
+I8VAinAbHsCgIIisGOno9OUFIMHt9OUFKgZfbWVtb18yDV9wYXltZW50X3VybF86D19tZXJjaGFu\
+dF9kYXRhXyqAAimBPrbXeVg+K7y2YuhlZrpXpQEpeLvp/wMGQzd5cTLaIZowecLWs3GWb7Tsyv1X\
+F/7+mXtVgh5zTeANrsfuYRDA7JcmJHT5AzrPngdMdeYQQXJBU2RUbDNBnHksPfciVfki6ol3J0Cf\
+MnBKDd0VmvVROlEAWSj/M/ti1wIo9BDeh3rEZ6K0BWx2jpLdJ0iw+SC3aQ0PruqBBx6J6FiEwfM4\
+YjYsCGqIlt9fBXlAbkTduEDaeRuY8/BwoRiXjVoMbE6f/3j5fwH3kyLN6YNVEJ0qR7+Iy84Ma5mz\
+lRTOiDCrNcGrQb/BPtPCRt7M0kull9jO3tJAwRjCnyXFfgI/90E=\
 ";
