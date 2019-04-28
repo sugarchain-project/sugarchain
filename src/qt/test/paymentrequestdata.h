@@ -436,10 +436,10 @@ d2hj739GDLz0b5KuJ2SG6VknMRQM976w/m2qlq0ccVGaaZ2zMIGfpzL3p6adwx/5\
 
 //
 // SUGAR-HALVING
-// Payment request with amount overflow (amount is set to "108356870917324800 + 1" Satoshis)
-// 108356870917324800 - total supply in theory
-// 108356870904710400 - total supply in actual
-//           12614400 - difference
+// Payment request with amount overflow (amount is set to "(1073741824 * 100000000) + 1" Satoshis)
+// Total Supply in COINs (in theory):	1073741824
+// Total Supply in COINs (in actual):	1073741823.87500000
+// Difference: 0.125
 //
 const char* paymentrequest5_cert2_BASE64 =
 "\
@@ -458,11 +458,11 @@ kzw23c4WAETQItqy5Z1p0k8k3gf/Uq6MZfPYo+kqJMDdKN2R+BFtc4aX6plCyh2YzO1K9sfO4WbU\
 E4BKWVQ9q9XVMkZDLo2qkLRrNrxAYJknY76FQ9QbVpW+QpXGnzoWci3M6mapTRQFW//U+j2C54k+\
 /8PwIA1cXrkIE9f/ctQSM5iZZhNH8CYZmajeojwsipXbtQ7DQExdCl1mj14vLqrxmdGcfNhEQlnz\
 xi4RwCU2TvHDzK3TVhcWf04U89KO2jm/tF4yNR74RzUYq6j0zcH62sVXyZu86eHzT2kqunzoZSc8\
-vX+vNhJaYcOe4vTYg1H7TS9BpmuW7CJhCgRtYWluEiUIgYCAgIDAvcABEhl2qRQrFJULjTFiDGzJ\
-I8VAinAbHsCgIIisGOno9OUFIMHt9OUFKgZfbWVtb18yDV9wYXltZW50X3VybF86D19tZXJjaGFu\
-dF9kYXRhXyqAAimBPrbXeVg+K7y2YuhlZrpXpQEpeLvp/wMGQzd5cTLaIZowecLWs3GWb7Tsyv1X\
-F/7+mXtVgh5zTeANrsfuYRDA7JcmJHT5AzrPngdMdeYQQXJBU2RUbDNBnHksPfciVfki6ol3J0Cf\
-MnBKDd0VmvVROlEAWSj/M/ti1wIo9BDeh3rEZ6K0BWx2jpLdJ0iw+SC3aQ0PruqBBx6J6FiEwfM4\
-YjYsCGqIlt9fBXlAbkTduEDaeRuY8/BwoRiXjVoMbE6f/3j5fwH3kyLN6YNVEJ0qR7+Iy84Ma5mz\
-lRTOiDCrNcGrQb/BPtPCRt7M0kull9jO3tJAwRjCnyXFfgI/90E=\
+vX+vNhJaYcOe4vTYg1H7TS9BpmuW7CJhCgRtYWluEiUIgYCAgICI3r4BEhl2qRQrFJULjTFiDGzJ\
+I8VAinAbHsCgIIisGLWhmOYFII2mmOYFKgZfbWVtb18yDV9wYXltZW50X3VybF86D19tZXJjaGFu\
+dF9kYXRhXyqAAiDZ+2ZrUy4h3sJXdEgMN0tsx0jSHovfbQtfJkOE4wiu89DxgH+XSpzYNia7kr/k\
+b4WZwsTYP4+swxyzg7vHAmiiuqJ26efPQYCNr08foozO2Jn8HlG/82QZuS4tsH86r4du9pVW/rML\
+ONC+CducUKVGEVYKK3FSDZ0dXxZAEd+GAAAVS4Z8kiSbL79Ije6p67H/Pz4of20U2oLMZbcl5ks9\
+ZABQKVGpsvAp7scqYT9tkC/cYt3rE+q/H0vOfwGQZ7I101i7u5Wvo2dRL7SlCnZsIlvbxkH2vi8X\
+uVY9+dDPS6HMLMPQLWgEjLPrOsw+A7jCskhy/HuYE7JnlVFD8VI=\
 ";

@@ -51,22 +51,19 @@ BOOST_AUTO_TEST_CASE(subsidy_limit_test)
     CAmount nSum = 0;
 
     // SUGAR-HALVING
-    // BTC: (was 14000000) oldSugar: (was 14000000 * 120)
-    // nHeight: (was 1000)
-    // 12614400 * 64 = halving interval * halving count
-    for (int nHeight = 0; nHeight < 12614400 * 64; nHeight += 3200) {
+    // BTC: (was 14000000 = 21000000/1.5)
+    for (int nHeight = 0; nHeight < 1073741824/1.5; nHeight += 1000) { // TotalSupply/1.5 = 1073741824/1.5 = 715827882.6666666
         CAmount nSubsidy = GetBlockSubsidy(nHeight, chainParams->GetConsensus());
         BOOST_CHECK(nSubsidy <= 42.94967296 * COIN); // SUGAR-HALVING // 2^32/COIN = 42.94967296 (was 50)
-        nSum += nSubsidy * 3200; // SUGAR-HALVING // (was 1000)
+        nSum += nSubsidy * 1000;
         BOOST_CHECK(MoneyRange(nSum));
     }
     // SUGAR-HALVING
     // BTC: (was 2099999997690000ULL)
-    // oldSugar: was (CAmount{251999999722800000})
-    // 108356870917324800 - total supply in theory
-    // 108356870904710400 - total supply in actual
-    //           12614400 - difference
-    BOOST_CHECK_EQUAL(nSum, 108356870904710400ULL);
+    // Total Supply in COINs (in theory):	1073741824
+    // Total Supply in COINs (in actual):	1073741823.87500000
+    // Difference: 0.125
+    BOOST_CHECK_EQUAL(nSum, 107374182387500000ULL); // Total Supply in Satoshis (in actual): :	107374182387500000
 }
 
 bool ReturnFalse() { return false; }

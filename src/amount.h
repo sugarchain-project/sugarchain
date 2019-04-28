@@ -26,11 +26,10 @@ static const CAmount CENT = 1000000;
 
 // SUGAR-HALVING
 // BTC: (was 21000000)
-// oldSugar (was 21000000 * 120 = 2520000000)
-// 108356870917324800 - total supply in theory
-// 108356870904710400 - total supply in actual
-//           12614400 - difference
-static const CAmount MAX_MONEY = 1083568709.17324800 * COIN; // total supply in theory
+// Total Supply in COINs (in theory):	1073741824
+// Total Supply in COINs (in actual):	1073741823.87500000
+// Difference: 0.125
+static const CAmount MAX_MONEY = 1073741824 * COIN; // total supply in theory
 inline bool MoneyRange(const CAmount& nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 
 #endif //  BITCOIN_AMOUNT_H

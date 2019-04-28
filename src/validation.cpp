@@ -1173,7 +1173,7 @@ CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
     }*/
     /* OUTPUT
     halvings & nSubsidy = 1 2147483648
-    halvings & nSubsidy = 2 1073741824
+    halvings & nSubsidy = 2 1073741824 // its the supply at 2nd halving, not the total supply, but same as in COIN (2^30 = 1073741824)
     halvings & nSubsidy = 3 536870912
     halvings & nSubsidy = 4 268435456
     halvings & nSubsidy = 5 134217728

@@ -128,11 +128,15 @@ public:
         strNetworkID = "main";
 
         // SUGAR-HALVING
-        // exactly 2 years = 60*60*24*365*2/5
-        // 5 is 5 seconds blocktime
-        // BTC: (was 210000)
-        // oldSugar: (was 25200000 = about 4 years)
-        consensus.nSubsidyHalvingInterval = 12614400;
+        // BTC: (was 21000000)
+        // around 2 years = pow(5,8)*32 = 390625*32 = 12500000
+        // pow(5,8) * pow(2,32) / COIN = 390625 * 4294967296 / 100000000 = INTEGER (16777216.0)
+        // pow(5,8) = 390625 is an integer cycle of pow(2,32) = 4294967296
+        // 1st halving = 536870912*COIN = 12500000 * 42.94967296
+        // Total Supply in COINs (in theory):	1073741824
+        // Total Supply in COINs (in actual):	1073741823.87500000
+        // Difference: 0.125
+        consensus.nSubsidyHalvingInterval = 12500000;
 
         consensus.BIP16Height = 0;  // always on
         consensus.BIP34Height = 17;
@@ -163,7 +167,7 @@ public:
 
         // SUGAR-HALVING
         // 17 hours = 17*60*60 = 61200 (was two weeks: 14×24×60×60 = 1209600)
-        // available: 17 hours or 17 days possible, because DigiShieldZEC uses n510 (17*n)
+        // available: 17*n hours or 17 days possible, because DigiShieldZEC uses n510 (17*n)
         consensus.nPowTargetTimespan = 61200;
 
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none; // DigiShieldZEC
@@ -300,11 +304,15 @@ public:
         strNetworkID = "test";
 
         // SUGAR-HALVING
-        // exactly 2 years = 60*60*24*365*2/5
-        // 5 is 5 seconds blocktime
-        // BTC: (was 210000)
-        // oldSugar: (was 25200000 = about 4 years)
-        consensus.nSubsidyHalvingInterval = 12614400;
+        // BTC: (was 21000000)
+        // around 2 years = pow(5,8)*32 = 390625*32 = 12500000
+        // pow(5,8) * pow(2,32) / COIN = 390625 * 4294967296 / 100000000 = INTEGER (16777216.0)
+        // pow(5,8) = 390625 is an integer cycle of pow(2,32) = 4294967296
+        // 1st halving = 536870912*COIN = 12500000 * 42.94967296
+        // Total Supply in COINs (in theory):	1073741824
+        // Total Supply in COINs (in actual):	1073741823.87500000
+        // Difference: 0.125
+        consensus.nSubsidyHalvingInterval = 12500000;
 
         consensus.BIP16Height = 0;  // always on
         consensus.BIP34Height = 17;
@@ -335,7 +343,7 @@ public:
 
         // SUGAR-HALVING
         // 17 hours = 17*60*60 = 61200 (was two weeks: 14×24×60×60 = 1209600)
-        // available: 17 hours or 17 days possible, because DigiShieldZEC uses n510 (17*n)
+        // available: 17*n hours or 17 days possible, because DigiShieldZEC uses n510 (17*n)
         consensus.nPowTargetTimespan = 61200;
 
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none; // DigiShieldZEC
@@ -496,8 +504,10 @@ public:
         // printf("powLimitTOnBits = 0x%x\n", powLimitTOnBits);
         // printf("*** END - DEBUG\n");
 
-        // SUGAR-HALVING // (was same as BTC)
-        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks: 1209600
+        // SUGAR-HALVING
+        // 17 hours = 17*60*60 = 61200 (was two weeks: 14×24×60×60 = 1209600)
+        // available: 17*n hours or 17 days possible, because DigiShieldZEC uses n510 (17*n)
+        consensus.nPowTargetTimespan = 61200;
 
         consensus.nPowAllowMinDifficultyBlocksAfterHeight = boost::none; // DigiShieldZEC
         consensus.nPowAveragingWindow = 17; // DigiShieldZEC // 85/nPowTargetSpacing(5) = 17
