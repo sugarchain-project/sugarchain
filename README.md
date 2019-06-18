@@ -31,7 +31,7 @@ build-essential libtool autotools-dev automake pkg-config \
 libssl-dev libevent-dev bsdmainutils libboost-all-dev \
 libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
 libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
-protobuf-compiler libqrencode-dev
+protobuf-compiler libqrencode-dev help2man
 ```
 
 ## Build
@@ -42,6 +42,12 @@ cd sugarchain-v0.16.3 && \
 ./configure && \
 make -j$(nproc) && \
 make check -j$(nproc)
+```
+
+## MISC
+ * update binary docs using help2man `.1` files
+```bash
+make -j$(nproc) && ./contrib/devtools/gen-manpages.sh
 ```
 
 ## Unit Test
