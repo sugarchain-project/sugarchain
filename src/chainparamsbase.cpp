@@ -38,7 +38,7 @@ public:
 };
 
 /**
- * Testnet (v3)
+ * Testnet (v4)
  */
 class CBaseTestNetParams : public CBaseChainParams
 {

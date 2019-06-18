@@ -296,7 +296,7 @@ public:
 };
 
 /**
- * Testnet (v3)
+ * Testnet (v4)
  */
 class CTestNetParams : public CChainParams {
 public:
