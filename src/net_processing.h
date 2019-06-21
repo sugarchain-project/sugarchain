@@ -30,7 +30,7 @@ static constexpr int32_t MAX_OUTBOUND_PEERS_TO_PROTECT_FROM_DISCONNECT = 4;
 static constexpr int64_t CHAIN_SYNC_TIMEOUT = 20 * 60; // 20 minutes
 
 // FIXME.SUGAR // SURE?
-// 120x bitcoin
+// 120x faster than bitcoin
 /** How frequently to check for stale tips, in seconds */
 // (10 * 60 / 120) = 5
 static constexpr int64_t STALE_CHECK_INTERVAL = 5; // seconds // FIXME.SUGAR

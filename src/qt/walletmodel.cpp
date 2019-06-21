@@ -114,7 +114,7 @@ void WalletModel::updateStatus()
 }
 
 // FIXME.SUGAR // SURE?
-// 120x bitcoin
+// 120x faster than bitcoin
 void WalletModel::pollBalanceChanged()
 {
     // Get required locks upfront. This avoids the GUI from getting stuck on

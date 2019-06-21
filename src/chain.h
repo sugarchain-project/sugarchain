@@ -25,7 +25,7 @@ FTL must be changed to 300 or N*T/20 whichever is higher. FTL in BTC clones is M
 Option1: N*T/21.25 = 510*5/21.25 = 120 (or)
 Option2: N*T/42.5 = 510*5/42.5 = 60
 
-120x bitcoin
+120x faster than bitcoin
 7200 / 120 = 60(sec)
 60(sec) = 12(blocks)
 Bitcoin: 7200s == 12 blocks (blocktime: 600s)
