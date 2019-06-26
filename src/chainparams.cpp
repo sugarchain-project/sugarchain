@@ -140,7 +140,7 @@ public:
 
         consensus.BIP16Height = 0;  // always on
         consensus.BIP34Height = 17;
-        consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
+        consensus.BIP34Hash = uint256S("");   // TODO.SUGAR
         consensus.BIP65Height = 0;  // always on
         consensus.BIP66Height = 0;  // always on
 
@@ -218,7 +218,7 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x00"); // FIXME.SUGAR
+        consensus.nMinimumChainWork = uint256S("0x00"); // TODO.SUGAR
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("6068e545c100bdfa51beb3bf250656d1dd87030a56dc02b79b605a314e3681b5"); // genesis
@@ -284,7 +284,7 @@ public:
             }
         };
 
-        // FIXME.SUGAR
+        // TODO.SUGAR
         chainTxData = ChainTxData{
             // Data as of block 0000000000000000002d6cca6761c99b3c2e936f9a0e304b7c7651a993f461de (height 506081).
             0,  // * UNIX timestamp of last known number of transactions
@@ -316,7 +316,7 @@ public:
 
         consensus.BIP16Height = 0;  // always on
         consensus.BIP34Height = 17;
-        consensus.BIP34Hash = uint256S("");   // FIXME.SUGAR
+        consensus.BIP34Hash = uint256S("");   // TODO.SUGAR
         consensus.BIP65Height = 0; // always on
         consensus.BIP66Height = 0; // always on
 
@@ -394,7 +394,7 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x00"); // FIXME.SUGAR
+        consensus.nMinimumChainWork = uint256S("0x00"); // TODO.SUGAR
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("e15ac61305c307e84db7906afef45a1acf1148b8c1f649645132ff66af7a760d"); // genesis
@@ -424,7 +424,6 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        // TODO.SUGAR - seeder
         // nodes with support for servicebits filtering should be at the top
         vSeeds.emplace_back("seed-testnet.sugarchain.org");
         vSeeds.emplace_back("seed-testnet.cryptozeny.com");
@@ -450,7 +449,7 @@ public:
             }
         };
 
-        // FIXME.SUGAR
+        // TODO.SUGAR
         chainTxData = ChainTxData{
             // Data as of block 000000000000033cfa3c975eb83ecf2bb4aaedf68e6d279f6ed2b427c64caff9 (height 1260526)
             0,
