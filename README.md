@@ -61,6 +61,16 @@ make -j$(nproc) && \
 make check -j$(nproc)
 ```
 
+ * (optional) Reduce binary size using strip (about 90% file size reduction)
+
+```bash
+strip ./src/sugarchain-cli && \
+strip ./src/sugarchaind && \
+strip ./src/qt/sugarchain-qt && \
+strip ./src/sugarchain-tx && \
+strip ./src/test/test_sugarchain
+```
+
  * (optional) After make, update binary docs (manpages) using help2man `.1` files
 
 ```bash
