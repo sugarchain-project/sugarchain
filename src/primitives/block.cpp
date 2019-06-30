@@ -12,7 +12,7 @@
 
 // yespower
 #include <stdlib.h>
-#include <crypto/yespower-1.0.0/yespower.h>
+#include <crypto/yespower-1.0.1/yespower.h>
 #include <streams.h>
 #include <version.h>
 

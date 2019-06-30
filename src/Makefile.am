@@ -276,9 +276,9 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/sha256.h \
   crypto/sha512.cpp \
   crypto/sha512.h \
-  crypto/yespower-1.0.0/sha256.c \
-  crypto/yespower-1.0.0/yespower.h \
-  crypto/yespower-1.0.0/yespower-opt.c
+  crypto/yespower-1.0.1/sha256.c \
+  crypto/yespower-1.0.1/yespower.h \
+  crypto/yespower-1.0.1/yespower-opt.c
 
 if USE_ASM
 crypto_libbitcoin_crypto_a_SOURCES += crypto/sha256_sse4.cpp

@@ -22,7 +22,7 @@ env:
     - BASE_OUTDIR=$TRAVIS_BUILD_DIR/out
     - SDK_URL=https://bitcoincore.org/depends-sources/sdks
     - WINEDEBUG=fixme-all
-    - YESPOWER_PATH=$TRAVIS_BUILD_DIR/src/crypto/yespower-1.0.0
+    - YESPOWER_PATH=$TRAVIS_BUILD_DIR/src/crypto/yespower-1.0.1
     - YESPOWER_OPTION="-fPIE -Wall -O2 -fomit-frame-pointer"
     - YESPOWER_MSSE2_32BIT="-msse2"
     - WIN_BITCOIN_CONFIG="--disable-shared"

@@ -6,7 +6,7 @@ Sugarchain Yumekawa
 What is Sugarchain?
 -------------------
 
-Sugarchain is a PoW blockchain for ultra speed transaction (5 seconds block time) and fair distribution (CPU mining only by Yespower 1.0.0).
+Sugarchain is a PoW blockchain for ultra speed transaction (5 seconds block time) and fair distribution (CPU mining only by Yespower 1.0.1).
  - `one-CPU-one-vote` by Satoshi Nakamoto
  - `NVIDIA, fuck you` by Linus Torvalds
  - the world's fastest PoW blockchain (2019-06-26)
@@ -26,7 +26,7 @@ Sugarchain Yumekawa is released under the terms of the MIT license. See [COPYING
 information or see https://opensource.org/licenses/MIT.
 - Copyright (c) 2009-2010 Satoshi Nakamoto
 - Copyright (c) 2009-2018 The Bitcoin Core developers
-- Copyright (c) 2013-2018 Alexander Peslyak - Yespower 1.0.0
+- Copyright (c) 2013-2019 Alexander Peslyak - Yespower 1.0.1
 - Copyright (c) 2016-2018 The Zcash developers - DigiShieldZEC
 - Copyright (c) 2018-2019 The Sugarchain developers
 

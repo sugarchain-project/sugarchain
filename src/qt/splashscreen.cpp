@@ -51,7 +51,7 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle *networkStyle) 
     // Duplicated <init.cpp> but little bit different
     const std::string Copyright_1 = strprintf(_("\xc2\xA9 %u-%u "), 2009, 2010) + "Satoshi Nakamoto";
     const std::string Copyright_2 = strprintf(_("\xc2\xA9 %u-%u "), 2009, 2018) + "The Bitcoin Core developers";
-    const std::string Copyright_3 = strprintf(_("\xc2\xA9 %u-%u "), 2013, 2018) + "Alexander Peslyak - Yespower 1.0.0";
+    const std::string Copyright_3 = strprintf(_("\xc2\xA9 %u-%u "), 2013, 2019) + "Alexander Peslyak - Yespower 1.0.1";
     const std::string Copyright_4 = strprintf(_("\xc2\xA9 %u-%u "), 2016, 2018) + "The Zcash developers - DigiShieldZEC";
     // END - Adding Additional CopyrightHolders (2/2)
 

@@ -533,7 +533,7 @@ std::string LicenseInfo()
     // BEGIN - Adding Additional CopyrightHolders (1/2)
     const std::string Copyright_1 = strprintf(_("Copyright (C) %i-%i"), 2009, 2010) + " " + "Satoshi Nakamoto";
     const std::string Copyright_2 = strprintf(_("Copyright (C) %i-%i"), 2009, 2018) + " " + "The Bitcoin Core developers";
-    const std::string Copyright_3 = strprintf(_("Copyright (C) %i-%i"), 2013, 2018) + " " + "Alexander Peslyak - Yespower 1.0.0";
+    const std::string Copyright_3 = strprintf(_("Copyright (C) %i-%i"), 2013, 2019) + " " + "Alexander Peslyak - Yespower 1.0.1";
     const std::string Copyright_4 = strprintf(_("Copyright (C) %i-%i"), 2016, 2018) + " " + "The Zcash developers - DigiShieldZEC";
     // END - Adding Additional CopyrightHolders (1/2)
 

@@ -1,0 +1,18 @@
+	Changes made between 1.0.0 (2018/07/12) and 1.0.1 (2019/06/30).
+
+Fill the destination buffer with all set bits on error for fail-safety
+of the caller's "< target" check in case the caller neglects to check
+for errors.
+
+Simplified SMix2 for its final invocation with Nloop=2 in yespower 0.5.
+
+Revised the "XOR of yespower" tests to trigger duplicate index in the
+last SMix2 invocation in yespower 0.5 for N=2048 with at least one of
+the values of r being tested.  This is needed to test that a proper
+kind of BlockMix is used in that special case, which would previously be
+left untested.
+
+Added x32 ABI support (x86-64 with 32-bit pointers).
+
+Added a bit more detail to the README on caching of the computed PoW
+hashes when integrating yespower in an altcoin based on Bitcoin Core.
