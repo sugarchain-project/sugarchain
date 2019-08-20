@@ -3,14 +3,6 @@ Sugarchain Yumekawa
 
 [![Build Status](https://travis-ci.com/cryptozeny/sugarchain-v0.16.3.svg?token=KrYycpAcc7g95pAVRykP&branch=master-v0.16.3)](https://travis-ci.com/cryptozeny/sugarchain-v0.16.3)
 
-What is Sugarchain?
--------------------
-
-Sugarchain is a PoW blockchain for ultra speed transaction (5 seconds block time) and fair distribution (CPU mining only by Yespower 1.0.1).
- - `one-CPU-one-vote` by Satoshi Nakamoto
- - `NVIDIA, fuck you` by Linus Torvalds
- - the world's fastest PoW blockchain (2019-06-26)
-
 The meaning of Yumekawa
 -----------------------
 
