@@ -77,6 +77,8 @@ strip ./src/test/test_sugarchain
 make -j$(nproc) && ./contrib/devtools/gen-manpages.sh
 ```
 
+ * (optional) build for Windows and OSX you may need `--disable-shared` option with make.
+
 Unit Test
 ---------
 
