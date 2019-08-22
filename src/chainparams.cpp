@@ -39,7 +39,7 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
     // BEGIN - DEBUG - SUGAR
 
     // MAINNET
-    // if (genesis.nTime == 1565913600) {
+    // if (genesis.nTime == 1565881200) {
     //   printf("\n*** BEGIN - DEBUG: MAINNET\n");
     //   printf("nTime = %u\n", nTime);
     //   printf("nNonce = %u\n", nNonce);
@@ -215,7 +215,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x00"); // TODO.SUGAR
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("b8a83b1f579c06911c120932f06f0eabb857ef7f3366b3096b589769ef8d3e14"); // genesis
+        consensus.defaultAssumeValid = uint256S("7d5eaec2dbb75f99feadfa524c78b7cabc1d8c8204f79d4f3a83381b811b0adc"); // genesis
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -229,9 +229,9 @@ public:
         nDefaultPort = 34230;
         nPruneAfterHeight = 100000;
 
-        // nTime: date -d '2019-08-16 00:00:00 UTC' +%s = 1565913600
+        // nTime: date -d '2019-08-16 00:00:00 KST' +%s = 1565881200
         // genesisReward: pow(2,32) / COIN = 42.94967296 (was 50)
-        genesis = CreateGenesisBlock(1565913600, 1211, 0x1f3fffff, 1, 42.94967296 * COIN);
+        genesis = CreateGenesisBlock(1565881200, 247, 0x1f3fffff, 1, 42.94967296 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
 
         // DEBUG - SUGAR
@@ -241,8 +241,8 @@ public:
         // printf("genesis.hashMerkleRoot.MAIN %s\n",genesis.hashMerkleRoot.ToString().c_str());
         // printf("***\n");
 
-        assert(genesis.GetPoWHash() == uint256S("0033d1bd1d8c348096621f6f86d6ce2800db8a2d7d740c52901c77aaa502c9b4")); // genesis
-        assert(consensus.hashGenesisBlock == uint256S("b8a83b1f579c06911c120932f06f0eabb857ef7f3366b3096b589769ef8d3e14")); // genesis
+        assert(genesis.GetPoWHash() == uint256S("0031205acedcc69a9c18f79b84790179d68fb90588bedee6587ff701bdde04eb")); // genesis
+        assert(consensus.hashGenesisBlock == uint256S("7d5eaec2dbb75f99feadfa524c78b7cabc1d8c8204f79d4f3a83381b811b0adc")); // genesis
         assert(genesis.hashMerkleRoot == uint256S("7677ce2a579cb0411d1c9e6b1e9072b8f537f1e59cb387dacac2daac56e150b0"));
 
         // TODO.SUGAR - seeder
@@ -274,7 +274,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("b8a83b1f579c06911c120932f06f0eabb857ef7f3366b3096b589769ef8d3e14")}, // genesis
+                {0, uint256S("7d5eaec2dbb75f99feadfa524c78b7cabc1d8c8204f79d4f3a83381b811b0adc")}, // genesis
             }
         };
 
