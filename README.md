@@ -74,7 +74,7 @@ make -j$(nproc) && ./contrib/devtools/gen-manpages.sh
 Unit Test
 ---------
 
-All Yumekawa developer's should check this unit test. Some updates may break these tests in some occasions.
+All Yumekawa developers should check this unit test. Some updates may break these tests in some occasions.
 
  * Test All
  ```bash
@@ -115,6 +115,6 @@ Release process using GITIAN
 
 https://gist.github.com/cryptozeny/3501c77750541208b9dd1a9e9719fc53
 
- * All Sugarchain Yumekawa developer's should do following GITIAN release process. It's the safest way to distribute binaries to people.
+ * All Sugarchain Yumekawa developers should do following GITIAN release process. It's the safest way to distribute binaries to people.
  * Please use GITIAN release with checking PGP signature, or compile it yourself on your own machine.
  
