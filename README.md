@@ -74,7 +74,7 @@ make -j$(nproc) && ./contrib/devtools/gen-manpages.sh
 Unit Test
 ---------
 
-Every Yumekawa developers should check this unit test. Some updates may break this tests sometimes.
+All Yumekawa developers should execute this unit test. Some updates may break these tests in some occasions.
 
  * Test All
  ```bash
@@ -94,7 +94,7 @@ Every Yumekawa developers should check this unit test. Some updates may break th
 Run
 ---
 
-The options `-rpcuser` and `-rpcpassword` can be freely choose. If you need the file `debug.log`, then drop the `-printtoconsole` out. `server=1` needed by RPC servers or cpuminer (when solo-mining).
+The options `-rpcuser` and `-rpcpassword` are optional . If you need the file `debug.log`, then execute the `-printtoconsole` command. `server=1` needed by RPC servers or cpuminer only when solo-mining.
 
  * Testnet [debug mode]
  > ./src/qt/sugarchain-qt -testnet -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword -printtoconsole
@@ -115,6 +115,6 @@ Release process using GITIAN
 
 https://gist.github.com/cryptozeny/3501c77750541208b9dd1a9e9719fc53
 
- * Every Sugarchain Yumekawa developers should do following GITIAN release process. It's the safest way to distribute binaries to people.
+ * All Sugarchain Yumekawa developers should do following GITIAN release process. It's the safest way to distribute binaries to people.
  * Please use GITIAN release with checking PGP signature, or compile it yourself on your own machine.
  
