@@ -23,6 +23,20 @@ the same data no matter which byte format is chosen.
 The `linearize-hashes` script requires a connection, local or remote, to a
 JSON-RPC server. Running `bitcoind` or `bitcoin-qt -server` will be sufficient.
 
+## Step 1.1: Change absolute location in `linearize.cfg`
+
+    input=/home/{USERNAME}/.sugarchain/blocks
+    output_file=/home/{USERNAME}/Desktop/bootstrap.dat
+
+## Step 1.2: Check outputs
+
+    $ head -1 hashlist.txt # genesis
+      7d5eaec2dbb75f99feadfa524c78b7cabc1d8c8204f79d4f3a83381b811b0adc
+    $ wc -l hashlist.txt # 650000+1 (add genesis)
+      650001 hashlist.txt
+    $ tail -n 1 hashlist.txt # height 650000 # getblockhash 650000
+      e5728ed52ccc5b2f1261f377e810b98c007cdbe09507b6e4aa4c2d81eb4199af
+
 ## Step 2: Copy local block data
 
     $ ./linearize-data.py linearize.cfg
