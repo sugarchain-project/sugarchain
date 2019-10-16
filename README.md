@@ -71,10 +71,14 @@ make -j$(nproc) && ./contrib/devtools/gen-manpages.sh
 
  * (optional) build for Windows and OSX you may need `--disable-shared` option with make.
 
+ * (optional) Add seeds/nodes from DNSSEED
+ https://github.com/cryptozeny/sugarchain-v0.16.3/tree/master-v0.16.3/contrib/seeds
+ https://github.com/sugarchain-project/sugarchain-seeder
+
 Unit Test
 ---------
 
-All Yumekawa developers should check this unit test. Some updates may break these tests in some occasions.
+All Yumekawa developers should execute this unit test. Some updates may break these tests in some occasions.
 
  * Test All
  ```bash
@@ -94,7 +98,7 @@ All Yumekawa developers should check this unit test. Some updates may break thes
 Run
 ---
 
-The options `-rpcuser` and `-rpcpassword` are optional. If you need the file `debug.log`, then execute the `-printtoconsole` command in the debug console. The option `server=1` is needed by RPC servers or cpuminer only when solo mining.
+The options `-rpcuser` and `-rpcpassword` are optional . If you need the file `debug.log`, then execute the `-printtoconsole` command. `server=1` needed by RPC servers or cpuminer only when solo-mining.
 
  * Testnet [debug mode]
  > ./src/qt/sugarchain-qt -testnet -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword -printtoconsole
