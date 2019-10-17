@@ -20,7 +20,7 @@ information or see https://opensource.org/licenses/MIT.
 - Copyright (c) 2009-2018 The Bitcoin Core developers
 - Copyright (c) 2013-2019 Alexander Peslyak - Yespower 1.0.1
 - Copyright (c) 2016-2018 The Zcash developers - DigiShieldZEC
-- Copyright (c) 2018-2019 The Sugarchain developers
+- Copyright (c) 2018-2019 The Sugarchain Yumekawa developers
 
 Depends on Bitcoin Core
 --------------
@@ -78,7 +78,7 @@ make -j$(nproc) && ./contrib/devtools/gen-manpages.sh
 Unit Test
 ---------
 
-All Yumekawa developers should execute this unit test. Some updates may break these tests in some occasions.
+All Sugarchain Yumekawa developers should execute this unit test. Some updates may break these tests in some occasions.
 
  * Test All
  ```bash
@@ -100,19 +100,19 @@ Run
 
 The options `-rpcuser` and `-rpcpassword` are optional . If you need the file `debug.log`, then execute the `-printtoconsole` command. `server=1` needed by RPC servers or cpuminer only when solo-mining.
 
- * Testnet [debug mode]
- > ./src/qt/sugarchain-qt -testnet -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword -printtoconsole
+ * Mainnet [debug mode: `pow` for PoW]
+ > ./src/qt/sugarchain-qt -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword **-debug=pow** -printtoconsole
 
- * Testnet [debug mode for PoW]
- > ./src/qt/sugarchain-qt -testnet -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword -debug=pow -printtoconsole
+ * Mainnet [debug mode: `net` for Network]
+ > ./src/qt/sugarchain-qt -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword **-debug=net** -printtoconsole
 
- * Reference https://en.bitcoin.it/wiki/Running_Bitcoin
+ * Reference https://en.bitcoin.it/w/index.php?title=Running_Bitcoin&oldid=66644
 
 CLI
 ---
 
- * Testnet
- > ./src/sugarchain-cli -testnet -rpcuser=rpcuser -rpcpassword=rpcpassword getblockcount
+ * Mainnet [`getblockcount` for Blocks]
+ > ./src/sugarchain-cli -rpcuser=rpcuser -rpcpassword=rpcpassword **getblockcount**
 
 Release process using GITIAN
 ----------------------------
