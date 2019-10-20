@@ -7,15 +7,15 @@
 #include <utiltime.h>
 
 // Sanity test: this should loop ten times, and
-// min/max/average should be close to 100ms.
-static void Sleep100ms(benchmark::State& state)
+// min/max/average should be close to 7ms. (was 100ms)
+static void Sleep7ms(benchmark::State& state)
 {
     while (state.KeepRunning()) {
-        MilliSleep(100);
+        MilliSleep(7);
     }
 }
 
-BENCHMARK(Sleep100ms, 10);
+BENCHMARK(Sleep7ms, 10);
 
 // Extremely fast-running benchmark:
 #include <math.h>

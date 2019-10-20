@@ -22,8 +22,14 @@ information or see https://opensource.org/licenses/MIT.
 - Copyright (c) 2016-2018 The Zcash developers - DigiShieldZEC
 - Copyright (c) 2018-2019 The Sugarchain Yumekawa developers
 
+Minimum Requirement
+-------------------
+- CPU: 1 Core
+- RAM: 1024 MB (at least 2048 MB [swap](https://github.com/sugarchain-project/doc/blob/master/swap.md))
+- DISK: 3.65 GB
+
 Depends on Bitcoin Core
---------------
+-----------------------
 
 Exactly the same as dependencies of `Bitcoin Core v0.16.3`.
 
