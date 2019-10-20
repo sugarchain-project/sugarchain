@@ -22,8 +22,14 @@ information or see https://opensource.org/licenses/MIT.
 - Copyright (c) 2016-2018 The Zcash developers - DigiShieldZEC
 - Copyright (c) 2018-2019 The Sugarchain Yumekawa developers
 
+Minimum Requirement
+-------------------
+- CPU: 1 Core
+- RAM: 1024 MB (at least 2048 MB [swap](https://github.com/sugarchain-project/doc/blob/master/swap.md))
+- DISK: 3.65 GB
+
 Depends on Bitcoin Core
---------------
+-----------------------
 
 Exactly the same as dependencies of `Bitcoin Core v0.16.3`.
 
@@ -71,9 +77,8 @@ make -j$(nproc) && ./contrib/devtools/gen-manpages.sh
 
  * (optional) build for Windows and OSX you may need `--disable-shared` option with make.
 
- * (optional) Add seeds/nodes from DNSSEED
+ * (optional) Add seeds/nodes from [DNSSEED](https://github.com/sugarchain-project/sugarchain-seeder)
  https://github.com/cryptozeny/sugarchain-v0.16.3/tree/master-v0.16.3/contrib/seeds
- https://github.com/sugarchain-project/sugarchain-seeder
 
 Unit Test
 ---------
