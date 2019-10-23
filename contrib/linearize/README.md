@@ -6,11 +6,11 @@ run using Python 3 but are compatible with Python 2.
 
     $ ./linearize-hashes.py linearize.cfg > hashlist.txt
 
-Required configuration file settings for linearize-hashes:
+Required configuration file `linearize.cfg` settings for linearize-hashes:
 * RPC: `datadir` (Required if `rpcuser` and `rpcpassword` are not specified)
 * RPC: `rpcuser`, `rpcpassword` (Required if `datadir` is not specified)
 
-Optional config file setting for linearize-hashes:
+Optional config file `linearize.cfg` setting for linearize-hashes:
 * RPC: `host`  (Default: `127.0.0.1`)
 * RPC: `port`  (Default: `34229`)
 * Blockchain: `min_height`, `max_height`
@@ -67,3 +67,16 @@ will be byte-reversed when read by linearize-data.py. See the linearize-hashes
 entry for more information.
 * `split_timestamp`: Split blockchain files when a new month is first seen, in
 addition to reaching a maximum file size (`max_out_sz`).
+
+## Step 3: PGP signing on bootstrap release
+
+    $ cd ~/Desktop # move to output directory
+    ... # zip into bootstrap.dat.zip
+    $ sha256sum bootstrap.dat.zip > SHA256SUMS
+    $ gpg --digest-algo sha256 --clearsign SHA256SUMS # PGP signing
+    $ rm SHA256SUMS && > cat SHA256SUMS.asc # rename to asc
+    ... # release
+
+* Release following files at https://github.com/sugarchain-project/bootstrap/releases
+  - bootstrap.dat.zip
+  - SHA256SUMS.asc
