@@ -3165,7 +3165,7 @@
     </message>
     <message>
         <source>Sugarchain Yumekawa</source>
-        <translation>糖链夢川</translation>
+        <translation>糖链梦川</translation>
     </message>
     <message>
         <source>The %s developers</source>
