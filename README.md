@@ -70,7 +70,7 @@ strip ./src/sugarchain-tx && \
 strip ./src/test/test_sugarchain
 ```
 
- * (optional) After make, update binary docs (manpages) using help2man `.1` files
+ * (optional) After bump version on `configure.ac`, update binary docs (manpages) using help2man `.1` files
 
 ```bash
 make -j$(nproc) && ./contrib/devtools/gen-manpages.sh
