@@ -52,8 +52,8 @@ Build
  * Make
 
 ```bash
-git clone git@github.com:cryptozeny/sugarchain-v0.16.3.git && \
-cd sugarchain-v0.16.3 && \
+git clone https://github.com/sugarchain-project/sugarchain.git && \
+cd sugarchain && \
 ./autogen.sh && \
 ./configure && \
 make -j$(nproc) && \
