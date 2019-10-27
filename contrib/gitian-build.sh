@@ -18,8 +18,9 @@ VERSION=
 commit=false
 
 # FIXME.SUGAR
-# url=https://github.com/sugarchain-project/sugarchain
-url=git@github.com:cryptozeny/sugarchain-v0.16.3.git # private repo
+# GITHUB repo select
+url=https://github.com/sugarchain-project/sugarchain
+# url=git@github.com:cryptozeny/sugarchain-v0.16.3.git # private repo
 
 proc=2
 mem=2000

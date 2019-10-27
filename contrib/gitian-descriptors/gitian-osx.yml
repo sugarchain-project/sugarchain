@@ -29,9 +29,10 @@ packages:
 - "fonts-tuffy"
 
 # FIXME.SUGAR
+# GITHUB repo select
 remotes:
-# - "url": "https://github.com/sugarchain-project/sugarchain.git"
-- "url": "git@github.com:cryptozeny/sugarchain-v0.16.3.git" # private repo
+- "url": "https://github.com/sugarchain-project/sugarchain.git"
+# - "url": "git@github.com:cryptozeny/sugarchain-v0.16.3.git" # private repo
   "dir": "sugarchain"
 
 files:
