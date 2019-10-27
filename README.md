@@ -1,7 +1,7 @@
 Sugarchain Yumekawa
 ===================
 
-[![Build Status](https://travis-ci.com/cryptozeny/sugarchain-v0.16.3.svg?token=KrYycpAcc7g95pAVRykP&branch=master-v0.16.3)](https://travis-ci.com/cryptozeny/sugarchain-v0.16.3)
+[![Build Status](https://travis-ci.org/sugarchain-project/sugarchain.svg?branch=master-v0.16.3)](https://travis-ci.org/sugarchain-project/sugarchain)
 ![GitHub All Releases](https://img.shields.io/github/downloads/sugarchain-project/sugarchain/total)
 
 The meaning of Yumekawa
@@ -79,7 +79,7 @@ make -j$(nproc) && ./contrib/devtools/gen-manpages.sh
  * (optional) build for Windows and OSX you may need `--disable-shared` option with make.
 
  * (optional) Add seeds/nodes from [DNSSEED](https://github.com/sugarchain-project/sugarchain-seeder)
- https://github.com/cryptozeny/sugarchain-v0.16.3/tree/master-v0.16.3/contrib/seeds
+ https://github.com/sugarchain-project/sugarchain/tree/master-v0.16.3/contrib/seeds
 
 Unit Test
 ---------
