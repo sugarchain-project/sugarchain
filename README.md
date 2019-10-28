@@ -114,6 +114,24 @@ The options `-rpcuser` and `-rpcpassword` are optional . If you need the file `d
 
  * Reference https://en.bitcoin.it/w/index.php?title=Running_Bitcoin&oldid=66644
 
+
+Known Issues
+------------
+
+- Transaction too large:
+  * This is a part of BTC.
+  * It will be fixed in next *Schnorr Signature* update.
+- Slow update balance on wallet:
+  * Update total balance *every minute (12 blocks)* interval.
+  * This slow is a part of BTC.
+  * This fix is a (nice) workaround for now. [source](https://github.com/sugarchain-project/sugarchain/commit/72436c90b29844cf507895df053103f9b6840776#diff-2e3836af182cfb375329c3463ffd91f8)
+- Poor performance on ARM CPUs (32/64-Bit):
+  * ARM optimization for Yespower disabled for now.
+  * *TODO*
+- Poor performance on 32-Bit OS:
+  * SSE2 for Yespower disabled for now. [source](https://github.com/sugarchain-project/sugarchain/blob/d977987a83aba115d50a9130f0d7914330d1bc75/src/crypto/yespower-1.0.1/yespower-opt.c#L59)
+  * Please use *64-bit* for best performance.
+
 CLI
 ---
 
