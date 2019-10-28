@@ -104,7 +104,7 @@ All Sugarchain Yumekawa developers should execute this unit test. Some updates m
 
 Run
 ---
-The options `-rpcuser` and `-rpcpassword` are optional . If you need the file `debug.log`, then execute the `-printtoconsole` command. `server=1` needed by RPC servers or cpuminer only when solo-mining.
+The options `-rpcuser`, `-rpcpassword`, and `-printtoconsole` are optional. `server=1` needed by RPC servers or cpuminer when solo-mining.
 
 - Mainnet [debug mode: `pow` for PoW]
   > ./src/qt/sugarchain-qt -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword **-debug=pow** -printtoconsole
