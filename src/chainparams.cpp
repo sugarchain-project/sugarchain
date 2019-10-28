@@ -250,14 +250,8 @@ public:
         // This is fine at runtime as we'll fall back to using them as a oneshot if they dont support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        // vSeeds.emplace_back("seed.bitcoin.sipa.be"); // Pieter Wuille, only supports x1, x5, x9, and xd
-        // vSeeds.emplace_back("dnsseed.bluematt.me"); // Matt Corallo, only supports x9
-        // vSeeds.emplace_back("dnsseed.bitcoin.dashjr.org"); // Luke Dashjr
-        // vSeeds.emplace_back("seed.bitcoinstats.com"); // Christian Decker, supports x1 - xf
-        // vSeeds.emplace_back("seed.bitcoin.jonasschnelli.ch"); // Jonas Schnelli, only supports x1, x5, x9, and xd
-        // vSeeds.emplace_back("seed.btc.petertodd.org"); // Peter Todd, only supports x1, x5, x9, and xd
-        vSeeds.emplace_back("1seed.sugarchain.info");
-        vSeeds.emplace_back("2seed.sugarchain.info");
+        vSeeds.emplace_back("1seed.sugarchain.info"); // cryptozeny
+        vSeeds.emplace_back("2seed.sugarchain.info"); // cryptozeny
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,63);  // legacy: starting with S (upper)
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,125); // p2sh-segwit: starting with s (lower)
@@ -439,8 +433,7 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("1seed-testnet.cryptozeny.com");
-        vSeeds.emplace_back("2seed-testnet.cryptozeny.com");
+        vSeeds.emplace_back("1seed-testnet.cryptozeny.com"); // cryptozeny
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,66);  // legacy: starting with T (upper)
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,128); // p2sh-segwit: starting with t (lower)
