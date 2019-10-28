@@ -301,10 +301,10 @@ public:
             "txrate": 0.2115853962245355
             */
 
+            // TODO.SUGAR.UPDATE
             /* nTime    */ 1570999961,
             /* nTxCount */ 992381,
             /* dTxRate  */ 0.2115853962245355
-            // TODO.SUGAR.UPDATE
         };
     }
 };
