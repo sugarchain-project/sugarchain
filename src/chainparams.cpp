@@ -433,8 +433,7 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("1seed-testnet.cryptozeny.com");
-        vSeeds.emplace_back("2seed-testnet.cryptozeny.com");
+        vSeeds.emplace_back("1seed-testnet.cryptozeny.com"); // cryptozeny
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,66);  // legacy: starting with T (upper)
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,128); // p2sh-segwit: starting with t (lower)
