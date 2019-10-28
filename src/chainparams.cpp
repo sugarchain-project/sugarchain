@@ -290,18 +290,21 @@ public:
             nblocks 4096 (default: one month(518400), but 4096)
             hash cbc2e56571fb4a1fe8ba81c57579a693ad2ba041a80d9b5e06b90318aedb5d44
             height 878358
+            */
 
+            /*
             "time": 1570999961,
             "txcount": 992381,
             "window_block_count": 4096,
             "window_tx_count": 4248,
             "window_interval": 20077,
             "txrate": 0.2115853962245355
+            */
 
+            // TODO.SUGAR.UPDATE
             /* nTime    */ 1570999961,
             /* nTxCount */ 992381,
             /* dTxRate  */ 0.2115853962245355
-            // TODO.SUGAR.UPDATE
         };
     }
 };
