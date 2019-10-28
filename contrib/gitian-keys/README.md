@@ -12,5 +12,8 @@ meantime.
 
 ```sh
 gpg --import ./*.pgp
-gpg --refresh-keys
+gpg --refresh-keys --keyserver keyserver.ubuntu.com
 ```
+
+If your pgp is not found, please submit your key as text format.
+https://keyserver.ubuntu.com/
