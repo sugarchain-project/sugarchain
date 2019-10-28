@@ -27,7 +27,7 @@ Minimum Requirement
 -------------------
 - CPU: 1 Core
 - RAM: 1024 MB (at least 2048 MB [swap](https://github.com/sugarchain-project/doc/blob/master/swap.md))
-- DISK: 3.65 GB
+- DISK: 3 GB
 
 
 Depends on Bitcoin Core
@@ -106,11 +106,17 @@ Run
 ---
 The options `-rpcuser`, `-rpcpassword`, and `-printtoconsole` are optional. `server=1` needed by RPC servers or cpuminer when solo-mining.
 
-- Mainnet [debug mode: `pow` for PoW]
+- Mainnet: debug mode: `pow` for PoW
   > ./src/qt/sugarchain-qt -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword **-debug=pow** -printtoconsole
 
-- Mainnet [debug mode: `net` for Network]
+- Mainnet: debug mode: `net` for Network
   > ./src/qt/sugarchain-qt -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword **-debug=net** -printtoconsole
+
+- Testnet
+  > ./src/qt/sugarchain-qt **-testnet**
+
+- Regtest
+  > ./src/qt/sugarchain-qt **-regtest**
 
 - Reference  
   https://en.bitcoin.it/w/index.php?title=Running_Bitcoin&oldid=66644
@@ -118,7 +124,7 @@ The options `-rpcuser`, `-rpcpassword`, and `-printtoconsole` are optional. `ser
 
 CLI
 ---
-- Mainnet [`getblockcount` for Blocks]
+- Mainnet: `getblockcount` for counting blocks
   > ./src/sugarchain-cli -rpcuser=rpcuser -rpcpassword=rpcpassword **getblockcount**
 
 
