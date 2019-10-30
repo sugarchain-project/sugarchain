@@ -1,5 +1,5 @@
-v0.16.3.24-bloomy
------------------
+Yumekawa v0.16.3.24-bloomy
+--------------------------
 Final Release
 
 **Changes:**
@@ -38,11 +38,11 @@ Thanks to everyone who directly contributed to this release (alphabetical order)
 - zawy12
 
 
--------------
+----------------------
 
 
-v0.16.3.21rc1
--------------
+Yumekawa v0.16.3.21rc1
+----------------------
 Mainnet Launching: `2019/08/24 15:00 UTC`
 https://bitcointalk.org/index.php?topic=5177722.0
 
