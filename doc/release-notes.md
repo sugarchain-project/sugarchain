@@ -48,7 +48,7 @@ https://bitcointalk.org/index.php?topic=5177722.0
 
 **Changes:**
 - Block time: `5` seconds
-- Difficulty: SugarShield-N510
+- Difficulty: [SugarShield-N510](https://github.com/sugarchain-project/sugarchain/blob/master-v0.16.3/src/pow.cpp)
 - Block reward: 42.94967296 COIN `pow(2,32)/1E+08`
 - Halving interval: 12500000 Blocks `pow(5,8)*32`
 - Total supply: 1073741824 COIN `pow(2,30)`
