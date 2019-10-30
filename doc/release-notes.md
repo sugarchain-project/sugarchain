@@ -43,7 +43,7 @@ Thanks to everyone who directly contributed to this release (alphabetical order)
 
 Yumekawa v0.16.3.21rc1
 ----------------------
-Mainnet Launching: `2019/08/24 15:00 UTC`
+Mainnet Launching: `2019/08/24 15:00 UTC`  
 https://bitcointalk.org/index.php?topic=5177722.0
 
 **Changes:**
