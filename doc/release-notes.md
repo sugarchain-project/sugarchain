@@ -54,8 +54,8 @@ https://bitcointalk.org/index.php?topic=5177722.0
 - Total supply: 1073741824 COIN `pow(2,30)`
 - PoW algorithm: YespowerSugar `N2048 r32 (+pers)`
 - Port: Main 34230/34229, Testnet 44230/44229, Regtest 45340/45339
-- DEFAULT_MAX_TIME_ADJUSTMENT 70 (was 4200)
-- MAX_FUTURE_BLOCK_TIME 60 (was 7200)
+- DEFAULT_MAX_TIME_ADJUSTMENT `70` (was 4200)
+- MAX_FUTURE_BLOCK_TIME `60` (was 7200)
 - QT delayed refresh balance [source](https://github.com/sugarchain-project/sugarchain/commit/72436c90b29844cf507895df053103f9b6840776#diff-2e3836af182cfb375329c3463ffd91f8)
 
 **Credits:**  
