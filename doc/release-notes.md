@@ -52,7 +52,7 @@ https://bitcointalk.org/index.php?topic=5177722.0
 - Block reward: 42.94967296 COIN `pow(2,32)/1E+08`
 - Halving interval: 12500000 Blocks `pow(5,8)*32`
 - Total supply: 1073741824 COIN `pow(2,30)`
-- PoW algorithm: YespowerSugar `N2048 r32 (+pers)`
+- PoW algorithm: YespowerSugar
   * Settings
   ```cpp
   yespower_params_t yespower_1_0_sugarchain = {
