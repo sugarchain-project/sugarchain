@@ -1,90 +1,88 @@
-Bitcoin Core version 0.16.3 is now available from:
+Yumekawa v0.16.3.24-bloomy
+--------------------------
+Final Release
 
-  <https://bitcoincore.org/bin/bitcoin-core-0.16.3/>
+**Changes:**
+- Major Fix:
+  * fix: Timeout downloading block
+  * revert: download window back to `1024` (was 1024*120=122880)
+  * add: checkpointData, chainTxData
+  * add: seed list from dnsseed
+  * fix: boost warnings on OSX by @volbil
+  * fix: gitian github URL to official repo
+- Minor Fix:
+  * review: README.md by @Nugetzrul3
+  * rename: Sugarchain Yumekawa developers
+  * create: benchmark sh and result
+  * add: translation: Korean, Japanese, Chinese(zh_CH)
+  * add: bootstrap linearize at height `650000`, `1043000`
+  * fix: comment error (#6)
 
-This is a new minor version release, with various bugfixes
-as well as updated translations.
+**Known Issues:**  
+https://github.com/sugarchain-project/sugarchain#known-issues
 
-Please report bugs using the issue tracker at GitHub:
+**Credits:**  
+Thanks to everyone who directly contributed to this release (alphabetical order)
 
-  <https://github.com/bitcoin/bitcoin/issues>
+- AestheticSenpai
+- cryptozeny
+- ilmango-doge
+- joeland1
+- nao20010128nao
+- Nugetzrul3
+- okoto-xyz
+- RicK~Z
+- solardiz
+- volbil
+- y-chan
+- zawy12
 
-To receive security and update notifications, please subscribe to:
 
-  <https://bitcoincore.org/en/list/announcements/join/>
+----------------------
 
-How to Upgrade
-==============
 
-If you are running an older version, shut it down. Wait until it has completely
-shut down (which might take a few minutes for older versions), then run the
-installer (on Windows) or just copy over `/Applications/Bitcoin-Qt` (on Mac)
-or `bitcoind`/`bitcoin-qt` (on Linux).
+Yumekawa v0.16.3.21rc1
+----------------------
+Mainnet Launching: `2019/08/24 15:00 UTC`  
+https://bitcointalk.org/index.php?topic=5177722.0
 
-The first time you run version 0.15.0 or newer, your chainstate database will be converted to a
-new format, which will take anywhere from a few minutes to half an hour,
-depending on the speed of your machine.
+**Changes:**
+- Block time: `5` seconds
+- Difficulty: [SugarShield-N510](https://github.com/sugarchain-project/sugarchain/blob/master-v0.16.3/src/pow.cpp)
+- Block reward: 42.94967296 COIN `pow(2,32)/1E+08`
+- Halving interval: 12500000 Blocks `pow(5,8)*32`
+- Total supply: 1073741824 COIN `pow(2,30)`
+- PoW algorithm: YespowerSugar
+  * Settings
+  ```cpp
+  yespower_params_t yespower_1_0_sugarchain = {
+    .version = YESPOWER_1_0,
+    .N = 2048,
+    .r = 32,
+    .pers = (const uint8_t *)"Satoshi Nakamoto 31/Oct/2008 Proof-of-work is essentially one-CPU-one-vote",
+    .perslen = 74
+  };
+  ```
+- Genesis:
+  * Timestamp [link](https://www.thetimes.co.uk/article/facebook-s-libra-knocks-bitcoin-b3zvn67k0)
+  ```cpp
+  "The Times 17/July/2019 Bitcoin falls after senators call Facebook delusional over libra"
+  ```
+  * Genesis block
+  ```cpp
+  genesis = CreateGenesisBlock(1565881200, 247, 0x1f3fffff, 1, 42.94967296 * COIN);
+  ```
+- Port: Main `34230/34229`, Testnet 44230/44229, Regtest 45340/45339
+  * Meaning: 34230 is the molar mass of a sugar [link](https://twitter.com/cryptozeny/status/1130167161475911682)
+- DEFAULT_MAX_TIME_ADJUSTMENT `70` (was 4200)
+- MAX_FUTURE_BLOCK_TIME `60` (was 7200)
+- QT delayed refresh balance [source](https://github.com/sugarchain-project/sugarchain/commit/72436c90b29844cf507895df053103f9b6840776#diff-2e3836af182cfb375329c3463ffd91f8)
 
-Note that the block database format also changed in version 0.8.0 and there is no
-automatic upgrade code from before version 0.8 to version 0.15.0 or higher. Upgrading
-directly from 0.7.x and earlier without re-downloading the blockchain is not supported.
-However, as usual, old wallet versions are still supported.
-
-Downgrading warning
--------------------
-
-Wallets created in 0.16 and later are not compatible with versions prior to 0.16
-and will not work if you try to use newly created wallets in older versions. Existing
-wallets that were created with older versions are not affected by this.
-
-Compatibility
-==============
-
-Bitcoin Core is extensively tested on multiple operating systems using
-the Linux kernel, macOS 10.8+, and Windows Vista and later. Windows XP is not supported.
-
-Bitcoin Core should also work on most other Unix-like systems but is not
-frequently tested on them.
-
-Notable changes
-===============
-
-Denial-of-Service vulnerability
--------------------------------
-
-A denial-of-service vulnerability exploitable by miners has been discovered in
-Bitcoin Core versions 0.14.0 up to 0.16.2. It is recommended to upgrade any of
-the vulnerable versions to 0.16.3 as soon as possible.
-
-0.16.3 change log
-------------------
-
-### Consensus
-- #14249 `696b936` Fix crash bug with duplicate inputs within a transaction (TheBlueMatt, sdaftuar)
-
-### RPC and other APIs
-- #13547 `212ef1f` Make `signrawtransaction*` give an error when amount is needed but missing (ajtowns)
-
-### Miscellaneous
-- #13655 `1cdbea7` bitcoinconsensus: invalid flags error should be set to `bitcoinconsensus_err` (afk11)
-
-### Documentation
-- #13844 `11b9dbb` correct the help output for -prune (hebasto)
-
-Credits
-=======
-
-Thanks to everyone who directly contributed to this release:
-
-- Anthony Towns
-- Hennadii Stepanov
-- Matt Corallo
-- Suhas Daftuar
-- Thomas Kerin
-- Wladimir J. van der Laan
-
-And to those that reported security issues:
-
-- beardnboobies
-
-As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/bitcoin/).
+**Credits:**  
+Thanks to everyone who directly contributed to this release (alphabetical order)
+- cryptozeny
+- ilmango-doge
+- okoto-xyz
+- solardiz
+- volbil
+- zawy12
