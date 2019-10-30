@@ -1,9 +1,62 @@
-0.16.3.21rc1
-------------
+v0.16.3.24-bloomy
+-----------------
+Final Release
+
+**Changes:**
+- Major Fix:
+  * fix: Timeout downloading block
+  * revert: download window back to 1024 (was 1024*120=122880)
+  * add: checkpointData, chainTxData
+  * add: seed list from dnsseed
+  * fix: boost warnings on OSX by @volbil
+  * fix: gitian github URL to official repo
+- Minor Fix:
+  * review: README.md by @Nugetzrul3
+  * rename: Sugarchain Yumekawa developers
+  * create: benchmark sh and result
+  * add: translation: Korean, Japanese, Chinese(zh_CH)
+  * add: bootstrap linearize at height 650000, 1043000
+  * fix: comment error (#6)
+
+**Known Issues:**
+- Transaction too large:
+  * This is a part of BTC.
+  * It will be fixed in next *Schnorr Signature* update.
+- Slow update balance on wallet:
+  * Update total balance *every minute (12 blocks)* interval.
+  * This slow is a part of BTC.
+  * This fix is a (nice) workaround for now. [source](https://github.com/sugarchain-project/sugarchain/commit/72436c90b29844cf507895df053103f9b6840776#diff-2e3836af182cfb375329c3463ffd91f8)
+- Poor performance on ARM CPUs (32/64-Bit):
+  * ARM optimization for Yespower disabled for now.
+  * *TODO*
+- Poor performance on 32-Bit OS:
+  * SSE2 for Yespower disabled for now. [source](https://github.com/sugarchain-project/sugarchain/blob/d977987a83aba115d50a9130f0d7914330d1bc75/src/crypto/yespower-1.0.1/yespower-opt.c#L59)
+  * Please use *64-bit* for best performance.
+
+**Credits:**  
+Thanks to everyone who directly contributed to this release (alphabetical order)
+
+- AestheticSenpai
+- cryptozeny
+- ilmango-doge
+- joeland1
+- nao20010128nao
+- Nugetzrul3
+- okoto-xyz
+- RicK~Z
+- solardiz
+- volbil
+- y-chan
+- zawy12
+
+
+-------------
+
+
+v0.16.3.21rc1
+-------------
 Mainnet Launching: `2019/08/24 15:00 UTC`
 https://bitcointalk.org/index.php?topic=5177722.0
-
-[Download](https://github.com/sugarchain-project/sugarchain/releases/tag/release-0.16.3.21rc1)
 
 **Changes:**
 - Block time: 5 seconds
@@ -17,7 +70,7 @@ https://bitcointalk.org/index.php?topic=5177722.0
 - MAX_FUTURE_BLOCK_TIME 60 (was 7200)
 - QT delayed refresh balance [source](https://github.com/sugarchain-project/sugarchain/commit/72436c90b29844cf507895df053103f9b6840776#diff-2e3836af182cfb375329c3463ffd91f8)
 
-**Credits:**
+**Credits:**  
 Thanks to everyone who directly contributed to this release (alphabetical order)
 - cryptozeny
 - ilmango-doge
