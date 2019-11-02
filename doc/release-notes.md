@@ -50,8 +50,8 @@ https://bitcointalk.org/index.php?topic=5177722.0
 - Block time: `5` seconds
 - Difficulty: [SugarShield-N510](https://github.com/sugarchain-project/sugarchain/blob/master-v0.16.3/src/pow.cpp)
 - Block reward: 42.94967296 COIN `pow(2,32)/1E+08`
-- Halving interval: 12500000 Blocks `pow(5,8)*32`
-- Total supply: 1073741824 COIN `pow(2,30)`
+- Halving interval: 12500000 Blocks `pow(5,8)*32` [source](https://github.com/sugarchain-project/sugarchain/blob/32c7d945cda04374f1abbcb8e9787704e7171d4e/src/validation.cpp#L1168-L1211)
+- Total supply: 1073741824 COIN `pow(2,30)` [source](https://github.com/sugarchain-project/yumekawa-utils)
 - PoW algorithm: YespowerSugar
   * Settings
   ```cpp
