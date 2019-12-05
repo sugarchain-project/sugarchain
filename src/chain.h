@@ -227,6 +227,10 @@ public:
     uint32_t nBits;
     uint32_t nNonce;
 
+    //! (memory only)
+    bool cacheInit;
+    uint256 cacheIndexHash, cacheWorkHash;
+
     //! (memory only) Sequential id assigned to distinguish order in which blocks are received.
     int32_t nSequenceId;
 
@@ -254,6 +258,8 @@ public:
         nTime          = 0;
         nBits          = 0;
         nNonce         = 0;
+
+        cacheInit     = false;
     }
 
     CBlockIndex()
@@ -270,6 +276,10 @@ public:
         nTime          = block.nTime;
         nBits          = block.nBits;
         nNonce         = block.nNonce;
+
+        cacheInit     = block.cacheInit;
+        cacheIndexHash = block.cacheIndexHash;
+        cacheWorkHash = block.cacheWorkHash;
     }
 
     CDiskBlockPos GetBlockPos() const {
@@ -300,6 +310,11 @@ public:
         block.nTime          = nTime;
         block.nBits          = nBits;
         block.nNonce         = nNonce;
+
+        block.cacheInit     = cacheInit;
+        block.cacheIndexHash = cacheIndexHash;
+        block.cacheWorkHash = cacheWorkHash;
+
         return block;
     }
 

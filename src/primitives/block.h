@@ -9,6 +9,7 @@
 #include <primitives/transaction.h>
 #include <serialize.h>
 #include <uint256.h>
+#include <sync.h>
 
 /** Nodes collect new transactions into a block, hash them into a hash tree,
  * and scan through nonce values to make the block's hash satisfy proof-of-work
@@ -17,7 +18,7 @@
  * in the block is a special one that creates a new coin owned by the creator
  * of the block.
  */
-class CBlockHeader
+class CBlockHeaderUncached
 {
 public:
     // header
@@ -28,7 +29,7 @@ public:
     uint32_t nBits;
     uint32_t nNonce;
 
-    CBlockHeader()
+    CBlockHeaderUncached()
     {
         SetNull();
     }
@@ -70,6 +71,34 @@ public:
     }
 };
 
+class CBlockHeader : public CBlockHeaderUncached
+{
+public:
+    mutable CCriticalSection cacheLock;
+    mutable bool cacheInit;
+    mutable uint256 cacheIndexHash, cacheWorkHash;
+
+    CBlockHeader()
+    {
+        cacheInit = false;
+    }
+
+    CBlockHeader(const CBlockHeader& header)
+    {
+        *this = header;
+    }
+
+    CBlockHeader& operator=(const CBlockHeader& header)
+    {
+        *(CBlockHeaderUncached*)this = (CBlockHeaderUncached)header;
+        cacheInit = header.cacheInit;
+        cacheIndexHash = header.cacheIndexHash;
+        cacheWorkHash = header.cacheWorkHash;
+        return *this;
+    }
+
+    uint256 GetPoWHashCached() const;
+};
 
 class CBlock : public CBlockHeader
 {

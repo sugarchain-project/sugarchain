@@ -9,6 +9,7 @@
 #include <tinyformat.h>
 #include <utilstrencodings.h>
 #include <crypto/common.h>
+#include <sync.h>
 
 // yespower
 #include <stdlib.h>
@@ -16,13 +17,13 @@
 #include <streams.h>
 #include <version.h>
 
-uint256 CBlockHeader::GetHash() const
+uint256 CBlockHeaderUncached::GetHash() const
 {
     return SerializeHash(*this);
 }
 
 // yespower
-uint256 CBlockHeader::GetPoWHash() const
+uint256 CBlockHeaderUncached::GetPoWHash() const
 {
     uint256 thash;
     CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
@@ -38,6 +39,24 @@ uint256 CBlockHeader::GetPoWHash() const
         abort();
     }
     return thash;
+}
+
+
+uint256 CBlockHeader::GetPoWHashCached() const
+{
+    uint256 indexHash = GetHash();
+    LOCK(cacheLock);
+    if (cacheInit) {
+        if (indexHash != cacheIndexHash) {
+            fprintf(stderr, "Error: CBlockHeader: block hash changed unexpectedly\n");
+            exit(1);
+        }
+    } else {
+        cacheWorkHash = GetPoWHash();
+        cacheIndexHash = indexHash;
+        cacheInit = true;
+    }
+    return cacheWorkHash;
 }
 
 std::string CBlock::ToString() const
