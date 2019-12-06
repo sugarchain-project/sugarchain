@@ -9,6 +9,7 @@
 #include <script/script.h>
 #include <uint256.h>
 #include <utilstrencodings.h>
+#include <script/standard.h>
 
 #include <boost/variant/apply_visitor.hpp>
 #include <boost/variant/static_visitor.hpp>
