@@ -71,10 +71,10 @@ addition to reaching a maximum file size (`max_out_sz`).
 ## Step 3: PGP signing on bootstrap release
 
     $ cd ~/Desktop # move to output directory
-    ... # zip into bootstrap.dat.zip
+    $ zip -X bootstrap.dat.zip bootstrap.dat # zip into bootstrap.dat.zip
     $ sha256sum bootstrap.dat.zip > SHA256SUMS
     $ gpg --digest-algo sha256 --clearsign SHA256SUMS # PGP signing
-    $ rm SHA256SUMS && > cat SHA256SUMS.asc # rename to asc
+    $ rm SHA256SUMS && cat SHA256SUMS.asc # rename to asc
     ... # release
 
 * Release following files at https://github.com/sugarchain-project/bootstrap/releases

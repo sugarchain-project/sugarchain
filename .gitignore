@@ -117,4 +117,8 @@ test/cache/*
 libbitcoinconsensus.pc
 contrib/devtools/split-debug.sh
 
+# cryptozeny tools
 init.sh
+
+# linearlize (bootstrap)
+contrib/linearize/hashlist.txt
