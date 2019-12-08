@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 
 import re
+import sys
 from datetime import datetime
 from datetime import timedelta
 
-logFilePath = "debug.log"
-outputFilePath = "output.csv"
+# logFilePath = "debug.log"
+# outputFilePath = "output.csv"
+logFilePath = sys.argv[1]
+outputFilePath = sys.argv[1] + ".csv"
 
 with open(logFilePath, "r") as logFile, open(outputFilePath, "w") as csvFile:
     lines = logFile.readlines()
