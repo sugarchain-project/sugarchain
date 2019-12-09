@@ -5,7 +5,7 @@ FILE_NAME_1=$1
 
 ## DRAW PLOT
 OUTPUT_PNG="./png/synctime.png"
-gnuplot -persist <<-EOFMarker 
+gnuplot -persist <<-EOFMarker
 set terminal pngcairo size 1500,750 enhanced font "VL P Gothic,11";
 set output "$OUTPUT_PNG";
 
@@ -21,7 +21,7 @@ set xrange [1:*]; set xtics 0, 1;
 # set format x "%H:%M:%S"
 # set timefmt "%Y-%m-%d %H:%M:%S"
 # set format x "%H:%M:%S"
- 
+
 plot \
 "$FILE_NAME_1" using 0:3 axis x1y1 w l  title "$FILE_NAME_1" lc rgb "#ff0000" lw 1.0,
 # caution at the end: no "\"
