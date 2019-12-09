@@ -15,12 +15,12 @@ set ylabel "Block Height";
 
 set datafile separator ","
 
-set xrange [1:*]; set xtics 0, 1;
+set xrange [0:*];
+set xtics 0, 1;
 
-# 2019-12-06 17:14:47,0:10:00,81558
-# set format x "%H:%M:%S"
-# set timefmt "%Y-%m-%d %H:%M:%S"
-# set format x "%H:%M:%S"
+set yrange [0:*];
+set ytics 0, 100000;
+set format y '%.0f'
 
 plot \
 "$FILE_NAME_1" using 0:3 axis x1y1 w l  title "$FILE_NAME_1" lc rgb "#ff0000" lw 1.0,
