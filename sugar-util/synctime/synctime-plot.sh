@@ -29,4 +29,4 @@ echo ""
 xclip -selection clipboard -t image/png -i $OUTPUT_PNG
 
 ## OPEN PNG
-feh --scale-down $OUTPUT_PNG &
+feh --scale-down $OUTPUT_PNG
