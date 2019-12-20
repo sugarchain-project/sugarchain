@@ -8,7 +8,7 @@ Benchmark blockchain synchronization time during [IBD](https://blog.bitmex.com/b
 
 ## Drawing Plot
 ```bash
-./synctime-plot.sh debug.log.csv
+./synctime-plot.sh
 ```
 
 ## Some related CLI commands
