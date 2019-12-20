@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ## INIT
-FILE_NAME_1="uncached_IBD.log.csv"
-FILE_NAME_2="cached_IBD.log.csv"
+FILE_NAME_1="uncached_reindex.log.csv"
+FILE_NAME_2="cached_reindex.log.csv"
 
 ## DRAW PLOT
 OUTPUT_PNG="./png/synctime.png"
