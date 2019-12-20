@@ -27,9 +27,11 @@ set yrange [0:*];
 set ytics 0, 100000;
 set format y '%.0f'
 
+set grid xtics;
+
 plot \
 "$FILE_NAME_1" using 2:3 axis x1y1 w l  title "$FILE_NAME_1" lc rgb "blue" lw 1.0, \
-"$FILE_NAME_2" using 2:3 axis x1y1 w l  title "$FILE_NAME_2" lc rgb "red" lw 1.0,
+"$FILE_NAME_2" using 2:3 axis x1y1 w l  title "$FILE_NAME_2" lc rgb "red" lw 1.0, \
 # caution at the end: no "\"
 EOFMarker
 
