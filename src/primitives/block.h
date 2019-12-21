@@ -9,6 +9,8 @@
 #include <primitives/transaction.h>
 #include <serialize.h>
 #include <uint256.h>
+
+// yespower cache
 #include <sync.h>
 
 /** Nodes collect new transactions into a block, hash them into a hash tree,
@@ -74,13 +76,13 @@ public:
 class CBlockHeader : public CBlockHeaderUncached
 {
 public:
-    mutable CCriticalSection cacheLock;
-    mutable bool cacheInit;
-    mutable uint256 cacheIndexHash, cacheWorkHash;
+    mutable CCriticalSection cache_lock;
+    mutable bool cache_init;
+    mutable uint256 cache_block_hash, cache_PoW_hash;
 
     CBlockHeader()
     {
-        cacheInit = false;
+        cache_init = false;
     }
 
     CBlockHeader(const CBlockHeader& header)
@@ -91,13 +93,13 @@ public:
     CBlockHeader& operator=(const CBlockHeader& header)
     {
         *(CBlockHeaderUncached*)this = (CBlockHeaderUncached)header;
-        cacheInit = header.cacheInit;
-        cacheIndexHash = header.cacheIndexHash;
-        cacheWorkHash = header.cacheWorkHash;
+        cache_init = header.cache_init;
+        cache_block_hash = header.cache_block_hash;
+        cache_PoW_hash = header.cache_PoW_hash;
         return *this;
     }
 
-    uint256 GetPoWHashCached() const;
+    uint256 GetPoWHash_cached() const;
 };
 
 class CBlock : public CBlockHeader
