@@ -9,13 +9,15 @@
 #include <tinyformat.h>
 #include <utilstrencodings.h>
 #include <crypto/common.h>
-#include <sync.h>
 
 // yespower
 #include <stdlib.h>
 #include <crypto/yespower-1.0.1/yespower.h>
 #include <streams.h>
 #include <version.h>
+
+// yespower cache
+#include <sync.h>
 
 uint256 CBlockHeaderUncached::GetHash() const
 {
@@ -42,21 +44,25 @@ uint256 CBlockHeaderUncached::GetPoWHash() const
 }
 
 
-uint256 CBlockHeader::GetPoWHashCached() const
+uint256 CBlockHeader::GetPoWHash_cached() const
 {
-    uint256 indexHash = GetHash();
-    LOCK(cacheLock);
-    if (cacheInit) {
-        if (indexHash != cacheIndexHash) {
+    uint256 block_hash = GetHash();
+    LOCK(cache_lock);
+    if (cache_init) {
+        if (block_hash != cache_block_hash) {
             fprintf(stderr, "Error: CBlockHeader: block hash changed unexpectedly\n");
             exit(1);
         }
+        // yespower cache: log
+        printf("HIT block_hash = %s PoW_hash = %s\n", cache_block_hash.ToString().c_str(), cache_PoW_hash.ToString().c_str());
     } else {
-        cacheWorkHash = GetPoWHash();
-        cacheIndexHash = indexHash;
-        cacheInit = true;
+        cache_PoW_hash = GetPoWHash();
+        cache_block_hash = block_hash;
+        cache_init = true;
+        // yespower cache: log
+        printf("MISS block_hash = %s PoW_hash = %s\n", cache_block_hash.ToString().c_str(), cache_PoW_hash.ToString().c_str());
     }
-    return cacheWorkHash;
+    return cache_PoW_hash;
 }
 
 std::string CBlock::ToString() const
