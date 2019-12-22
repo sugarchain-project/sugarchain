@@ -53,14 +53,14 @@ uint256 CBlockHeader::GetPoWHash_cached() const
             fprintf(stderr, "Error: CBlockHeader: block hash changed unexpectedly\n");
             exit(1);
         }
-        // yespower cache: log
-        printf("HIT block_hash = %s PoW_hash = %s\n", cache_block_hash.ToString().c_str(), cache_PoW_hash.ToString().c_str());
+        // yespower cache: log // O (cyan) = HIT
+        printf("\033[36;1mO\033[0m block = %s PoW = %s\n", cache_block_hash.ToString().c_str(), cache_PoW_hash.ToString().c_str());
     } else {
         cache_PoW_hash = GetPoWHash();
         cache_block_hash = block_hash;
         cache_init = true;
-        // yespower cache: log
-        printf("MISS block_hash = %s PoW_hash = %s\n", cache_block_hash.ToString().c_str(), cache_PoW_hash.ToString().c_str());
+        // yespower cache: log // x = MISS
+        printf("x block = %s PoW = %s\n", cache_block_hash.ToString().c_str(), cache_PoW_hash.ToString().c_str());
     }
     return cache_PoW_hash;
 }
