@@ -1265,7 +1265,7 @@ static const CRPCCommand commands[] =
     { "util",               "getaddresstxids",        &getaddresstxids,        {"address"} },
     { "util",               "getaddressdeltas",       &getaddressdeltas,       {"address"} },
     { "util",               "getaddressbalance",      &getaddressbalance,      {"address"} },
-    { "util",               "getaddressutxos",        &getaddressutxos,        {"address"} },
+    { "util",               "getaddressutxos",        &getaddressutxos,        {"address", "amount"} },
     { "util",               "getaddressmempool",      &getaddressmempool,      {"address"} },
     { "util",               "getblockhashes",         &getblockhashes,         {"high","low","options"} },
     { "util",               "getspentinfo",           &getspentinfo,           {"argument"} },

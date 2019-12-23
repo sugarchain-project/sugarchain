@@ -144,7 +144,6 @@ static const CRPCConvertParam vRPCConvertParams[] =
     { "rescanblockchain", 0, "start_height"},
     { "rescanblockchain", 1, "stop_height"},
     { "getaddressutxos", 1, "amount" },
-    { "getaddressutxos", 2, "includechaininfo" },
 };
 
 class CRPCConvertTable
