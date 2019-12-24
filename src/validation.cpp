@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2017 The Bitcoin Core developers
+// Copyright (c) 2013-2019 Alexander Peslyak - Yespower 1.0.1
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -1120,7 +1121,7 @@ bool ReadBlockFromDisk(CBlock& block, const CDiskBlockPos& pos, const Consensus:
     }
 
     // Check the header
-    if (!CheckProofOfWork(block.GetPoWHash(), block.nBits, consensusParams))
+    if (!CheckProofOfWork(block.GetPoWHash_cached(), block.nBits, consensusParams))
         return error("ReadBlockFromDisk: Errors in block header at %s", pos.ToString());
 
     return true;
@@ -3042,7 +3043,7 @@ static bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, 
 static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
 {
     // Check proof of work matches claimed amount
-    if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash(), block.nBits, consensusParams))
+    if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash_cached(), block.nBits, consensusParams))
         return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
 
     return true;
@@ -3497,6 +3498,26 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
 bool ProcessNewBlock(const CChainParams& chainparams, const std::shared_ptr<const CBlock> pblock, bool fForceProcessing, bool *fNewBlock)
 {
     AssertLockNotHeld(cs_main);
+
+    // Look for this block's header in the index like AcceptBlock() will
+    uint256 hash = pblock->GetHash();
+
+    {
+        LOCK(cs_main);
+
+        BlockMap::iterator miSelf = mapBlockIndex.find(hash);
+        CBlockIndex *pindex = NULL;
+        if (miSelf != mapBlockIndex.end()) {
+            // Block header is already known
+            pindex = miSelf->second;
+            if (!pblock->cache_init && pindex->cache_init) {
+                LOCK(pblock->cache_lock); // Probably unnecessary since no concurrent access to pblock is expected
+                pblock->cache_init = true;
+                pblock->cache_block_hash = pindex->cache_block_hash;
+                pblock->cache_PoW_hash = pindex->cache_PoW_hash;
+            }
+        }
+    }
 
     {
         CBlockIndex *pindex = nullptr;
