@@ -10,6 +10,9 @@
 #include <serialize.h>
 #include <uint256.h>
 
+// yespower cache
+#include <sync.h>
+
 /** Nodes collect new transactions into a block, hash them into a hash tree,
  * and scan through nonce values to make the block's hash satisfy proof-of-work
  * requirements.  When they solve the proof-of-work, they broadcast the block
@@ -17,7 +20,7 @@
  * in the block is a special one that creates a new coin owned by the creator
  * of the block.
  */
-class CBlockHeader
+class CBlockHeaderUncached
 {
 public:
     // header
@@ -28,7 +31,7 @@ public:
     uint32_t nBits;
     uint32_t nNonce;
 
-    CBlockHeader()
+    CBlockHeaderUncached()
     {
         SetNull();
     }
@@ -70,6 +73,34 @@ public:
     }
 };
 
+class CBlockHeader : public CBlockHeaderUncached
+{
+public:
+    mutable CCriticalSection cache_lock;
+    mutable bool cache_init;
+    mutable uint256 cache_block_hash, cache_PoW_hash;
+
+    CBlockHeader()
+    {
+        cache_init = false;
+    }
+
+    CBlockHeader(const CBlockHeader& header)
+    {
+        *this = header;
+    }
+
+    CBlockHeader& operator=(const CBlockHeader& header)
+    {
+        *(CBlockHeaderUncached*)this = (CBlockHeaderUncached)header;
+        cache_init = header.cache_init;
+        cache_block_hash = header.cache_block_hash;
+        cache_PoW_hash = header.cache_PoW_hash;
+        return *this;
+    }
+
+    uint256 GetPoWHash_cached() const;
+};
 
 class CBlock : public CBlockHeader
 {
