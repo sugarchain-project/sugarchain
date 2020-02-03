@@ -2,6 +2,9 @@
 Construct a linear, no-fork, best version of the Bitcoin blockchain. The scripts
 run using Python 3 but are compatible with Python 2.
 
+## Warning
+    Do not use `-txindex=1` in this script.
+
 ## Stop 0: Fix `max_height` in `linearize.cfg`
 
 ## Step 1: Download hash list
