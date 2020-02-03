@@ -2,6 +2,11 @@
 Construct a linear, no-fork, best version of the Bitcoin blockchain. The scripts
 run using Python 3 but are compatible with Python 2.
 
+## Warning
+    Do not use `-txindex=1` in this script.
+
+## Stop 0: Fix `max_height` in `linearize.cfg`
+
 ## Step 1: Download hash list
 
     $ ./linearize-hashes.py linearize.cfg > hashlist.txt
@@ -32,10 +37,10 @@ JSON-RPC server. Running `bitcoind` or `bitcoin-qt -server` will be sufficient.
 
     $ head -1 hashlist.txt # genesis
       7d5eaec2dbb75f99feadfa524c78b7cabc1d8c8204f79d4f3a83381b811b0adc
-    $ wc -l hashlist.txt # 650000+1 (add genesis)
-      650001 hashlist.txt
-    $ tail -n 1 hashlist.txt # height 650000 # getblockhash 650000
-      e5728ed52ccc5b2f1261f377e810b98c007cdbe09507b6e4aa4c2d81eb4199af
+    $ wc -l hashlist.txt # 2601001+1 (add genesis)
+      2601002 hashlist.txt
+    $ tail -n 1 hashlist.txt # height 2601001 # getblockhash 2601001
+      56e8f536feb26f749ed9198f56f397da08f018de9518674b2ac12a41061612cb
 
 ## Step 2: Copy local block data
 
