@@ -403,10 +403,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x00"); // TODO.SUGAR
+        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000000039d585c9"); // getblockhash 780301 "chainwork" // TODO.SUGAR.UPDATE
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("e0e0e42e493ba7b15f7b0fe1a7e66f73b7fd8b3e6e6a7b0e821a6b95040d3826"); // genesis
+        consensus.defaultAssumeValid = uint256S("e87ec8451768ddadc3364b48efdc8f47b79e7723eb69c75ae3e7083bf48985b1"); // getblockhash 780301 "hash" // TODO.SUGAR.UPDATE
 
         pchMessageStart[0] = 0xb0;
         pchMessageStart[1] = 0x11;
@@ -453,16 +453,20 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("e0e0e42e493ba7b15f7b0fe1a7e66f73b7fd8b3e6e6a7b0e821a6b95040d3826")}, // genesis
+                {1, uint256S("0741357f5ee729dffdebdc78f0897f4c244788effebb2cda22c5d5947bebd923")},
+                {510, uint256S("9e355f520668f48212641bf674733d24e56c6b2f05ac60ba6fa860163feef8d4")},
+                {511, uint256S("9418cef01af69fc2491afcb56c640df9d78e0d0768bf9e2748c1978d2ffb97ed")},
+                {512, uint256S("c8663700fe1020185d26f1f06571dd51ed2f9c331436b83aa08dd21352f7ffea")},
+                {780811, uint256S("bd83debccee1bef17340539beff64ad3feab03c25e5d91969cf5418b8e2fe5a7")}, // 780811=780301+510
             }
         };
 
         // TODO.SUGAR
         chainTxData = ChainTxData{
-            // Data as of block 000000000000033cfa3c975eb83ecf2bb4aaedf68e6d279f6ed2b427c64caff9 (height 1260526)
-            0,
-            0,
-            0
+            // Data from RPC: getchaintxstats 4096 bd83debccee1bef17340539beff64ad3feab03c25e5d91969cf5418b8e2fe5a7
+            /* nTime    */ 1580549062,
+            /* nTxCount */ 801819,
+            /* dTxRate  */ 0.1563717517116163
         };
 
     }
