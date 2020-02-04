@@ -212,10 +212,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000020f4aed1203"); // chainwork 876543 // TODO.SUGAR.UPDATE
+        consensus.nMinimumChainWork = uint256S("00000000000000000000000000000000000000000000000000000b63a48c5c1e"); // getblockhash 2601001 "chainwork" // TODO.SUGAR.UPDATE
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("3332eab6dc92487414f636c3d0cfb100d0eca25f3981b8012219a73d49078577"); // hash 876543 // TODO.SUGAR.UPDATE
+        consensus.defaultAssumeValid = uint256S("56e8f536feb26f749ed9198f56f397da08f018de9518674b2ac12a41061612cb"); // getblockhash 2601001 "hash" // TODO.SUGAR.UPDATE
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -274,31 +274,32 @@ public:
                 {511, uint256S("ef160a17b4ecc855d00dd6ce051df72f1e690d91811b74c50751ada2e14c5f1a")},
                 {512, uint256S("094afbe86930e4950c601fde563cd2c7b9d050c1b567ad6fe48ae3b15a705ebb")},
                 {900000, uint256S("8a566a463925cf028cb427edb6d4d18a9c1213bf472d9032369c4e45449eb71c")},
+                {2601511, uint256S("e30af0fcf522354f43c3ab2cfb4805d175b1264608b6124eab0b635bdea2589d")}, // 2601511=2601001+510
                 // TODO.SUGAR.UPDATE
             }
         };
 
         chainTxData = ChainTxData{
             /*
-            getchaintxstats 4096 cbc2e56571fb4a1fe8ba81c57579a693ad2ba041a80d9b5e06b90318aedb5d44
+            getchaintxstats 4096 e30af0fcf522354f43c3ab2cfb4805d175b1264608b6124eab0b635bdea2589d
             nblocks 4096 (default: one month(518400), but 4096)
-            hash cbc2e56571fb4a1fe8ba81c57579a693ad2ba041a80d9b5e06b90318aedb5d44
-            height 878358
+            hash e30af0fcf522354f43c3ab2cfb4805d175b1264608b6124eab0b635bdea2589d
+            height 2601511
             */
 
             /*
-            "time": 1570999961,
-            "txcount": 992381,
+            "time": 1579620817,
+            "txcount": 2788446,
             "window_block_count": 4096,
-            "window_tx_count": 4248,
-            "window_interval": 20077,
-            "txrate": 0.2115853962245355
+            "window_tx_count": 4323,
+            "window_interval": 20342,
+            "txrate": 0.2125159767967751
             */
 
             // TODO.SUGAR.UPDATE
-            /* nTime    */ 1570999961,
-            /* nTxCount */ 992381,
-            /* dTxRate  */ 0.2115853962245355
+            /* nTime    */ 1579620817,
+            /* nTxCount */ 2788446,
+            /* dTxRate  */ 0.2125159767967751
         };
     }
 };
