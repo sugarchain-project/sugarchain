@@ -281,7 +281,7 @@ public:
 
         // TODO.SUGAR.UPDATE
         chainTxData = ChainTxData{
-            // Data from RPC: getchaintxstats 4096 e30af0fcf522354f43c3ab2cfb4805d175b1264608b6124eab0b635bdea2589d
+            // Data from RPC: getchaintxstats 4096 e30af0fcf522354f43c3ab2cfb4805d175b1264608b6124eab0b635bdea2589d (2601511)
             /* nTime    */ 1579620817,
             /* nTxCount */ 2788446,
             /* dTxRate  */ 0.2125159767967751
@@ -448,7 +448,7 @@ public:
 
         // TODO.SUGAR.UPDATE
         chainTxData = ChainTxData{
-            // Data from RPC: getchaintxstats 4096 bd83debccee1bef17340539beff64ad3feab03c25e5d91969cf5418b8e2fe5a7
+            // Data from RPC: getchaintxstats 4096 bd83debccee1bef17340539beff64ad3feab03c25e5d91969cf5418b8e2fe5a7 (780811)
             /* nTime    */ 1580549062,
             /* nTxCount */ 801819,
             /* dTxRate  */ 0.1563717517116163
