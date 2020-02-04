@@ -279,24 +279,9 @@ public:
             }
         };
 
+        // TODO.SUGAR.UPDATE
         chainTxData = ChainTxData{
-            /*
-            getchaintxstats 4096 e30af0fcf522354f43c3ab2cfb4805d175b1264608b6124eab0b635bdea2589d
-            nblocks 4096 (default: one month(518400), but 4096)
-            hash e30af0fcf522354f43c3ab2cfb4805d175b1264608b6124eab0b635bdea2589d
-            height 2601511
-            */
-
-            /*
-            "time": 1579620817,
-            "txcount": 2788446,
-            "window_block_count": 4096,
-            "window_tx_count": 4323,
-            "window_interval": 20342,
-            "txrate": 0.2125159767967751
-            */
-
-            // TODO.SUGAR.UPDATE
+            // Data from RPC: getchaintxstats 4096 e30af0fcf522354f43c3ab2cfb4805d175b1264608b6124eab0b635bdea2589d
             /* nTime    */ 1579620817,
             /* nTxCount */ 2788446,
             /* dTxRate  */ 0.2125159767967751
@@ -461,7 +446,7 @@ public:
             }
         };
 
-        // TODO.SUGAR
+        // TODO.SUGAR.UPDATE
         chainTxData = ChainTxData{
             // Data from RPC: getchaintxstats 4096 bd83debccee1bef17340539beff64ad3feab03c25e5d91969cf5418b8e2fe5a7
             /* nTime    */ 1580549062,
