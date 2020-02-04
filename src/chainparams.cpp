@@ -274,7 +274,7 @@ public:
                 {511, uint256S("ef160a17b4ecc855d00dd6ce051df72f1e690d91811b74c50751ada2e14c5f1a")},
                 {512, uint256S("094afbe86930e4950c601fde563cd2c7b9d050c1b567ad6fe48ae3b15a705ebb")},
                 {900000, uint256S("8a566a463925cf028cb427edb6d4d18a9c1213bf472d9032369c4e45449eb71c")},
-                {2601511, uint256S("e30af0fcf522354f43c3ab2cfb4805d175b1264608b6124eab0b635bdea2589d")}, // 2601511=2601001+510
+                {260151, uint256S("e30af0fcf522354f43c3ab2cfb485d175b1264608b6124eab0b635bdea2589d")}, // 2601511=2601001+510 // error
                 // TODO.SUGAR.UPDATE
             }
         };
