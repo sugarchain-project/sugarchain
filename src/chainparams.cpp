@@ -215,7 +215,7 @@ public:
         consensus.nMinimumChainWork = uint256S("00000000000000000000000000000000000000000000000000000b63a48c5c1e"); // getblockhash 2601001 "chainwork" // TODO.SUGAR.UPDATE
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("56e8f536feb26f749ed9198f56f397da08f018de9518674b2ac12a41061612cb"); // getblockhash 2601001 "hash" // TODO.SUGAR.UPDATE
+        consensus.defaultAssumeValid = uint256S("9998f536feb26f749ed9198f56f397da08f018de9518674b2ac12a41061612cb"); // getblockhash 2601001 "hash" // TODO.SUGAR.UPDATE // error
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
