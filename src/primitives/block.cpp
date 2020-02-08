@@ -33,13 +33,13 @@ uint256 CBlockHeaderUncached::GetPoWHash() const
         .version = YESPOWER_1_0,
         .N = 2048,
         .r = 32,
-        .pers = (const uint8_t *)"Satoshi Nakamoto 31/Oct/2008 Proof-of-work is essentially one-CPU-one-vote",
+        .pers = (const unsigned char *)"Satoshi Nakamoto 31/Oct/2008 Proof-of-work is essentially one-CPU-one-vote",
         .perslen = 74
     };
     uint256 hash;
     CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
     ss << *this;
-    if (yespower_tls((const uint8_t *)&ss[0], ss.size(), &yespower_1_0_sugarchain, (yespower_binary_t *)&hash)) {
+    if (yespower_tls((const unsigned char *)&ss[0], ss.size(), &yespower_1_0_sugarchain, (yespower_binary_t *)&hash)) {
         fprintf(stderr, "Error: CBlockHeader: failed to compute PoW hash (out of memory?)\n");
         exit(1);
     }
