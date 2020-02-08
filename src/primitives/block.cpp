@@ -11,10 +11,12 @@
 #include <crypto/common.h>
 
 // yespower
-#include <stdlib.h>
 #include <crypto/yespower-1.0.1/yespower.h>
 #include <streams.h>
 #include <version.h>
+
+// yespower exit()
+#include <stdlib.h>
 
 // yespower cache
 #include <sync.h>
