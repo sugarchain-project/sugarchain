@@ -29,9 +29,6 @@ uint256 CBlockHeaderUncached::GetHash() const
 // yespower
 uint256 CBlockHeaderUncached::GetPoWHash() const
 {
-    uint256 thash;
-    CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
-    ss << *this;
     yespower_params_t yespower_1_0_sugarchain = {
         .version = YESPOWER_1_0,
         .N = 2048,
@@ -39,10 +36,13 @@ uint256 CBlockHeaderUncached::GetPoWHash() const
         .pers = (const uint8_t *)"Satoshi Nakamoto 31/Oct/2008 Proof-of-work is essentially one-CPU-one-vote",
         .perslen = 74
     };
-    if (yespower_tls( (unsigned char *)&ss[0], ss.size(), &yespower_1_0_sugarchain, (yespower_binary_t *)&thash) ) {
+    uint256 hash;
+    CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
+    ss << *this;
+    if (yespower_tls( (unsigned char *)&ss[0], ss.size(), &yespower_1_0_sugarchain, (yespower_binary_t *)&hash) ) {
         abort();
     }
-    return thash;
+    return hash;
 }
 
 
