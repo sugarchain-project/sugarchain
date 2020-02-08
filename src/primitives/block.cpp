@@ -29,7 +29,7 @@ uint256 CBlockHeaderUncached::GetHash() const
 // yespower
 uint256 CBlockHeaderUncached::GetPoWHash() const
 {
-    yespower_params_t yespower_1_0_sugarchain = {
+    static const yespower_params_t yespower_1_0_sugarchain = {
         .version = YESPOWER_1_0,
         .N = 2048,
         .r = 32,
