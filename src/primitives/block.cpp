@@ -18,7 +18,7 @@
 // yespower exit()
 #include <stdlib.h>
 
-// yespower cache
+// yespower PoW cache
 #include <sync.h>
 
 uint256 CBlockHeaderUncached::GetHash() const
@@ -26,7 +26,7 @@ uint256 CBlockHeaderUncached::GetHash() const
     return SerializeHash(*this);
 }
 
-// yespower
+// yespowerUncached
 uint256 CBlockHeaderUncached::GetPoWHash() const
 {
     static const yespower_params_t yespower_1_0_sugarchain = {
@@ -46,6 +46,7 @@ uint256 CBlockHeaderUncached::GetPoWHash() const
     return hash;
 }
 
+// yespower_cached
 uint256 CBlockHeader::GetPoWHash_cached() const
 {
     uint256 block_hash = GetHash();
@@ -55,13 +56,13 @@ uint256 CBlockHeader::GetPoWHash_cached() const
             fprintf(stderr, "Error: GetPoWHash_cached: block hash changed unexpectedly\n");
             exit(1);
         }
-        // yespower cache: log // O (cyan) = HIT
+        // yespower PoW cache: log // O (cyan) = HIT
         // printf("\033[36;1mO\033[0m block = %s PoW = %s\n", cache_block_hash.ToString().c_str(), cache_PoW_hash.ToString().c_str());
     } else {
         cache_PoW_hash = GetPoWHash();
         cache_block_hash = block_hash;
         cache_init = true;
-        // yespower cache: log // x = MISS
+        // yespower PoW cache: log // x = MISS
         // printf("x block = %s PoW = %s\n", cache_block_hash.ToString().c_str(), cache_PoW_hash.ToString().c_str());
     }
     return cache_PoW_hash;
