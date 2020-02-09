@@ -10,7 +10,7 @@
 #include <serialize.h>
 #include <uint256.h>
 
-// yespower cache
+// yespower PoW cache
 #include <sync.h>
 
 /** Nodes collect new transactions into a block, hash them into a hash tree,
