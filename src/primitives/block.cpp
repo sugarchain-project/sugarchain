@@ -46,7 +46,6 @@ uint256 CBlockHeaderUncached::GetPoWHash() const
     return hash;
 }
 
-
 uint256 CBlockHeader::GetPoWHash_cached() const
 {
     uint256 block_hash = GetHash();
