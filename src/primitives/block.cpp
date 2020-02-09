@@ -53,7 +53,7 @@ uint256 CBlockHeader::GetPoWHash_cached() const
     LOCK(cache_lock);
     if (cache_init) {
         if (block_hash != cache_block_hash) {
-            fprintf(stderr, "Error: GetPoWHash_cached: block hash changed unexpectedly\n");
+            fprintf(stderr, "Error: CBlockHeader: block hash changed unexpectedly\n");
             exit(1);
         }
         // yespower PoW cache: log // O (cyan) = HIT
