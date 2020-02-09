@@ -39,7 +39,7 @@ uint256 CBlockHeaderUncached::GetPoWHash() const
     uint256 hash;
     CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
     ss << *this;
-    if (yespower_tls((unsigned char *)&ss[0], ss.size(), &yespower_1_0_sugarchain, (yespower_binary_t *)&hash)) {
+    if (yespower_tls((const uint8_t *)&ss[0], ss.size(), &yespower_1_0_sugarchain, (yespower_binary_t *)&hash)) {
         fprintf(stderr, "Error: CBlockHeader: failed to compute PoW hash (out of memory?)\n");
         exit(1);
     }
