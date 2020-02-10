@@ -33,7 +33,8 @@ static constexpr int64_t CHAIN_SYNC_TIMEOUT = 20 * 60; // 20 minutes
 // 120x faster than bitcoin
 /** How frequently to check for stale tips, in seconds */
 // (10 * 60 / 120) = 5
-static constexpr int64_t STALE_CHECK_INTERVAL = 5; // seconds // FIXME.SUGAR
+// EXTRA_PEER_CHECK_INTERVAL < STALE_CHECK_INTERVAL
+static constexpr int64_t STALE_CHECK_INTERVAL = 5 * 12; // seconds // FIXME.SUGAR
 
 /** How frequently to check for extra outbound peers and disconnect, in seconds */
 static constexpr int64_t EXTRA_PEER_CHECK_INTERVAL = 45;
