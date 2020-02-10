@@ -34,6 +34,7 @@ static constexpr int64_t CHAIN_SYNC_TIMEOUT = 20 * 60; // 20 minutes
 /** How frequently to check for stale tips, in seconds */
 // (10 * 60 / 120) = 5
 static constexpr int64_t STALE_CHECK_INTERVAL = 5; // seconds // FIXME.SUGAR
+
 /** How frequently to check for extra outbound peers and disconnect, in seconds */
 static constexpr int64_t EXTRA_PEER_CHECK_INTERVAL = 45;
 /** Minimum time an outbound-peer-eviction candidate must be connected for, in order to evict, in seconds */
