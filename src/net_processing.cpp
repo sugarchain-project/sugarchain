@@ -3566,14 +3566,11 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
             // 120x faster than bitcoin
             // (consensusParams.nPowTargetSpacing * 120) = 600 seconds = 10 minutes (BTC)
 
-            // FIXME.SUGAR // SURE? // INFLIGHT_DISABLED
-            /*
             if (nNow > state.nDownloadingSince + (consensusParams.nPowTargetSpacing * 120) * (BLOCK_DOWNLOAD_TIMEOUT_BASE + BLOCK_DOWNLOAD_TIMEOUT_PER_PEER * nOtherPeersWithValidatedDownloads)) {
                 LogPrintf("Timeout downloading block %s from peer=%d, disconnecting\n", queuedBlock.hash.ToString(), pto->GetId());
                 pto->fDisconnect = true;
                 return true;
             }
-            */
         }
         // Check for headers sync timeouts
         if (state.fSyncStarted && state.nHeadersSyncTimeout < std::numeric_limits<int64_t>::max()) {
