@@ -32,7 +32,7 @@ Bitcoin: 7200s == 12 blocks (blocktime: 600s)
 Sugarchain: 60s == 12 blocks (blocktime: 5s)
 */
 
-static const int64_t MAX_FUTURE_BLOCK_TIME = 2 * 60 * 60 / 120; // 7200/120=60(sec) // 12(blocks) // FIXME.SUGAR // SURE?
+static const int64_t MAX_FUTURE_BLOCK_TIME = 2 * 60 * 60 / 120; // 7200/120=60(sec) // 12(blocks) // FIXME.SUGAR // SURE? // FTL?
 
 /**
  * Timestamp window used as a grace period by code that compares external
