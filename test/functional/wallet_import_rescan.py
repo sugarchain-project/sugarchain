@@ -111,7 +111,7 @@ ImportNode = collections.namedtuple("ImportNode", "prune rescan")
 IMPORT_NODES = [ImportNode(*fields) for fields in itertools.product((False, True), repeat=2)]
 
 # Rescans start at the earliest block up to 2 hours before the key timestamp.
-TIMESTAMP_WINDOW = 2 * 60 * 60 #// FTL?
+TIMESTAMP_WINDOW = 2 * 60 * 60
 
 
 class ImportRescanTest(BitcoinTestFramework):
