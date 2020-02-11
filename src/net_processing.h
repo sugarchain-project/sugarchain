@@ -33,13 +33,15 @@ static constexpr int64_t CHAIN_SYNC_TIMEOUT = 20 * 60; // 20 minutes
 // 120x faster than bitcoin
 /** How frequently to check for stale tips, in seconds */
 // (10 * 60 / 120) = 5
-// EXTRA_PEER_CHECK_INTERVAL < STALE_CHECK_INTERVAL
-static constexpr int64_t STALE_CHECK_INTERVAL = 5 * 12; // seconds // FIXME.SUGAR
-
+static constexpr int64_t STALE_CHECK_INTERVAL = 5; // seconds // FIXME.SUGAR
 /** How frequently to check for extra outbound peers and disconnect, in seconds */
-static constexpr int64_t EXTRA_PEER_CHECK_INTERVAL = 45;
+// bitcoin:     (600 / 45) = 13.333...
+// litecoin:    (150 / 45) = 3.333...
+// sugarchain:  (5 / 3) = 1.666...
+static constexpr int64_t EXTRA_PEER_CHECK_INTERVAL = 3; // seconds // FIXME.SUGAR
 /** Minimum time an outbound-peer-eviction candidate must be connected for, in order to evict, in seconds */
-static constexpr int64_t MINIMUM_CONNECT_TIME = 30;
+// (30 / 2) = 15 
+static constexpr int64_t MINIMUM_CONNECT_TIME = 15; // seconds // FIXME.SUGAR
 
 class PeerLogicValidation : public CValidationInterface, public NetEventsInterface {
 private:
