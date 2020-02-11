@@ -222,7 +222,7 @@ static const unsigned int DEFAULT_CHECKLEVEL = 3;
 // one 128MB block file + added 15% undo data = 147MB greater for a total of 545MB
 // Setting the target to > than 550MB will make it likely we can respect the target.
 // FIXME.SUGAR // SURE? // 120x bitcoin // 550*(120/2-10)=27500
-static const uint64_t MIN_DISK_SPACE_FOR_BLOCK_FILES = 27500 * 1024 * 1024; // was "550 * 1024 * 1024"
+static const uint64_t MIN_DISK_SPACE_FOR_BLOCK_FILES = 27500ULL * 1024 * 1024; // was "550 * 1024 * 1024"
 
 /** 
  * Process an incoming block. This only returns after the best known valid
