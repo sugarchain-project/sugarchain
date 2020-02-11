@@ -3550,7 +3550,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
             // the download window should be much larger than the to-be-downloaded set of blocks, so disconnection
             // should only happen during initial block download.
             LogPrintf("Peer=%d is stalling block download, disconnecting\n", pto->GetId());
-            pto->fDisconnect = true;
+            // pto->fDisconnect = true; // fDisconnect_DISABLED
             return true;
         }
         // In case there is a block that has been in flight from this peer for 2 + 0.5 * N times the block interval
@@ -3568,7 +3568,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
 
             if (nNow > state.nDownloadingSince + (consensusParams.nPowTargetSpacing * 120) * (BLOCK_DOWNLOAD_TIMEOUT_BASE + BLOCK_DOWNLOAD_TIMEOUT_PER_PEER * nOtherPeersWithValidatedDownloads)) {
                 LogPrintf("Timeout downloading block %s from peer=%d, disconnecting\n", queuedBlock.hash.ToString(), pto->GetId());
-                pto->fDisconnect = true;
+                // pto->fDisconnect = true; // fDisconnect_DISABLED
                 return true;
             }
         }
@@ -3584,7 +3584,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
                     // problems if we can't get any outbound peers.
                     if (!pto->fWhitelisted) {
                         LogPrintf("Timeout downloading headers from peer=%d, disconnecting\n", pto->GetId());
-                        pto->fDisconnect = true;
+                        // pto->fDisconnect = true; // fDisconnect_DISABLED
                         return true;
                     } else {
                         LogPrintf("Timeout downloading headers from whitelisted peer=%d, not disconnecting\n", pto->GetId());
