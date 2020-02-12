@@ -1226,14 +1226,18 @@ bool IsInitialBlockDownload()
     if (latchToFalse.load(std::memory_order_relaxed))
         return false;
     if (fImporting || fReindex)
+        LogPrintf("\033[36;1mIBD:\033[0m Entering InitialBlockDownload (fImporting || fReindex)\n"); // FIXME.SUGAR
         return true;
     if (chainActive.Tip() == nullptr)
+        LogPrintf("\033[36;1mIBD:\033[0m Entering InitialBlockDownload (chainActive.Tip() == nullptr)\n"); // FIXME.SUGAR
         return true;
     if (chainActive.Tip()->nChainWork < nMinimumChainWork)
+        LogPrintf("\033[36;1mIBD:\033[0m Entering InitialBlockDownload (chainActive.Tip()->nChainWork < nMinimumChainWork)\n"); // FIXME.SUGAR
         return true;
     if (chainActive.Tip()->GetBlockTime() < (GetTime() - nMaxTipAge))
+        LogPrintf("\033[36;1mIBD:\033[0m Entering InitialBlockDownload (chainActive.Tip()->GetBlockTime() < (GetTime() - nMaxTipAge))\n"); // FIXME.SUGAR
         return true;
-    LogPrintf("Leaving InitialBlockDownload (latching to false)\n");
+    LogPrintf("\033[36;1mIBD:\033[0m Leaving InitialBlockDownload (latching to false)\n"); // FIXME.SUGAR
     latchToFalse.store(true, std::memory_order_relaxed);
     return false;
 }
