@@ -140,7 +140,7 @@ static const bool DEFAULT_ENABLE_REPLACEMENT = true;
 static const bool DEFAULT_FEEFILTER = true;
 
 /** Maximum number of headers to announce when relaying blocks with headers message.*/
-static const unsigned int MAX_BLOCKS_TO_ANNOUNCE = 8 * 120; // FIXME.SUGAR // 120x bitcoin
+static const unsigned int MAX_BLOCKS_TO_ANNOUNCE = 8;
 
 /** Maximum number of unconnecting headers announcements before DoS score */
 static const int MAX_UNCONNECTING_HEADERS = 10;
