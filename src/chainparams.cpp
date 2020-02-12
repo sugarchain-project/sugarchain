@@ -227,7 +227,7 @@ public:
         pchMessageStart[2] = 0x4b;
         pchMessageStart[3] = 0x9d;
         nDefaultPort = 34230;
-        nPruneAfterHeight = 12000000; // was 100000 // FIXME.SUGAR // 120x bitcoin
+        nPruneAfterHeight = 100000;
 
         // nTime: date -d '2019-08-16 00:00:00 KST' +%s = 1565881200
         // genesisReward: pow(2,32) / COIN = 42.94967296 (was 50)
