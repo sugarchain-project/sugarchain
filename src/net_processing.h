@@ -21,7 +21,7 @@ static const unsigned int DEFAULT_BLOCK_RECONSTRUCTION_EXTRA_TXN = 100;
 /** Headers download timeout expressed in microseconds
  *  Timeout = base + per_header * (expected number of headers) */
 static constexpr int64_t HEADERS_DOWNLOAD_TIMEOUT_BASE = 15 * 60 * 1000000; // 15 minutes
-static constexpr int64_t HEADERS_DOWNLOAD_TIMEOUT_PER_HEADER = 1000 * 120; // 1ms/header // FIXME.SUGAR // 120x bitcoin
+static constexpr int64_t HEADERS_DOWNLOAD_TIMEOUT_PER_HEADER = 1000; // 1ms/header
 /** Protect at least this many outbound peers from disconnection due to slow/
  * behind headers chain.
  */
