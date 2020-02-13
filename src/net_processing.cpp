@@ -3129,10 +3129,10 @@ void PeerLogicValidation::CheckForStaleTipAndEvictPeers(const Consensus::Params 
         // Check whether our tip is stale, and if so, allow using an extra
         // outbound peer
         if (TipMayBeStale(consensusParams)) {
-            if (!IsInitialBlockDownload()) { // FIXME.SUGAR // LOG_DISABLED during IBD
+            if (!IsInitialBlockDownload()) { // FIXME.SUGAR // LOG_DISABLED during IBD // no disconnect during IBD
                 LogPrintf("Potential stale tip detected, will try using extra outbound peer (last tip update: %d seconds ago)\n", time_in_seconds - g_last_tip_update);
+                connman->SetTryNewOutboundPeer(true); // FIXME.SUGAR // no disconnect during IBD
             }
-            connman->SetTryNewOutboundPeer(true);
         } else if (connman->GetTryNewOutboundPeer()) {
             connman->SetTryNewOutboundPeer(false);
         }
