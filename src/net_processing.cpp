@@ -1397,7 +1397,7 @@ bool static ProcessHeadersMessage(CNode *pfrom, CConnman *connman, const std::ve
         }
 
         // FIXME.SUGAR
-        // 120x bitcoin // disable additional download traffic during IBD
+        // 120x bitcoin // IBD: disable additional download during IBD, due to too much traffic
         /*
         if (nCount == MAX_HEADERS_RESULTS) {
             // Headers message had its maximum size; the peer may have more headers.
@@ -3129,7 +3129,7 @@ void PeerLogicValidation::CheckForStaleTipAndEvictPeers(const Consensus::Params 
         // Check whether our tip is stale, and if so, allow using an extra
         // outbound peer
         if (TipMayBeStale(consensusParams)) {
-            if (!IsInitialBlockDownload()) { // FIXME.SUGAR // LOG_DISABLED during IBD
+            if (!IsInitialBlockDownload()) { // FIXME.SUGAR // IBD: do not print this connection log during IBD
                 LogPrintf("Potential stale tip detected, will try using extra outbound peer (last tip update: %d seconds ago)\n", time_in_seconds - g_last_tip_update);
             }
             connman->SetTryNewOutboundPeer(true);
@@ -3588,7 +3588,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
                     // Note: If all our peers are inbound, then we won't
                     // disconnect our sync peer for stalling; we have bigger
                     // problems if we can't get any outbound peers.
-                    if (!pto->fWhitelisted) {
+                    if (!pto->fWhitelisted && !IsInitialBlockDownload()) { // FIXME.SUGAR // IBD: do not disconnect *whitelisted* peers during IBD
                         LogPrintf("Timeout downloading headers from peer=%d, disconnecting\n", pto->GetId());
                         pto->fDisconnect = true;
                         return true;

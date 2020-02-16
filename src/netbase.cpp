@@ -21,7 +21,7 @@
 #include <boost/algorithm/string/case_conv.hpp> // for to_lower()
 #include <boost/algorithm/string/predicate.hpp> // for startswith() and endswith()
 
-#include <validation.h> // FIXME.SUGAR // for IsInitialBlockDownload
+#include <validation.h> // FIXME.SUGAR // IBD: for IsInitialBlockDownload()
 
 #if !defined(HAVE_MSG_NOSIGNAL)
 #define MSG_NOSIGNAL 0
@@ -515,7 +515,7 @@ bool ConnectSocketDirectly(const CService &addrConnect, const SOCKET& hSocket, i
             }
             if (nRet != 0)
             {
-                if (!IsInitialBlockDownload()) { // FIXME.SUGAR // LOG_DISABLED during IBD
+                if (!IsInitialBlockDownload()) { // FIXME.SUGAR // IBD: do not print this connection log during IBD
                     LogPrintf("connect() to %s failed after select(): %s\n", addrConnect.ToString(), NetworkErrorString(nRet));
                 }
                 return false;
@@ -527,7 +527,7 @@ bool ConnectSocketDirectly(const CService &addrConnect, const SOCKET& hSocket, i
         else
 #endif
         {
-            if (!IsInitialBlockDownload()) { // FIXME.SUGAR // LOG_DISABLED during IBD
+            if (!IsInitialBlockDownload()) { // FIXME.SUGAR // IBD: do not print this connection log during IBD
                 LogPrintf("connect() to %s failed: %s\n", addrConnect.ToString(), NetworkErrorString(WSAGetLastError()));
             }
             return false;
