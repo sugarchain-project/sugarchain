@@ -40,7 +40,7 @@ uint256 CBlockHeaderUncached::GetPoWHash() const
     CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
     ss << *this;
     if (yespower_tls((const uint8_t *)&ss[0], ss.size(), &yespower_1_0_sugarchain, (yespower_binary_t *)&hash)) {
-        fprintf(stderr, "Error: CBlockHeaderUncached: failed to compute PoW hash (out of memory?)\n");
+        fprintf(stderr, "Error: CBlockHeaderUncached::GetPoWHash(): failed to compute PoW hash (out of memory?)\n");
         exit(1);
     }
     return hash;
@@ -53,7 +53,7 @@ uint256 CBlockHeader::GetPoWHash_cached() const
     LOCK(cache_lock);
     if (cache_init) {
         if (block_hash != cache_block_hash) {
-            fprintf(stderr, "Error: CBlockHeader: block hash changed unexpectedly\n");
+            fprintf(stderr, "Error: CBlockHeader::GetPoWHash_cached(): block hash changed unexpectedly\n");
             exit(1);
         }
         // yespower PoW cache: log // O (cyan) = HIT
