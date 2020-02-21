@@ -28,6 +28,7 @@ PATTERN_ONION = re.compile(r"^([abcdefghijklmnopqrstuvwxyz234567]{16}\.onion):(\
 PATTERN_AGENT = re.compile(
     r"^/Yumekawa:("
     r"0.16.(3).(21|23|24|25|26|27|28|29)|"
+    r"0.19.99"
     r")")
 
 def parseline(line):
