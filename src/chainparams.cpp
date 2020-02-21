@@ -116,6 +116,7 @@ const arith_uint256 maxUint = UintToArith256(uint256S("fffffffffffffffffffffffff
  *    timestamp before)
  * + Contains no strange transactions
  */
+
 class CMainParams : public CChainParams {
 public:
     CMainParams() {
