@@ -132,9 +132,11 @@ void WalletModel::pollBalanceChanged()
         fForceCheckBalanceChanged = false;
 
         // BEGIN - DEBUG for checking height?
+        /*
         LogPrint(BCLog::QT, "GUI:   %d = height \n", chainActive.Height());
         LogPrint(BCLog::QT, "GUI:   %d = cached \n", cachedNumBlocks);
         LogPrint(BCLog::QT, "GUI: height - cached = %d \n", (int)(chainActive.Height() - cachedNumBlocks));
+        */
         // END - DEBUG for checking height?
 
         // FIXME.SUGAR // SURE?
@@ -142,8 +144,10 @@ void WalletModel::pollBalanceChanged()
         if(chainActive.Height() - cachedNumBlocks >= 12)
         {
             // BEGIN - DEBUG for checking polled?
+            /*
             LogPrint(BCLog::QT, "GUI: \033[0;31m  pollBalanceChanged:  \033[0m \n"); // red
             LogPrint(BCLog::QT, "GUI: height - cached = %d \n", (int)(chainActive.Height() - cachedNumBlocks));
+            */
             // END - DEBUG for checking polled?
 
             // Balance and number of transactions might have changed
