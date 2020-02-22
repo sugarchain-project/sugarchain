@@ -166,10 +166,10 @@ script: |
 
     # BEGIN - DISABLE SHARED
     # WIN_BITCOIN_CONFIG="--disable-shared"
-    # mv ${DISTNAME}/bin/*.dll ${DISTNAME}/lib/
-    if [ -f ${DISTNAME}/bin/*.dll ]; then
-      mv ${DISTNAME}/bin/*.dll ${DISTNAME}/lib/
-    fi
+    mv ${DISTNAME}/bin/*.dll ${DISTNAME}/lib/
+    # if [ -f ${DISTNAME}/bin/*.dll ]; then
+      # mv ${DISTNAME}/bin/*.dll ${DISTNAME}/lib/
+    # fi
     # END - DISABLE SHARED
 
     find . -name "lib*.la" -delete
