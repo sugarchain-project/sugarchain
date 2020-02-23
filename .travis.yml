@@ -63,7 +63,7 @@ env:
       GOAL="install"
       BITCOIN_CONFIG="--enable-zmq --enable-glibc-back-compat --enable-reduce-exports LDFLAGS=-static-libstdc++"
       USE_SHELL="/bin/dash"
-      YESPOWER_OPTION="$YESPOWER_OPTION $YESPOWER_MSSE2_32BIT"
+    # disabled (slow "make check") # YESPOWER_OPTION="$YESPOWER_OPTION $YESPOWER_MSSE2_32BIT"
 # Win64
     - >
       HOST=x86_64-w64-mingw32
