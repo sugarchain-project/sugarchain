@@ -22,7 +22,7 @@
 
 static const uint64_t GB_BYTES = 1000000000LL;
 /* Minimum free space (in GB) needed for data directory */
-static const uint64_t BLOCK_CHAIN_SIZE = 4; // inaccurate size
+static const uint64_t BLOCK_CHAIN_SIZE = 2; // inaccurate size
 /* Minimum free space (in GB) needed for data directory when pruned; Does not include prune target */
 static const uint64_t CHAIN_STATE_SIZE = 1; // inaccurate size // should INT
 /* Total required space (in GB) depending on user choice (prune, not prune) */

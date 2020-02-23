@@ -3,11 +3,12 @@ Construct a linear, no-fork, best version of the Bitcoin blockchain. The scripts
 run using Python 3 but are compatible with Python 2.
 
 ## Warning
-    Do not use `-txindex=1` in this script.
+Do not use `-txindex=1` in this script.
 
-## Stop 0: Fix `max_height` in `linearize.cfg`
+## Step 1:
+Fix `max_height` in `linearize.cfg`
 
-## Step 1: Download hash list
+## Step 1.1: Download hash list
 
     $ ./linearize-hashes.py linearize.cfg > hashlist.txt
 
@@ -28,12 +29,13 @@ the same data no matter which byte format is chosen.
 The `linearize-hashes` script requires a connection, local or remote, to a
 JSON-RPC server. Running `bitcoind` or `bitcoin-qt -server` will be sufficient.
 
-## Step 1.1: Change absolute location in `linearize.cfg`
+## Step 1.2:
+Change absolute location in `linearize.cfg`
 
     input=/home/{USERNAME}/.sugarchain/blocks
     output_file=/home/{USERNAME}/Desktop/bootstrap.dat
 
-## Step 1.2: Check outputs
+## Step 1.3: Check outputs
 
     $ head -1 hashlist.txt # genesis
       7d5eaec2dbb75f99feadfa524c78b7cabc1d8c8204f79d4f3a83381b811b0adc
