@@ -42,9 +42,7 @@ Version: Final Release
     [#85](https://github.com/sugarchain-project/sugarchain/pull/85)
     [#92](https://github.com/sugarchain-project/sugarchain/pull/92)
 
-**Known Issues:**
-
-https://github.com/sugarchain-project/sugarchain#known-issues
+**[Known Issues](https://github.com/sugarchain-project/sugarchain#known-issues)**
 
 **Credits:**
 
@@ -86,8 +84,7 @@ Version: Final Release
   * add: bootstrap linearize at height `650000`, `1043000`
   * fix: comment error (#6)
 
-**Known Issues:**
-https://github.com/sugarchain-project/sugarchain#known-issues
+**[Known Issues](https://github.com/sugarchain-project/sugarchain#known-issues)**
 
 **Credits:**
 Thanks to everyone who directly contributed to this release (alphabetical order)
