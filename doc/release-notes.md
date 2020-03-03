@@ -29,9 +29,13 @@ Thanks to everyone who directly contributed to this release
 - okoto-xyz
 - decryp2kanon
 - cryptozeny
-- 唐伯虎 (financial support)
-- Rakutens (financial support)
-- [happysensor.xyz](http://happysensor.xyz/) (financial support)
+
+**Financial Support:**
+We give our utmost thanks to the donors. This donation will be used for our future development. [Donations](https://github.com/sugarchain-project/Donations/blob/master/README.md).
+
+- 唐伯虎
+- Rakutens
+- [happysensor.xyz](http://happysensor.xyz/)
 
 -----
 
