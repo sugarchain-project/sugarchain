@@ -22,11 +22,11 @@ Version: Final Release
 https://github.com/sugarchain-project/sugarchain#known-issues
 
 **Credits:**
-Thanks to everyone who directly contributed to this release (alphabetical order)
+Thanks to everyone who directly contributed to this release
 
 - solardiz (original Yespower author)
 - volbil
-- okoto
+- okoto-xyz
 - decryp2kanon
 - cryptozeny
 - 唐伯虎 (financial support)
