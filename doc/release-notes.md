@@ -1,7 +1,6 @@
 ## Yumekawa v0.16.3.30-moonlight
-
-Version: Final Release
-Date: 2020-03-02
+- Version: Final Release
+- Date: 2020-03-02
 
 **Changes:**
 - Major Fix:
@@ -66,9 +65,8 @@ We give our utmost thanks to the donors. This donation will be used for our futu
 -----
 
 ## Yumekawa v0.16.3.24-bloomy
-
-Version: Final Release
-Date: 2019-11-10
+- Version: Final Release
+- Date: 2019-11-10
 
 **Changes:**
 - Major Fix:
@@ -107,9 +105,8 @@ Thanks to everyone who directly contributed to this release (alphabetical order)
 -----
 
 ## Yumekawa v0.16.3.21rc1
-
-Version: The First Release
-Date: 2019-08-24
+- Version: The First Release
+- Date: 2019-08-24
 
 Mainnet Launching: `2019/08/24 15:00 UTC`
 https://bitcointalk.org/index.php?topic=5177722.0
