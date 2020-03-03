@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2017 The Bitcoin Core developers
+// Copyright (c) 2018-2020 The Sugarchain Yumekawa developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -20,6 +21,8 @@
 
 #include <boost/algorithm/string/case_conv.hpp> // for to_lower()
 #include <boost/algorithm/string/predicate.hpp> // for startswith() and endswith()
+
+#include <validation.h> // FIXME.SUGAR // IBD: for IsInitialBlockDownload()
 
 #if !defined(HAVE_MSG_NOSIGNAL)
 #define MSG_NOSIGNAL 0
@@ -513,7 +516,9 @@ bool ConnectSocketDirectly(const CService &addrConnect, const SOCKET& hSocket, i
             }
             if (nRet != 0)
             {
-                LogPrintf("connect() to %s failed after select(): %s\n", addrConnect.ToString(), NetworkErrorString(nRet));
+                if (!IsInitialBlockDownload()) { // FIXME.SUGAR // IBD: do not print this connection log during IBD
+                    LogPrintf("connect() to %s failed after select(): %s\n", addrConnect.ToString(), NetworkErrorString(nRet));
+                }
                 return false;
             }
         }
@@ -523,7 +528,9 @@ bool ConnectSocketDirectly(const CService &addrConnect, const SOCKET& hSocket, i
         else
 #endif
         {
-            LogPrintf("connect() to %s failed: %s\n", addrConnect.ToString(), NetworkErrorString(WSAGetLastError()));
+            if (!IsInitialBlockDownload()) { // FIXME.SUGAR // IBD: do not print this connection log during IBD
+                LogPrintf("connect() to %s failed: %s\n", addrConnect.ToString(), NetworkErrorString(WSAGetLastError()));
+            }
             return false;
         }
     }

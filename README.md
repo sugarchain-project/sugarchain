@@ -22,7 +22,7 @@ information or see https://opensource.org/licenses/MIT.
 - Copyright (c) 2009-2018 The Bitcoin Core developers
 - Copyright (c) 2013-2019 Alexander Peslyak - Yespower 1.0.1
 - Copyright (c) 2016-2018 The Zcash developers - DigiShieldZEC
-- Copyright (c) 2018-2019 The Sugarchain Yumekawa developers
+- Copyright (c) 2018-2020 The Sugarchain Yumekawa developers
 
 
 Minimum Requirement

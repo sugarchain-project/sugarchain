@@ -1,5 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2017 The Bitcoin Core developers
+// Copyright (c) 2018-2020 The Sugarchain Yumekawa developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -116,6 +117,7 @@ const arith_uint256 maxUint = UintToArith256(uint256S("fffffffffffffffffffffffff
  *    timestamp before)
  * + Contains no strange transactions
  */
+
 class CMainParams : public CChainParams {
 public:
     CMainParams() {

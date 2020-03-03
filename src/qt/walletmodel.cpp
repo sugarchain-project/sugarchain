@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2017 The Bitcoin Core developers
+// Copyright (c) 2018-2020 The Sugarchain Yumekawa developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -132,9 +133,11 @@ void WalletModel::pollBalanceChanged()
         fForceCheckBalanceChanged = false;
 
         // BEGIN - DEBUG for checking height?
+        /*
         LogPrint(BCLog::QT, "GUI:   %d = height \n", chainActive.Height());
         LogPrint(BCLog::QT, "GUI:   %d = cached \n", cachedNumBlocks);
         LogPrint(BCLog::QT, "GUI: height - cached = %d \n", (int)(chainActive.Height() - cachedNumBlocks));
+        */
         // END - DEBUG for checking height?
 
         // FIXME.SUGAR // SURE?
@@ -142,8 +145,10 @@ void WalletModel::pollBalanceChanged()
         if(chainActive.Height() - cachedNumBlocks >= 12)
         {
             // BEGIN - DEBUG for checking polled?
+            /*
             LogPrint(BCLog::QT, "GUI: \033[0;31m  pollBalanceChanged:  \033[0m \n"); // red
             LogPrint(BCLog::QT, "GUI: height - cached = %d \n", (int)(chainActive.Height() - cachedNumBlocks));
+            */
             // END - DEBUG for checking polled?
 
             // Balance and number of transactions might have changed

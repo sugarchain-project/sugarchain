@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2017 The Bitcoin Core developers
+// Copyright (c) 2018-2020 The Sugarchain Yumekawa developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,7 +11,7 @@
 #include <serialize.h>
 #include <uint256.h>
 
-// yespower cache
+// yespower PoW cache
 #include <sync.h>
 
 /** Nodes collect new transactions into a block, hash them into a hash tree,

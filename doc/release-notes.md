@@ -1,6 +1,72 @@
-Yumekawa v0.16.3.24-bloomy
---------------------------
-Final Release
+## Yumekawa v0.16.3.30-moonlight
+- Version: Final Release
+- Date: 2020-03-02
+
+**Changes:**
+- Major Fix:
+  * add: Yespower cached PoW
+    [#22](https://github.com/sugarchain-project/sugarchain/pull/22)
+  * fix: enhanced Yespower cached PoW
+    [#61](https://github.com/sugarchain-project/sugarchain/pull/61)
+    [#69](https://github.com/sugarchain-project/sugarchain/pull/69)
+  * review: solardiz (original Yespower author) confirmed
+    [1](https://github.com/sugarchain-project/sugarchain/pull/22#issuecomment-568301895)
+    [2](https://github.com/sugarchain-project/sugarchain/pull/22#issuecomment-568306963)
+    [3](https://github.com/sugarchain-project/sugarchain/pull/22#issuecomment-568505605)
+    [4](https://github.com/sugarchain-project/sugarchain/issues/31#issuecomment-583833642)
+    [5](https://github.com/sugarchain-project/sugarchain/issues/32#issuecomment-568302174)
+  * fix: IBD: do not disconnect *whitelisted* peers during IBD
+    [#80](https://github.com/sugarchain-project/sugarchain/pull/80)
+  * remove: IBD: disable additional download during IBD, due to too much traffic
+    [#78](https://github.com/sugarchain-project/sugarchain/pull/78)
+  * add: chainwork, assumevalid, txdata, checkpoint and seeds
+    [#50](https://github.com/sugarchain-project/sugarchain/pull/50)
+    [#52](https://github.com/sugarchain-project/sugarchain/pull/52)
+- Minor Fix:
+  * fix: IBD: do not print this connection log during IBD
+    [#78](https://github.com/sugarchain-project/sugarchain/pull/78)
+  * add: bootstrap block height at 2601001
+    [#49](https://github.com/sugarchain-project/sugarchain/pull/49)
+  * add: kanon PGP
+    [#48](https://github.com/sugarchain-project/sugarchain/pull/48)
+  * fix: copyright
+    [#75](https://github.com/sugarchain-project/sugarchain/pull/75)
+    [#90](https://github.com/sugarchain-project/sugarchain/pull/90)
+    [#96](https://github.com/sugarchain-project/sugarchain/pull/96)
+  * fix: makeseeds.py version
+    [#89](https://github.com/sugarchain-project/sugarchain/pull/89)
+  * cleanup:
+    [#60](https://github.com/sugarchain-project/sugarchain/pull/60)
+    [#66](https://github.com/sugarchain-project/sugarchain/pull/66)
+    [#84](https://github.com/sugarchain-project/sugarchain/pull/84)
+    [#85](https://github.com/sugarchain-project/sugarchain/pull/85)
+    [#92](https://github.com/sugarchain-project/sugarchain/pull/92)
+
+**[Known Issues](https://github.com/sugarchain-project/sugarchain#known-issues)**
+
+**Credits:**
+
+Thanks to everyone who directly contributed to this release
+
+- solardiz (original Yespower author)
+- volbil
+- okoto-xyz
+- decryp2kanon
+- cryptozeny
+
+**Financial Support:**
+
+We give our utmost thanks to the donors. This donation will be used for our future development. See [donations](https://github.com/sugarchain-project/Donations/blob/master/README.md).
+
+- 唐伯虎
+- Rakutens
+- [happysensor.xyz](http://happysensor.xyz/)
+
+-----
+
+## Yumekawa v0.16.3.24-bloomy
+- Version: Final Release
+- Date: 2019-11-10
 
 **Changes:**
 - Major Fix:
@@ -18,10 +84,9 @@ Final Release
   * add: bootstrap linearize at height `650000`, `1043000`
   * fix: comment error (#6)
 
-**Known Issues:**  
-https://github.com/sugarchain-project/sugarchain#known-issues
+**[Known Issues](https://github.com/sugarchain-project/sugarchain#known-issues)**
 
-**Credits:**  
+**Credits:**
 Thanks to everyone who directly contributed to this release (alphabetical order)
 
 - AestheticSenpai
@@ -37,13 +102,13 @@ Thanks to everyone who directly contributed to this release (alphabetical order)
 - y-chan
 - zawy12
 
+-----
 
-----------------------
+## Yumekawa v0.16.3.21rc1
+- Version: The First Release
+- Date: 2019-08-24
 
-
-Yumekawa v0.16.3.21rc1
-----------------------
-Mainnet Launching: `2019/08/24 15:00 UTC`  
+Mainnet Launching: `2019/08/24 15:00 UTC`
 https://bitcointalk.org/index.php?topic=5177722.0
 
 **Changes:**
@@ -78,7 +143,7 @@ https://bitcointalk.org/index.php?topic=5177722.0
 - MAX_FUTURE_BLOCK_TIME `60` (was 7200)
 - QT delayed refresh balance [source](https://github.com/sugarchain-project/sugarchain/commit/72436c90b29844cf507895df053103f9b6840776#diff-2e3836af182cfb375329c3463ffd91f8)
 
-**Credits:**  
+**Credits:**
 Thanks to everyone who directly contributed to this release (alphabetical order)
 - cryptozeny
 - ilmango-doge

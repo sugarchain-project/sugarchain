@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2017 The Bitcoin Core developers
+// Copyright (c) 2018-2020 The Sugarchain Yumekawa developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -1396,6 +1397,9 @@ bool static ProcessHeadersMessage(CNode *pfrom, CConnman *connman, const std::ve
             nodestate->m_last_block_announcement = GetTime();
         }
 
+        // FIXME.SUGAR
+        // 120x bitcoin // IBD: disable additional download during IBD, due to too much traffic
+        /*
         if (nCount == MAX_HEADERS_RESULTS) {
             // Headers message had its maximum size; the peer may have more headers.
             // TODO: optimize: if pindexLast is an ancestor of chainActive.Tip or pindexBestHeader, continue
@@ -1403,6 +1407,7 @@ bool static ProcessHeadersMessage(CNode *pfrom, CConnman *connman, const std::ve
             LogPrint(BCLog::NET, "more getheaders (%d) to end to peer=%d (startheight:%d)\n", pindexLast->nHeight, pfrom->GetId(), pfrom->nStartingHeight);
             connman->PushMessage(pfrom, msgMaker.Make(NetMsgType::GETHEADERS, chainActive.GetLocator(pindexLast), uint256()));
         }
+        */
 
         bool fCanDirectFetch = CanDirectFetch(chainparams.GetConsensus());
         // If this set of headers is valid and ends in a block with at least as
@@ -3125,7 +3130,9 @@ void PeerLogicValidation::CheckForStaleTipAndEvictPeers(const Consensus::Params 
         // Check whether our tip is stale, and if so, allow using an extra
         // outbound peer
         if (TipMayBeStale(consensusParams)) {
-            LogPrintf("Potential stale tip detected, will try using extra outbound peer (last tip update: %d seconds ago)\n", time_in_seconds - g_last_tip_update);
+            if (!IsInitialBlockDownload()) { // FIXME.SUGAR // IBD: do not print this connection log during IBD
+                LogPrintf("Potential stale tip detected, will try using extra outbound peer (last tip update: %d seconds ago)\n", time_in_seconds - g_last_tip_update);
+            }
             connman->SetTryNewOutboundPeer(true);
         } else if (connman->GetTryNewOutboundPeer()) {
             connman->SetTryNewOutboundPeer(false);
@@ -3582,7 +3589,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
                     // Note: If all our peers are inbound, then we won't
                     // disconnect our sync peer for stalling; we have bigger
                     // problems if we can't get any outbound peers.
-                    if (!pto->fWhitelisted) {
+                    if (!pto->fWhitelisted && !IsInitialBlockDownload()) { // FIXME.SUGAR // IBD: do not disconnect *whitelisted* peers during IBD
                         LogPrintf("Timeout downloading headers from peer=%d, disconnecting\n", pto->GetId());
                         pto->fDisconnect = true;
                         return true;

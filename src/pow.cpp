@@ -1,5 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2017 The Bitcoin Core developers
+// Copyright (c) 2016-2018 The Zcash developers - DigiShieldZEC
+// Copyright (c) 2018-2020 The Sugarchain Yumekawa developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -61,10 +63,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         // Comparing to pindexLast->nHeight with >= because this function
         // returns the work required for the block after pindexLast.
         if (params.nPowAllowMinDifficultyBlocksAfterHeight != boost::none &&
-            pindexLast->nHeight >= params.nPowAllowMinDifficultyBlocksAfterHeight.get()) // FIXME.SUGAR
-            // BEGIN - ADD MAKE WARNING
-            #warning "Note: 'pindexLast->nHeight >= params.nPowAllowMinDifficultyBlocksAfterHeight.get()'  That's OK.";
-            // END - ADD MAKE WARNING
+            pindexLast->nHeight >= params.nPowAllowMinDifficultyBlocksAfterHeight.get())
         {
             // Special difficulty rule for testnet:
             // If the new block's timestamp is more than 6 * 2.5 minutes
