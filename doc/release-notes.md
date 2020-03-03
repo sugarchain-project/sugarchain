@@ -56,7 +56,7 @@ Thanks to everyone who directly contributed to this release
 
 **Financial Support:**
 
-We give our utmost thanks to the donors. This donation will be used for our future development. [Donations](https://github.com/sugarchain-project/Donations/blob/master/README.md).
+We give our utmost thanks to the donors. This donation will be used for our future development. See [donations](https://github.com/sugarchain-project/Donations/blob/master/README.md).
 
 - 唐伯虎
 - Rakutens
