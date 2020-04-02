@@ -53,11 +53,8 @@ unsigned int GetNextWorkRequired_BTC(const CBlockIndex* pindexLast, const CBlock
 // DigiShieldZEC
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
+    assert(pindexLast != nullptr);
     unsigned int nProofOfWorkLimit = UintToArith256(params.powLimit).GetCompact();
-
-    // Genesis block
-    if (pindexLast == nullptr) // FIXME.SUGAR // SURE? // <chain.cpp>
-        return nProofOfWorkLimit;
 
     {
         // Comparing to pindexLast->nHeight with >= because this function
