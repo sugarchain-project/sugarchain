@@ -351,7 +351,31 @@ int LogPrintStr(const std::string &str)
         ret = fwrite(strTimestamped.data(), 1, strTimestamped.size(), stdout);
         fflush(stdout);
     }
-    else if (fPrintToDebugLog)
+    else if (fPrintToDebugLog && !fPruneDebugLog) // do not pruning (original)
+    {
+        boost::call_once(&DebugPrintInit, debugPrintInitFlag);
+        boost::mutex::scoped_lock scoped_lock(*mutexDebugLog);
+
+        // buffer if we haven't opened the log yet
+        if (fileout == nullptr) {
+            assert(vMsgsBeforeOpenLog);
+            ret = strTimestamped.length();
+            vMsgsBeforeOpenLog->push_back(strTimestamped);
+        }
+        else
+        {
+            // reopen the log file, if requested
+            if (fReopenDebugLog) {
+                fReopenDebugLog = false;
+                fs::path pathDebug = GetDebugLogPath();
+                if (fsbridge::freopen(pathDebug,"a",fileout) != nullptr)
+                    setbuf(fileout, nullptr); // unbuffered
+            }
+
+            ret = FileWriteStr(strTimestamped, fileout);
+        }
+    }
+    else if (fPrintToDebugLog && fPruneDebugLog) // pruning
     {
         boost::call_once(&DebugPrintInit, debugPrintInitFlag);
         boost::mutex::scoped_lock scoped_lock(*mutexDebugLog);
@@ -376,16 +400,14 @@ int LogPrintStr(const std::string &str)
         }
 
         // prune the log file, if requested
-        if (fPruneDebugLog) {
-            PruneDebugFile();
+        PruneDebugFile();
 
-            // REMOVE THIS LOG
-            if (ret > 100) {
-                fs::path pathLog = GetDebugLogPath();
-                printf("***** fs::file_size(pathLog) = %lu *****\n", fs::file_size(pathLog));
-                // LogPrintf("***** fs::file_size(pathLog) = %d *****\n", fs::file_size(pathLog));
-            }
-        }
+        // REMOVE THIS LOG
+        if (ret > 100) {
+            fs::path pathLog = GetDebugLogPath();
+            printf("***** fs::file_size(pathLog) = %lu *****\n", fs::file_size(pathLog));
+            // LogPrintf("***** fs::file_size(pathLog) = %d *****\n", fs::file_size(pathLog));
+          }
     }
     return ret;
 }
