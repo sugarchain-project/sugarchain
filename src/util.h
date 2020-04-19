@@ -49,6 +49,7 @@ public:
 
 extern bool fPrintToConsole;
 extern bool fPrintToDebugLog;
+extern bool fPruneDebugLog;
 
 extern bool fLogTimestamps;
 extern bool fLogTimeMicros;

@@ -89,6 +89,7 @@ const char * const DEFAULT_DEBUGLOGFILE = "debug.log";
 ArgsManager gArgs;
 bool fPrintToConsole = false;
 bool fPrintToDebugLog = true;
+bool fPruneDebugLog = false;
 
 bool fLogTimestamps = DEFAULT_LOGTIMESTAMPS;
 bool fLogTimeMicros = DEFAULT_LOGTIMEMICROS;
@@ -373,17 +374,19 @@ int LogPrintStr(const std::string &str)
 
             ret = FileWriteStr(strTimestamped, fileout);
         }
+
+        // prune the log file, if requested
+        if (fPruneDebugLog) {
+            PruneDebugFile();
+
+            // REMOVE THIS LOG
+            if (ret > 100) {
+                fs::path pathLog = GetDebugLogPath();
+                printf("***** fs::file_size(pathLog) = %lu *****\n", fs::file_size(pathLog));
+                // LogPrintf("***** fs::file_size(pathLog) = %d *****\n", fs::file_size(pathLog));
+            }
+        }
     }
-
-    PruneDebugFile();
-
-    // REMOVE THIS LOG
-    if (ret > 100) {
-        fs::path pathLog = GetDebugLogPath();
-        printf("***** fs::file_size(pathLog) = %lu *****\n", fs::file_size(pathLog));
-        // LogPrintf("***** fs::file_size(pathLog) = %d *****\n", fs::file_size(pathLog));
-    }
-
     return ret;
 }
 
