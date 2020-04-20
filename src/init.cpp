@@ -475,7 +475,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-maxtxfee=<amt>", strprintf(_("Maximum total fees (in %s) to use in a single wallet transaction or raw transaction; setting this too low may abort large transactions (default: %s)"),
         CURRENCY_UNIT, FormatMoney(DEFAULT_TRANSACTION_MAXFEE)));
     strUsage += HelpMessageOpt("-printtoconsole", _("Send trace/debug info to console instead of debug.log file"));
-    strUsage += HelpMessageOpt("-prunedebuglogfile", _("Limit filesize of debug.log"));
+    strUsage += HelpMessageOpt("-prunedebuglogfile", _("Prune (limit) filesize of debug.log")); // FIXME.SUGAR // prune debug.log
     if (showDebug)
     {
         strUsage += HelpMessageOpt("-printpriority", strprintf("Log transaction fee per kB when mining blocks (default: %u)", DEFAULT_PRINTPRIORITY));
@@ -830,7 +830,7 @@ static std::string ResolveErrMsg(const char * const optname, const std::string& 
 void InitLogging()
 {
     fPrintToConsole = gArgs.GetBoolArg("-printtoconsole", false);
-    fPruneDebugLog = gArgs.GetBoolArg("-prunedebuglogfile", false);
+    fPruneDebugLog = gArgs.GetBoolArg("-prunedebuglogfile", false); // FIXME.SUGAR // prune debug.log
     fLogTimestamps = gArgs.GetBoolArg("-logtimestamps", DEFAULT_LOGTIMESTAMPS);
     fLogTimeMicros = gArgs.GetBoolArg("-logtimemicros", DEFAULT_LOGTIMEMICROS);
     fLogIPs = gArgs.GetBoolArg("-logips", DEFAULT_LOGIPS);

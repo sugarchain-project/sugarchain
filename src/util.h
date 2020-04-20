@@ -49,7 +49,7 @@ public:
 
 extern bool fPrintToConsole;
 extern bool fPrintToDebugLog;
-extern bool fPruneDebugLog;
+extern bool fPruneDebugLog; // FIXME.SUGAR // prune debug.log
 
 extern bool fLogTimestamps;
 extern bool fLogTimeMicros;

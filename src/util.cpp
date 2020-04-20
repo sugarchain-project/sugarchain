@@ -89,7 +89,7 @@ const char * const DEFAULT_DEBUGLOGFILE = "debug.log";
 ArgsManager gArgs;
 bool fPrintToConsole = false;
 bool fPrintToDebugLog = true;
-bool fPruneDebugLog = false;
+bool fPruneDebugLog = false; // FIXME.SUGAR // prune debug.log
 
 bool fLogTimestamps = DEFAULT_LOGTIMESTAMPS;
 bool fLogTimeMicros = DEFAULT_LOGTIMEMICROS;
@@ -351,7 +351,7 @@ int LogPrintStr(const std::string &str)
         ret = fwrite(strTimestamped.data(), 1, strTimestamped.size(), stdout);
         fflush(stdout);
     }
-    else if (fPrintToDebugLog && !fPruneDebugLog) // do not pruning (original)
+    else if (fPrintToDebugLog && !fPruneDebugLog) // do not pruning (original) // FIXME.SUGAR // prune debug.log
     {
         boost::call_once(&DebugPrintInit, debugPrintInitFlag);
         boost::mutex::scoped_lock scoped_lock(*mutexDebugLog);
@@ -375,7 +375,7 @@ int LogPrintStr(const std::string &str)
             ret = FileWriteStr(strTimestamped, fileout);
         }
     }
-    else if (fPrintToDebugLog && fPruneDebugLog) // pruning
+    else if (fPrintToDebugLog && fPruneDebugLog) // pruning // FIXME.SUGAR // prune debug.log
     {
         boost::call_once(&DebugPrintInit, debugPrintInitFlag);
         boost::mutex::scoped_lock scoped_lock(*mutexDebugLog);
@@ -399,7 +399,7 @@ int LogPrintStr(const std::string &str)
             ret = FileWriteStr(strTimestamped, fileout);
         }
 
-        // BEGIN - PRUNE LOG
+        // BEGIN - PRUNE DEBUG.LOG
         // If debug.log is over 1mb (1000*1000), shrink to 1k (1000)
         {
             // Amount of debug.log to save at end when shrinking (must fit in memory)
