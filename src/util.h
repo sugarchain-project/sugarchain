@@ -198,7 +198,6 @@ fs::path GetSpecialFolderPath(int nFolder, bool fCreate = true);
 fs::path GetDebugLogPath();
 bool OpenDebugLog();
 void ShrinkDebugFile();
-void PruneDebugFile();
 void runCommand(const std::string& strCommand);
 
 inline bool IsSwitchChar(char c)
