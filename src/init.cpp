@@ -476,6 +476,7 @@ std::string HelpMessage(HelpMessageMode mode)
         CURRENCY_UNIT, FormatMoney(DEFAULT_TRANSACTION_MAXFEE)));
     strUsage += HelpMessageOpt("-printtoconsole", _("Send trace/debug info to console instead of debug.log file"));
     strUsage += HelpMessageOpt("-prunedebuglogfile", _("Limit filesize of debug.log"));
+    strUsage += HelpMessageOpt("-disabledebuglogfile", _("Do not create debug.log file to save disk space")); // FIXME.SUGAR // add disable "debug.log" // REMOVE after BTC 0.17
     if (showDebug)
     {
         strUsage += HelpMessageOpt("-printpriority", strprintf("Log transaction fee per kB when mining blocks (default: %u)", DEFAULT_PRINTPRIORITY));
@@ -831,6 +832,7 @@ void InitLogging()
 {
     fPrintToConsole = gArgs.GetBoolArg("-printtoconsole", false);
     fPruneDebugLog = gArgs.GetBoolArg("-prunedebuglogfile", false);
+    fDisableDebugLog = gArgs.GetBoolArg("-disabledebuglogfile", false); // FIXME.SUGAR // add disable "debug.log" // REMOVE after BTC 0.17
     fLogTimestamps = gArgs.GetBoolArg("-logtimestamps", DEFAULT_LOGTIMESTAMPS);
     fLogTimeMicros = gArgs.GetBoolArg("-logtimemicros", DEFAULT_LOGTIMEMICROS);
     fLogIPs = gArgs.GetBoolArg("-logips", DEFAULT_LOGIPS);

@@ -88,6 +88,7 @@ const char * const DEFAULT_DEBUGLOGFILE = "debug.log";
 
 ArgsManager gArgs;
 bool fPrintToConsole = false;
+bool fDisableDebugLog = false; // FIXME.SUGAR // add disable "debug.log" // REMOVE after BTC 0.17
 bool fPrintToDebugLog = true;
 bool fPruneDebugLog = false;
 
@@ -352,6 +353,11 @@ int LogPrintStr(const std::string &str)
         fflush(stdout);
     }
     else if (fPrintToDebugLog && !fPruneDebugLog) // do not pruning (original)
+    else if (fDisableDebugLog) // FIXME.SUGAR // add disable "debug.log" // REMOVE after BTC 0.17
+    {
+        // do nothing
+    }
+    else if (fPrintToDebugLog)
     {
         boost::call_once(&DebugPrintInit, debugPrintInitFlag);
         boost::mutex::scoped_lock scoped_lock(*mutexDebugLog);
