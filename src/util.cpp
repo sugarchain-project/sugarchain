@@ -378,7 +378,7 @@ int LogPrintStr(const std::string &str)
         // BEGIN - PRUNE DEBUG.LOG
         // If debug.log is over 10 MB (10*1000*1000), shrink to 1 MB (1*1000*1000)
         // see "void ShrinkDebugFile()"
-        if (fPruneDebugLog)
+        if (fPrintToDebugLog && fPruneDebugLog && !fPrintToConsole)
         {
             {
                 // Amount of debug.log to save at end when shrinking (must fit in memory)
@@ -391,7 +391,7 @@ int LogPrintStr(const std::string &str)
                 if (file && fs::file_size(pathLog) > 10 * RECENT_DEBUG_HISTORY_SIZE) // was (11 * (RECENT_DEBUG_HISTORY_SIZE / 10)))
                 {
                     // BEGIN - DEBUG FILESIZE
-                    printf("%s ** DEBUG.LOG PRUNED ** %lu\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), fs::file_size(pathLog));
+                    printf("%s DEBUG.LOG PRUNED at %lu\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), fs::file_size(pathLog));
                     // END - DEBUG FILESIZE
 
                     // Restart the file with some of the end
