@@ -375,6 +375,7 @@ int LogPrintStr(const std::string &str)
             ret = FileWriteStr(strTimestamped, fileout);
         }
 
+        // FIXME.SUGAR // prune debug.log
         // BEGIN - PRUNE DEBUG.LOG
         // If debug.log is over 10 MB (10*1000*1000), shrink to 1 MB (1*1000*1000)
         // see "void ShrinkDebugFile()"
