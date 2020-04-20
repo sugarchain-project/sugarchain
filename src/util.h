@@ -48,6 +48,7 @@ public:
 };
 
 extern bool fPrintToConsole;
+extern bool fDisableDebugLog; // FIXME.SUGAR // add disable "debug.log" // REMOVE after BTC 0.17
 extern bool fPrintToDebugLog;
 
 extern bool fLogTimestamps;
