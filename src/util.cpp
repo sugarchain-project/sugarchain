@@ -400,19 +400,19 @@ int LogPrintStr(const std::string &str)
         }
 
         // BEGIN - PRUNE DEBUG.LOG
-        // If debug.log is over 1mb (1000*1000), shrink to 1k (1000)
+        // If debug.log is over 10 MB (10*1000*1000), shrink to 1 MB (1*1000*1000)
         {
             // Amount of debug.log to save at end when shrinking (must fit in memory)
-            constexpr size_t RECENT_DEBUG_HISTORY_SIZE = 1000; // was (10 * 1000000)
+            constexpr size_t RECENT_DEBUG_HISTORY_SIZE = 1*1000*1000; // was (10 * 1000000)
             // Scroll debug.log if it's getting too big
             fs::path pathLog = GetDebugLogPath();
             FILE* file = fsbridge::fopen(pathLog, "r");
-            // If debug.log file is more than 1000% bigger the RECENT_DEBUG_HISTORY_SIZE
+            // If debug.log file is more than 10x bigger the RECENT_DEBUG_HISTORY_SIZE
             // trim it down by saving only the last RECENT_DEBUG_HISTORY_SIZE bytes
-            if (file && fs::file_size(pathLog) > 1000.0 * RECENT_DEBUG_HISTORY_SIZE) // was (11 * (RECENT_DEBUG_HISTORY_SIZE / 10)))
+            if (file && fs::file_size(pathLog) > 10 * RECENT_DEBUG_HISTORY_SIZE) // was (11 * (RECENT_DEBUG_HISTORY_SIZE / 10)))
             {
                 // BEGIN - DEBUG FILESIZE
-                printf("*** PRUNED = %lu ***\n", fs::file_size(pathLog));
+                printf("%s ** DEBUG.LOG PRUNED ** %lu\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), fs::file_size(pathLog));
                 // END - DEBUG FILESIZE
 
                 // Restart the file with some of the end
