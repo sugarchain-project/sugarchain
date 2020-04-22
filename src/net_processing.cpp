@@ -586,8 +586,10 @@ void PeerLogicValidation::FinalizeNode(NodeId nodeid, bool& fUpdateConnectionTim
     CNodeState *state = State(nodeid);
     assert(state != nullptr);
 
-    if (state->fSyncStarted)
+    if (state->fSyncStarted) {
         nSyncStarted--;
+        printf("%s nSyncStarted--=%d\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), nSyncStarted);
+    }
 
     if (state->nMisbehavior == 0 && state->fCurrentlyConnected) {
         fUpdateConnectionTime = true;
@@ -3249,6 +3251,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
         if (!state.fSyncStarted && !pto->fClient && !fImporting && !fReindex) {
             // Allow request headers from up to 4 peers, unless we're close to today.
             if ((nSyncStarted < 4 && fFetch) || pindexBestHeader->GetBlockTime() > GetAdjustedTime() - 24 * 60 * 60) {
+                printf("%s nSyncStarted=%d\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), nSyncStarted);
                 state.fSyncStarted = true;
                 state.nHeadersSyncTimeout = GetTimeMicros() + HEADERS_DOWNLOAD_TIMEOUT_BASE + HEADERS_DOWNLOAD_TIMEOUT_PER_HEADER * (GetAdjustedTime() - pindexBestHeader->GetBlockTime())/(consensusParams.nPowTargetSpacing);
                 nSyncStarted++;
@@ -3263,6 +3266,14 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
                 if (pindexStart->pprev)
                     pindexStart = pindexStart->pprev;
                 LogPrint(BCLog::NET, "initial getheaders (%d) to peer=%d (startheight:%d)\n", pindexStart->nHeight, pto->GetId(), pto->nStartingHeight);
+                // BEGIN - LOG
+                {
+                    int first = pindexStart->nHeight;
+                    int second = pto->GetId();
+                    int third = pto->nStartingHeight;
+                    printf("%s initial getheaders (%d) to peer=%d (startheight:%d)\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), first, second, third);
+                }
+                // END - LOG
                 connman->PushMessage(pto, msgMaker.Make(NetMsgType::GETHEADERS, chainActive.GetLocator(pindexStart), uint256()));
             }
         }
@@ -3602,6 +3613,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
                         // this peer (eventually).
                         state.fSyncStarted = false;
                         nSyncStarted--;
+                        printf("%s nSyncStarted--=%d\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), nSyncStarted);
                         state.nHeadersSyncTimeout = 0;
                     }
                 }
