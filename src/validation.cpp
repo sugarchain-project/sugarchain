@@ -3393,9 +3393,12 @@ bool ProcessNewBlockHeaders(const std::vector<CBlockHeader>& headers, CValidatio
     }
     NotifyHeaderTip();
 
-    if (IsInitialBlockDownload() && ppindex && *ppindex)
+    // FIXME.SUGAR
+    // display blockheader count during IBD
+    if (IsInitialBlockDownload() && ppindex && *ppindex) {
         LogPrintf("download=%d(%.1f%%)\n",
                   (*ppindex)->nHeight, 100.0/((*ppindex)->nHeight+(GetAdjustedTime() - (*ppindex)->GetBlockTime()) / Params().GetConsensus().nPowTargetSpacing) * (*ppindex)->nHeight);
+    }
 
     return true;
 }
