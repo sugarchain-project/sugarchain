@@ -3396,7 +3396,7 @@ bool ProcessNewBlockHeaders(const std::vector<CBlockHeader>& headers, CValidatio
     // FIXME.SUGAR
     // display blockheader count during IBD
     if (IsInitialBlockDownload() && ppindex && *ppindex) {
-        LogPrintf("download=%d(%.1f%%)\n",
+        LogPrintf("header=%d(%.1f%%)\n",
                   (*ppindex)->nHeight, 100.0/((*ppindex)->nHeight+(GetAdjustedTime() - (*ppindex)->GetBlockTime()) / Params().GetConsensus().nPowTargetSpacing) * (*ppindex)->nHeight);
     }
 
