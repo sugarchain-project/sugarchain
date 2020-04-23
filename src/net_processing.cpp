@@ -588,7 +588,7 @@ void PeerLogicValidation::FinalizeNode(NodeId nodeid, bool& fUpdateConnectionTim
 
     if (state->fSyncStarted) {
         nSyncStarted--;
-        printf("%s nSyncStarted--=%d\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), nSyncStarted);
+        printf("%s (fSyncStarted) nSyncStarted--=%d\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), nSyncStarted);
     }
 
     if (state->nMisbehavior == 0 && state->fCurrentlyConnected) {
@@ -3613,7 +3613,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
                         // this peer (eventually).
                         state.fSyncStarted = false;
                         nSyncStarted--;
-                        printf("%s nSyncStarted--=%d\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), nSyncStarted);
+                        printf("%s (Timeout) nSyncStarted--=%d\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), nSyncStarted);
                         state.nHeadersSyncTimeout = 0;
                     }
                 }
