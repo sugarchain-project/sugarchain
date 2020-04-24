@@ -3596,7 +3596,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
         if (state.fSyncStarted && state.nHeadersSyncTimeout < std::numeric_limits<int64_t>::max()) {
             // Detect whether this is a stalling initial-headers-sync peer
             if (pindexBestHeader->GetBlockTime() <= GetAdjustedTime() - 24*60*60) {
-                if (nNow > state.nHeadersSyncTimeout && nSyncStarted == 2 && (nPreferredDownload - state.fPreferredDownload >= 2)) {
+                if (nNow > state.nHeadersSyncTimeout && nSyncStarted >= 2 && (nPreferredDownload - state.fPreferredDownload >= 2)) {
                     {
                         int first = pindexBestHeader->GetBlockTime();
                         int second = GetAdjustedTime() - 24*60*60;
