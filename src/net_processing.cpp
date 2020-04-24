@@ -286,6 +286,7 @@ void UpdatePreferredDownload(CNode* node, CNodeState* state)
     state->fPreferredDownload = (!node->fInbound || node->fWhitelisted) && !node->fOneShot && !node->fClient;
 
     nPreferredDownload += state->fPreferredDownload;
+    printf("%s nPreferredDownload++=%d\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), nPreferredDownload);
 }
 
 void PushNodeVersion(CNode *pnode, CConnman* connman, int64_t nTime)
@@ -600,6 +601,7 @@ void PeerLogicValidation::FinalizeNode(NodeId nodeid, bool& fUpdateConnectionTim
     }
     EraseOrphansFor(nodeid);
     nPreferredDownload -= state->fPreferredDownload;
+    printf("%s (PeerLogicValidation) nPreferredDownload--=%d\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), nPreferredDownload);
     nPeersWithValidatedDownloads -= (state->nBlocksInFlightValidHeaders != 0);
     assert(nPeersWithValidatedDownloads >= 0);
     g_outbound_peers_with_protect_from_disconnect -= state->m_chain_sync.m_protect;
@@ -3595,6 +3597,11 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
             // Detect whether this is a stalling initial-headers-sync peer
             if (pindexBestHeader->GetBlockTime() <= GetAdjustedTime() - 24*60*60) {
                 if (nNow > state.nHeadersSyncTimeout && nSyncStarted == 2 && (nPreferredDownload - state.fPreferredDownload >= 2)) {
+                    {
+                        int first = pindexBestHeader->GetBlockTime();
+                        int second = GetAdjustedTime() - 24*60*60;
+                        printf("%s Stalling IBD? %d <= %d\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), first, second);
+                    }
                     // Disconnect a (non-whitelisted) peer if it is our only sync peer,
                     // and we have others we could be using instead.
                     // Note: If all our peers are inbound, then we won't
@@ -3618,6 +3625,11 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
                     }
                 }
             } else {
+                {
+                    int first = pindexBestHeader->GetBlockTime();
+                    int second = GetAdjustedTime() - 24*60*60;
+                    printf("%s Stalling IBD? %d <= %d\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), first, second);
+                }
                 // After we've caught up once, reset the timeout so we can't trigger
                 // disconnect later.
                 state.nHeadersSyncTimeout = std::numeric_limits<int64_t>::max();
