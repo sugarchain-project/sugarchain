@@ -2734,6 +2734,8 @@ bool CChainState::ActivateBestChain(CValidationState &state, const CChainParams&
     if (!isOkToGoFast()) {
         printf("%s (ActivateBestChain)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
         CheckBlockIndex(chainparams.GetConsensus());
+    } else if (isOkToGoFast()) {
+        printf("%s NOCHECK(ActivateBestChain)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
     }
 
     // Write changes periodically to disk, after relay.
@@ -3387,6 +3389,8 @@ bool CChainState::AcceptBlockHeader(const CBlockHeader& block, CValidationState&
     if (!isOkToGoFast()) {
         printf("%s (AcceptBlockHeader)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
         CheckBlockIndex(chainparams.GetConsensus());
+    } else if (isOkToGoFast()) {
+        printf("%s NOCHECK(AcceptBlockHeader)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
     }
 
     return true;
@@ -3512,6 +3516,8 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
     if (!isOkToGoFast()) {
         printf("%s (AcceptBlock)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
         CheckBlockIndex(chainparams.GetConsensus());
+    } else if (isOkToGoFast()) {
+        printf("%s NOCHECK(AcceptBlock)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
     }
 
     return true;
