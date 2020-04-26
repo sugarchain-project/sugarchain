@@ -2730,8 +2730,10 @@ bool CChainState::ActivateBestChain(CValidationState &state, const CChainParams&
         if (ShutdownRequested())
             break;
     } while (pindexNewTip != pindexMostWork);
-    if (!isOkToGoFast())
+    if (!isOkToGoFast()) {
+        printf("%s (ActivateBestChain)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
         CheckBlockIndex(chainparams.GetConsensus());
+    }
 
     // Write changes periodically to disk, after relay.
     if (!FlushStateToDisk(chainparams, state, FLUSH_STATE_PERIODIC)) {
@@ -3381,8 +3383,10 @@ bool CChainState::AcceptBlockHeader(const CBlockHeader& block, CValidationState&
     if (ppindex)
         *ppindex = pindex;
 
-    if (!isOkToGoFast())
+    if (!isOkToGoFast()) {
+        printf("%s (AcceptBlockHeader)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
         CheckBlockIndex(chainparams.GetConsensus());
+    }
 
     return true;
 }
@@ -3504,8 +3508,10 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
     if (fCheckForPruning)
         FlushStateToDisk(chainparams, state, FLUSH_STATE_NONE); // we just allocated more disk space for block files
 
-    if (!isOkToGoFast())
+    if (!isOkToGoFast()) {
+        printf("%s (AcceptBlock)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
         CheckBlockIndex(chainparams.GetConsensus());
+    }
 
     return true;
 }
@@ -4217,6 +4223,7 @@ bool CChainState::RewindBlockIndex(const CChainParams& params)
         // no tip due to chainActive being empty!
         PruneBlockIndexCandidates();
 
+        printf("%s (RewindBlockIndex)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
         CheckBlockIndex(params.GetConsensus());
     }
 
