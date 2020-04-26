@@ -4219,7 +4219,6 @@ bool CChainState::RewindBlockIndex(const CChainParams& params)
         // no tip due to chainActive being empty!
         PruneBlockIndexCandidates();
 
-        printf("%s (RewindBlockIndex)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
         CheckBlockIndex(params.GetConsensus());
     }
 
