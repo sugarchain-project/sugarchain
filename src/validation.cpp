@@ -3380,10 +3380,7 @@ bool CChainState::AcceptBlockHeader(const CBlockHeader& block, CValidationState&
     if (ppindex)
         *ppindex = pindex;
 
-    if (!isOkToGoFast()) {
-        printf("%s (AcceptBlockHeader)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
-        CheckBlockIndex(chainparams.GetConsensus());
-    }
+    CheckBlockIndex(chainparams.GetConsensus());
 
     return true;
 }
