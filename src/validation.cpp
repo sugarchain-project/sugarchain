@@ -2730,6 +2730,7 @@ bool CChainState::ActivateBestChain(CValidationState &state, const CChainParams&
         if (ShutdownRequested())
             break;
     } while (pindexNewTip != pindexMostWork);
+
     if (!isOkToGoFast()) {
         printf("%s (ActivateBestChain)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
         CheckBlockIndex(chainparams.GetConsensus());
