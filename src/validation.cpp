@@ -3118,6 +3118,8 @@ bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::P
     if (fCheckPOW && fCheckMerkleRoot)
         block.fChecked = true;
 
+    printf("%s CheckBlock\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
+
     return true;
 }
 
