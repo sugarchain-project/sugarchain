@@ -3045,6 +3045,7 @@ static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state,
 {
     // Skip pow test until IBD is finished
     if (!IsInitialBlockDownload()) {
+        printf("%s SKIP CheckBlockHeader\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
         return true;
     }
 
