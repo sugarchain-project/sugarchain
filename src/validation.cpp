@@ -3383,8 +3383,6 @@ bool CChainState::AcceptBlockHeader(const CBlockHeader& block, CValidationState&
     if (!isOkToGoFast()) {
         printf("%s (AcceptBlockHeader)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
         CheckBlockIndex(chainparams.GetConsensus());
-    } else if (isOkToGoFast()) {
-        printf("%s NOCHECK(AcceptBlockHeader)CheckBlockIndex\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
     }
 
     return true;
