@@ -3334,9 +3334,6 @@ bool CChainState::AcceptBlockHeader(const CBlockHeader& block, CValidationState&
             return true;
         }
 
-        if (!CheckBlockHeader(block, state, chainparams.GetConsensus()))
-            return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
-
         // Get prev block index
         CBlockIndex* pindexPrev = nullptr;
         BlockMap::iterator mi = mapBlockIndex.find(block.hashPrevBlock);
@@ -3424,6 +3421,11 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
 
     CBlockIndex *pindexDummy = nullptr;
     CBlockIndex *&pindex = ppindex ? *ppindex : pindexDummy;
+
+    // came from AcceptBlockHeader
+    uint256 hash = block.GetHash();
+    if (!CheckBlockHeader(block, state, chainparams.GetConsensus()))
+        return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
 
     if (!AcceptBlockHeader(block, state, chainparams, &pindex))
         return false;
