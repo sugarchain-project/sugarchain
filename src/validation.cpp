@@ -3425,10 +3425,11 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
     CBlockIndex *&pindex = ppindex ? *ppindex : pindexDummy;
 
     // came from AcceptBlockHeader
-    uint256 hash = block.GetHash();
     printf("%s AcceptBlock\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
-    if (!CheckBlockHeader(block, state, chainparams.GetConsensus()))
+    if (!CheckBlockHeader(block, state, chainparams.GetConsensus())) {
+        uint256 hash = block.GetHash();
         return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
+    }
 
     if (!AcceptBlockHeader(block, state, chainparams, &pindex))
         return false;
