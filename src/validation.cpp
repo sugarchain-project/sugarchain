@@ -3336,9 +3336,12 @@ bool CChainState::AcceptBlockHeader(const CBlockHeader& block, CValidationState&
             return true;
         }
 
-        // TEST
-        if (!CheckBlockHeader(block, state, chainparams.GetConsensus()))
-            return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
+        // moved to AcceptBlock (from here AcceptBlockHeader)
+        // Don't check PoW when its downloading, due to bottle neck at first stage, but do check after when syncing.
+        // BEGIN - MOVE
+        // if (!CheckBlockHeader(block, state, chainparams.GetConsensus()))
+        //     return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
+        // END - MOVE
 
         // Get prev block index
         CBlockIndex* pindexPrev = nullptr;
