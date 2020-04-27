@@ -3336,6 +3336,7 @@ bool CChainState::AcceptBlockHeader(const CBlockHeader& block, CValidationState&
 
         // Skip check header during IBD
         if (!IsInitialBlockDownload()) {
+            printf("%s (!IsInitialBlockDownload)AcceptBlockHeader\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
             if (!CheckBlockHeader(block, state, chainparams.GetConsensus()))
                 return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
         }
