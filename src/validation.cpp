@@ -3047,6 +3047,7 @@ static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state,
     if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash_cached(), block.nBits, consensusParams))
         return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
 
+    // FIXME.SUGAR // Move PoW check
     printf("%s CheckBlockH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
 
     return true;
@@ -3336,6 +3337,7 @@ bool CChainState::AcceptBlockHeader(const CBlockHeader& block, CValidationState&
             return true;
         }
 
+        // FIXME.SUGAR // Move PoW check
         // moved to AcceptBlock (from here AcceptBlockHeader)
         // Don't check PoW when its downloading, due to bottle neck at first stage, but do check after when syncing.
         // BEGIN - MOVE
@@ -3431,7 +3433,8 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
     CBlockIndex *pindexDummy = nullptr;
     CBlockIndex *&pindex = ppindex ? *ppindex : pindexDummy;
 
-    // came from AcceptBlockHeader
+    // FIXME.SUGAR // Move PoW check
+    // came from AcceptBlockHeader (to here AcceptBlock)
     if (!CheckBlockHeader(block, state, chainparams.GetConsensus())) {
         uint256 hash = block.GetHash();
         return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
