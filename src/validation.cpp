@@ -3044,8 +3044,24 @@ static bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, 
 static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
 {
     // Check proof of work matches claimed amount
-    if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash_cached(), block.nBits, consensusParams))
+    // if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash_cached(), block.nBits, consensusParams))
+    //     return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
+
+    // FAKE HEADER POW TEST
+    // uint256 fake_target_1 = uint256S("0x7d5eaec2dbb75f99feadfa524c78b7cabc1d8c8204f79d4f3a83381b811b0adc"); // block 0
+    uint256 fake_target_2 = uint256S("0xce8a0df339f2edceb99c5325c95b2b0ae752e29de1193f6113549f0e1cae7c91"); // block 1
+    uint256 fake_target_3 = uint256S("0x72e36f3fcdf98d3625dfe03f28a914c513b913231e479d53fc22e5e46cf5b585"); // block 17
+    uint256 fake_target_4 = uint256S("0xf6f565e58812f89d8ea2aca296b9934ea82918f5bd443312af90b0be1465dbd1"); // block 510
+    uint256 fake_replacement = uint256S("0x7777777777777777777777777777777777777777777777777777777777777777");
+    if (block.GetHash() == fake_target_2 || block.GetHash() == fake_target_3 || block.GetHash() == fake_target_4) {
+        // int nHeight = pindexPrev->nHeight + 1;
+        printf("%s INPUT FAKE HEADER! %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
+        if (fCheckPOW && !CheckProofOfWork(fake_replacement, block.nBits, consensusParams)) {
+            return state.DoS(50, false, REJECT_INVALID, "high-hash (fake)", false, "proof of work failed (fake)");
+        }
+    } else if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash_cached(), block.nBits, consensusParams)) {
         return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
+    }
 
     // FIXME.SUGAR // Move PoW check
     printf("%s CheckBlockH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
@@ -3345,6 +3361,14 @@ bool CChainState::AcceptBlockHeader(const CBlockHeader& block, CValidationState&
         //     return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
         // END - MOVE
 
+        // FIXME.SUGAR // Move PoW check
+        // came from AcceptBlockHeader (to here AcceptBlock)
+        if (!CheckBlockHeader(block, state, chainparams.GetConsensus())) {
+            // uint256 hash = block.GetHash();
+            return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
+        }
+        printf("%s AcceptBlock=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
+
         // Get prev block index
         CBlockIndex* pindexPrev = nullptr;
         BlockMap::iterator mi = mapBlockIndex.find(block.hashPrevBlock);
@@ -3435,11 +3459,11 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
 
     // FIXME.SUGAR // Move PoW check
     // came from AcceptBlockHeader (to here AcceptBlock)
-    if (!CheckBlockHeader(block, state, chainparams.GetConsensus())) {
-        uint256 hash = block.GetHash();
-        return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
-    }
-    printf("%s AcceptBlock=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
+    // if (!CheckBlockHeader(block, state, chainparams.GetConsensus())) {
+    //     uint256 hash = block.GetHash();
+    //     return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
+    // }
+    // printf("%s AcceptBlock=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
 
     if (!AcceptBlockHeader(block, state, chainparams, &pindex))
         return false;
