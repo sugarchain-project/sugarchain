@@ -3437,7 +3437,8 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
     // came from AcceptBlockHeader (to here AcceptBlock)
     if (!CheckBlockHeader(block, state, chainparams.GetConsensus())) {
         uint256 hash = block.GetHash();
-        return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
+        error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
+        return false;
     }
     printf("%s AcceptBlock=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
 
