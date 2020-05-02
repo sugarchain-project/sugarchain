@@ -65,6 +65,7 @@ std::shared_ptr<CBlock> Block(const uint256& prev_hash)
     pblock->vtx[0] = MakeTransactionRef(std::move(txCoinbase));
 
     return pblock;
+    printf("%s pblock=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), pblock->hashPrevBlock.ToString().c_str());
 }
 
 std::shared_ptr<CBlock> FinalizeBlock(std::shared_ptr<CBlock> pblock)
@@ -100,85 +101,38 @@ const std::shared_ptr<const CBlock> BadBlock(const uint256& prev_hash)
     return ret;
 }
 
-void BuildChain(const uint256& root, int height, const unsigned int invalid_rate, const unsigned int branch_rate, const unsigned int max_size, std::vector<std::shared_ptr<const CBlock>>& blocks)
+void BuildChain(const uint256& root, int height, const unsigned int fake_rate, const unsigned int max_size, std::vector<std::shared_ptr<const CBlock>>& blocks)
 {
+    printf("%s %lu/%u (%d) %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), blocks.size(), max_size, height, root.ToString().c_str());
+    // printf("%s blocks.size()=%lu/%u\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), blocks.size(), max_size);
+
     if (height <= 0 || blocks.size() >= max_size) return;
 
-    bool gen_invalid = GetRand(100) < invalid_rate;
-    bool gen_fork = GetRand(100) < branch_rate;
+    bool gen_fakeheader = GetRand(100) < fake_rate;
 
-    const std::shared_ptr<const CBlock> pblock = gen_invalid ? BadBlock(root) : GoodBlock(root);
-    blocks.push_back(pblock);
-    if (!gen_invalid) {
-        BuildChain(pblock->GetHash(), height - 1, invalid_rate, branch_rate, max_size, blocks);
-    }
-
-    if (gen_fork) {
-        blocks.push_back(GoodBlock(root));
-        BuildChain(blocks.back()->GetHash(), height - 1, invalid_rate, branch_rate, max_size, blocks);
+    if (gen_fakeheader) {
+        uint256 fake = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        // BuildChain(fake, height - 1, invalid_rate, branch_rate, fake_rate, max_size, blocks);
+        const std::shared_ptr<const CBlock> pblock = GoodBlock(root);
+        blocks.push_back(pblock);
+        BuildChain(fake, height - 1, fake_rate, max_size, blocks);
+    } else {
+        const std::shared_ptr<const CBlock> pblock = GoodBlock(root);
+        blocks.push_back(pblock);
+        BuildChain(pblock->GetHash(), height - 1, fake_rate, max_size, blocks);
     }
 }
 
 BOOST_AUTO_TEST_CASE(processnewblock_signals_ordering)
 {
-    // build a large-ish chain that's likely to have some forks
+    unsigned int amount = 10;
     std::vector<std::shared_ptr<const CBlock>> blocks;
-    while (blocks.size() < 50) {
+    while (blocks.size() < amount) {
         blocks.clear();
-        BuildChain(Params().GenesisBlock().GetHash(), 100, 15, 10, 500, blocks);
+        // BuildChain(Params().GenesisBlock().GetHash(), 100, 15, 10, 500, blocks);
+        int fake_percent = 50;
+        BuildChain(Params().GenesisBlock().GetHash(), amount, fake_percent, amount, blocks);
     }
-
-    bool ignored;
-    CValidationState state;
-    std::vector<CBlockHeader> headers;
-    std::transform(blocks.begin(), blocks.end(), std::back_inserter(headers), [](std::shared_ptr<const CBlock> b) { return b->GetBlockHeader(); });
-
-    // Process all the headers so we understand the toplogy of the chain
-    BOOST_CHECK(ProcessNewBlockHeaders(headers, state, Params()));
-
-    // Connect the genesis block and drain any outstanding events
-    ProcessNewBlock(Params(), std::make_shared<CBlock>(Params().GenesisBlock()), true, &ignored);
-    SyncWithValidationInterfaceQueue();
-
-    // subscribe to events (this subscriber will validate event ordering)
-    const CBlockIndex* initial_tip = nullptr;
-    {
-        LOCK(cs_main);
-        initial_tip = chainActive.Tip();
-    }
-    TestSubscriber sub(initial_tip->GetBlockHash());
-    RegisterValidationInterface(&sub);
-
-    // create a bunch of threads that repeatedly process a block generated above at random
-    // this will create parallelism and randomness inside validation - the ValidationInterface
-    // will subscribe to events generated during block validation and assert on ordering invariance
-    boost::thread_group threads;
-    for (int i = 0; i < 10; i++) {
-        threads.create_thread([&blocks]() {
-            bool ignored;
-            for (int i = 0; i < 1000; i++) {
-                auto block = blocks[GetRand(blocks.size() - 1)];
-                ProcessNewBlock(Params(), block, true, &ignored);
-            }
-
-            // to make sure that eventually we process the full chain - do it here
-            for (auto block : blocks) {
-                if (block->vtx.size() == 1) {
-                    bool processed = ProcessNewBlock(Params(), block, true, &ignored);
-                    assert(processed);
-                }
-            }
-        });
-    }
-
-    threads.join_all();
-    while (GetMainSignals().CallbacksPending() > 0) {
-        MilliSleep(100);
-    }
-
-    UnregisterValidationInterface(&sub);
-
-    BOOST_CHECK_EQUAL(sub.m_expected_tip, chainActive.Tip()->GetBlockHash());
 }
 
 BOOST_AUTO_TEST_SUITE_END()
