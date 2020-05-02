@@ -11,6 +11,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <validation.cpp> // FIXME.SUGAR // Move PoW check
+
 std::vector<std::pair<uint256, CTransactionRef>> extra_txn;
 
 struct RegtestingSetup : public TestingSetup {
@@ -314,6 +316,14 @@ BOOST_AUTO_TEST_CASE(EmptyBlockRoundTripTest)
         BOOST_CHECK_EQUAL(block.GetPoWHash().ToString(), block2.GetPoWHash().ToString());
         BOOST_CHECK_EQUAL(block.hashMerkleRoot.ToString(), BlockMerkleRoot(block2, &mutated).ToString());
         BOOST_CHECK(!mutated);
+
+        // FIXME.SUGAR // Move PoW check
+        // BEGIN - CheckBlockHeader
+        CValidationState state;
+        BOOST_CHECK(CheckBlockHeader(block, state, Params().GetConsensus()) == true);
+        CValidationState state2;
+        BOOST_CHECK(CheckBlockHeader(block2, state2, Params().GetConsensus()) == true);
+        // END - CheckBlockHeader
     }
 }
 
