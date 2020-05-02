@@ -86,6 +86,7 @@ BITCOIN_TESTS =\
   test/uint256_tests.cpp \
   test/util_tests.cpp \
   test/validation_block_tests.cpp \
+  test/validation_fakeheader_tests.cpp \
   test/versionbits_tests.cpp
 
 if ENABLE_WALLET
