@@ -3048,7 +3048,7 @@ static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state,
         return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
 
     // FIXME.SUGAR // Move PoW check
-    printf("%s CheckBlockH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
+    // printf("%s CheckBlockH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
 
     return true;
 }
@@ -3440,7 +3440,7 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, CVali
         error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
         return false;
     }
-    printf("%s AcceptBlock=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
+    // printf("%s AcceptBlock=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
 
     if (!AcceptBlockHeader(block, state, chainparams, &pindex))
         return false;
