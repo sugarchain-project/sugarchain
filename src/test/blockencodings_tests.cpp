@@ -313,39 +313,6 @@ BOOST_AUTO_TEST_CASE(EmptyBlockRoundTripTest)
         BOOST_CHECK(partialBlock.FillBlock(block2, vtx_missing) == READ_STATUS_OK);
         BOOST_CHECK_EQUAL(block.GetPoWHash().ToString(), block2.GetPoWHash().ToString());
         BOOST_CHECK_EQUAL(block.hashMerkleRoot.ToString(), BlockMerkleRoot(block2, &mutated).ToString());
-
-        // BEGIN - FIXME.SUGAR // Move PoW check
-        // CheckProofOfWork is meaningless mostly...
-        uint256 fake_target_1 = uint256S("0xce8a0df339f2edceb99c5325c95b2b0ae752e29de1193f6113549f0e1cae7c91"); // block 0
-        uint256 fake_target_2 = uint256S("0x71ce2b072f7dcfbc9c15d8a1125e14ef001bc54ff4e041e7c71b229515150064"); // block 5000
-        BOOST_CHECK(
-            CheckProofOfWork(fake_target_1, block.nBits, Params().GetConsensus())
-            ==
-            CheckProofOfWork(fake_target_2, block2.nBits, Params().GetConsensus())
-        );
-        uint256 fake_target_3 = uint256S("0x3794c0ea85062e7ba0f2d0052f73bf7dca3e4727133acc591b77dd96a4bdc4bf"); // block 1000
-        uint256 fake_target_4 = uint256S("0xaad89209b3faa50d28e7a07b7677239c8b8aa8a539e72e35d9431964f3ceaeb2"); // block 30000
-        BOOST_CHECK_EQUAL(
-            CheckProofOfWork(fake_target_3, 0x1f2923bd, Params().GetConsensus()),
-            CheckProofOfWork(fake_target_4, 0x1e028400, Params().GetConsensus())
-        );
-        uint256 fake_target_5 = uint256S("0x00"); // zero
-        uint256 fake_target_6 = uint256S("0xff"); // test
-        BOOST_CHECK(
-            CheckProofOfWork(fake_target_5, block.nBits, Params().GetConsensus())
-            ==
-            CheckProofOfWork(fake_target_6, block2.nBits, Params().GetConsensus())
-        );
-        // only working in this case...
-        uint256 fake_target_7 = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // full
-        uint256 fake_target_8 = uint256S("0x000000000000000000000000000000000000000000000000000000000000000000"); // zero
-        BOOST_CHECK(
-            CheckProofOfWork(fake_target_7, block.nBits, Params().GetConsensus())
-            !=
-            CheckProofOfWork(fake_target_8, block2.nBits, Params().GetConsensus())
-        );
-        // END - FIXME.SUGAR // Move PoW check
-
         BOOST_CHECK(!mutated);
     }
 }
