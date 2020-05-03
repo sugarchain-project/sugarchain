@@ -80,31 +80,14 @@ std::shared_ptr<CBlock> FinalizeBlock(std::shared_ptr<CBlock> pblock)
 }
 
 // construct a valid block
-const std::shared_ptr<const CBlock> GoodBlock(const uint256& prev_hash)
+const std::shared_ptr<const CBlock> MakeBlock(const uint256& prev_hash)
 {
     return FinalizeBlock(Block(prev_hash));
-}
-
-// construct an invalid block (but with a valid header)
-const std::shared_ptr<const CBlock> BadBlock(const uint256& prev_hash)
-{
-    auto pblock = Block(prev_hash);
-
-    CMutableTransaction coinbase_spend;
-    coinbase_spend.vin.push_back(CTxIn(COutPoint(pblock->vtx[0]->GetHash(), 0), CScript(), 0));
-    coinbase_spend.vout.push_back(pblock->vtx[0]->vout[0]);
-
-    CTransactionRef tx = MakeTransactionRef(coinbase_spend);
-    pblock->vtx.push_back(tx);
-
-    auto ret = FinalizeBlock(pblock);
-    return ret;
 }
 
 void BuildChain(const uint256& root, int height, const unsigned int fake_rate, const unsigned int max_size, std::vector<std::shared_ptr<const CBlock>>& blocks)
 {
     printf("%s %lu/%u (%d) %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), blocks.size(), max_size, height, root.ToString().c_str());
-    // printf("%s blocks.size()=%lu/%u\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), blocks.size(), max_size);
 
     if (height <= 0 || blocks.size() >= max_size) return;
 
@@ -112,27 +95,51 @@ void BuildChain(const uint256& root, int height, const unsigned int fake_rate, c
 
     if (gen_fakeheader) {
         uint256 fake = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        // BuildChain(fake, height - 1, invalid_rate, branch_rate, fake_rate, max_size, blocks);
-        const std::shared_ptr<const CBlock> pblock = GoodBlock(root);
+        const std::shared_ptr<const CBlock> pblock = MakeBlock(root);
         blocks.push_back(pblock);
         BuildChain(fake, height - 1, fake_rate, max_size, blocks);
     } else {
-        const std::shared_ptr<const CBlock> pblock = GoodBlock(root);
+        const std::shared_ptr<const CBlock> pblock = MakeBlock(root);
         blocks.push_back(pblock);
         BuildChain(pblock->GetHash(), height - 1, fake_rate, max_size, blocks);
     }
 }
 
-BOOST_AUTO_TEST_CASE(processnewblock_signals_ordering)
+BOOST_AUTO_TEST_CASE(processnewblockheaders_fake_50)
+{
+    unsigned int amount = 10;
+    std::vector<std::shared_ptr<const CBlock>> blocks;
+    while (blocks.size() < amount) {
+        blocks.clear();
+        int fake_percent = 50;
+        BuildChain(Params().GenesisBlock().GetHash(), amount, fake_percent, amount, blocks);
+    }
+
+    CValidationState state;
+    std::vector<CBlockHeader> headers;
+    std::transform(blocks.begin(), blocks.end(), std::back_inserter(headers), [](std::shared_ptr<const CBlock> b) { return b->GetBlockHeader(); });
+
+    // Process all the headers so we understand the toplogy of the chain
+    BOOST_CHECK_EQUAL(ProcessNewBlockHeaders(headers, state, Params()), false);
+}
+
+BOOST_AUTO_TEST_CASE(processnewblockheaders_fake_zero)
 {
     unsigned int amount = 10;
     std::vector<std::shared_ptr<const CBlock>> blocks;
     while (blocks.size() < amount) {
         blocks.clear();
         // BuildChain(Params().GenesisBlock().GetHash(), 100, 15, 10, 500, blocks);
-        int fake_percent = 50;
+        int fake_percent = 0;
         BuildChain(Params().GenesisBlock().GetHash(), amount, fake_percent, amount, blocks);
     }
+
+    CValidationState state;
+    std::vector<CBlockHeader> headers;
+    std::transform(blocks.begin(), blocks.end(), std::back_inserter(headers), [](std::shared_ptr<const CBlock> b) { return b->GetBlockHeader(); });
+
+    // Process all the headers so we understand the toplogy of the chain
+    BOOST_CHECK_EQUAL(ProcessNewBlockHeaders(headers, state, Params()), true);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
