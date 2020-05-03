@@ -64,8 +64,8 @@ std::shared_ptr<CBlock> Block(const uint256& prev_hash)
     txCoinbase.vin[0].scriptWitness.SetNull();
     pblock->vtx[0] = MakeTransactionRef(std::move(txCoinbase));
 
+    // printf("%s pblock=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), pblock->hashPrevBlock.ToString().c_str());
     return pblock;
-    printf("%s pblock=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), pblock->hashPrevBlock.ToString().c_str());
 }
 
 std::shared_ptr<CBlock> FinalizeBlock(std::shared_ptr<CBlock> pblock)
