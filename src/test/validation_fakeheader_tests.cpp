@@ -94,7 +94,10 @@ void BuildChain(const uint256& root, int height, const unsigned int fake_rate, c
     bool gen_fakeheader = GetRand(100) < fake_rate;
 
     if (gen_fakeheader) {
+    // if (height % 3 == 0) {
         uint256 fake = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        // uint256 fake = uint256S("0x40813d2ba8cb96cfe5829ca949c6b020f898ddadc04c0fde599405eb4e6698e3"); // block 777
+        // uint256 fake = InsecureRand256();
         const std::shared_ptr<const CBlock> pblock = MakeBlock(root);
         blocks.push_back(pblock);
         BuildChain(fake, height - 1, fake_rate, max_size, blocks);
@@ -102,6 +105,29 @@ void BuildChain(const uint256& root, int height, const unsigned int fake_rate, c
         const std::shared_ptr<const CBlock> pblock = MakeBlock(root);
         blocks.push_back(pblock);
         BuildChain(pblock->GetHash(), height - 1, fake_rate, max_size, blocks);
+    }
+}
+
+void BuildChain2(const uint256& root, int height, const int limit, const unsigned int max_size, std::vector<std::shared_ptr<const CBlock>>& blocks)
+{
+    printf("%s %lu/%u (%d) %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), blocks.size(), max_size, height, root.ToString().c_str());
+
+    if (height <= 0 || blocks.size() >= max_size) return;
+
+    // bool gen_fakeheader = GetRand(100) < fake_rate;
+
+    // if (gen_fakeheader) {
+    if (height <= limit) {
+        uint256 fake = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        // uint256 fake = uint256S("0x40813d2ba8cb96cfe5829ca949c6b020f898ddadc04c0fde599405eb4e6698e3"); // block 777
+        // uint256 fake = InsecureRand256();
+        const std::shared_ptr<const CBlock> pblock = MakeBlock(root);
+        blocks.push_back(pblock);
+        BuildChain2(fake, height - 1, limit, max_size, blocks);
+    } else {
+        const std::shared_ptr<const CBlock> pblock = MakeBlock(root);
+        blocks.push_back(pblock);
+        BuildChain2(pblock->GetHash(), height - 1, limit, max_size, blocks);
     }
 }
 
@@ -140,6 +166,36 @@ BOOST_AUTO_TEST_CASE(processnewblockheaders_fake_zero)
 
     // Process all the headers so we understand the toplogy of the chain
     BOOST_CHECK_EQUAL(ProcessNewBlockHeaders(headers, state, Params()), true);
+}
+
+BOOST_AUTO_TEST_CASE(processnewblockheaders_fake_50_newblock)
+{
+    int fake_amount = 3;
+    unsigned int amount = 10;
+    assert(amount-fake_amount <= 149); // no idea, but it should under 150
+
+    std::vector<std::shared_ptr<const CBlock>> blocks;
+    while (blocks.size() < amount) {
+        blocks.clear();
+        // BuildChain(Params().GenesisBlock().GetHash(), 100, 15, 10, 500, blocks);
+        BuildChain2(Params().GenesisBlock().GetHash(), amount, fake_amount, amount, blocks);
+    }
+
+    bool ignored;
+    CValidationState state;
+    std::vector<CBlockHeader> headers;
+    std::transform(blocks.begin(), blocks.end(), std::back_inserter(headers), [](std::shared_ptr<const CBlock> b) { return b->GetBlockHeader(); });
+
+    // Process all the headers so we understand the toplogy of the chain
+    unsigned int count = 0;
+    for (auto block : blocks) {
+        count++;
+        if (count <= amount-fake_amount+1) {
+            BOOST_CHECK_EQUAL(ProcessNewBlock(Params(), block, true, &ignored), true);
+        } else {
+            BOOST_CHECK_EQUAL(ProcessNewBlock(Params(), block, true, &ignored), false); // fake header should be false
+        }
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()

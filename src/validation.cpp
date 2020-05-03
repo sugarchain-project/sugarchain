@@ -3556,9 +3556,14 @@ bool ProcessNewBlock(const CChainParams& chainparams, const std::shared_ptr<cons
             ret = g_chainstate.AcceptBlock(pblock, state, chainparams, &pindex, fForceProcessing, nullptr, fNewBlock);
         }
         if (!ret) {
+            // FIXME.SUGAR // Move PoW check
+            printf("%s (false)PNB=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), hash.ToString().c_str());
+
             GetMainSignals().BlockChecked(*pblock, state);
             return error("%s: AcceptBlock FAILED (%s)", __func__, state.GetDebugMessage());
         }
+        // FIXME.SUGAR // Move PoW check
+        printf("%s PNB=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), hash.ToString().c_str());
     }
 
     NotifyHeaderTip();
