@@ -79,12 +79,6 @@ std::shared_ptr<CBlock> FinalizeBlock(std::shared_ptr<CBlock> pblock)
     return pblock;
 }
 
-// construct a valid block
-const std::shared_ptr<const CBlock> MakeBlock(const uint256& prev_hash)
-{
-    return FinalizeBlock(Block(prev_hash));
-}
-
 void BuildChain(const uint256& root, int height, const unsigned int fake_rate, const unsigned int max_size, std::vector<std::shared_ptr<const CBlock>>& blocks)
 {
     printf("%s %lu/%u (%d) %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), blocks.size(), max_size, height, root.ToString().c_str());
@@ -98,11 +92,11 @@ void BuildChain(const uint256& root, int height, const unsigned int fake_rate, c
         uint256 fake = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         // uint256 fake = uint256S("0x40813d2ba8cb96cfe5829ca949c6b020f898ddadc04c0fde599405eb4e6698e3"); // block 777
         // uint256 fake = InsecureRand256();
-        const std::shared_ptr<const CBlock> pblock = MakeBlock(root);
+        const std::shared_ptr<const CBlock> pblock = FinalizeBlock(Block(root));
         blocks.push_back(pblock);
         BuildChain(fake, height - 1, fake_rate, max_size, blocks);
     } else {
-        const std::shared_ptr<const CBlock> pblock = MakeBlock(root);
+        const std::shared_ptr<const CBlock> pblock = FinalizeBlock(Block(root));
         blocks.push_back(pblock);
         BuildChain(pblock->GetHash(), height - 1, fake_rate, max_size, blocks);
     }
@@ -121,11 +115,11 @@ void BuildChain2(const uint256& root, int height, const int limit, const unsigne
         uint256 fake = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         // uint256 fake = uint256S("0x40813d2ba8cb96cfe5829ca949c6b020f898ddadc04c0fde599405eb4e6698e3"); // block 777
         // uint256 fake = InsecureRand256();
-        const std::shared_ptr<const CBlock> pblock = MakeBlock(root);
+        const std::shared_ptr<const CBlock> pblock = FinalizeBlock(Block(root));
         blocks.push_back(pblock);
         BuildChain2(fake, height - 1, limit, max_size, blocks);
     } else {
-        const std::shared_ptr<const CBlock> pblock = MakeBlock(root);
+        const std::shared_ptr<const CBlock> pblock = FinalizeBlock(Block(root));
         blocks.push_back(pblock);
         BuildChain2(pblock->GetHash(), height - 1, limit, max_size, blocks);
     }
