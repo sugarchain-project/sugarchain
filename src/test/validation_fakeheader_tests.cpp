@@ -93,7 +93,7 @@ void BuildChain(const uint256& root, int height, const unsigned int fake_rate, c
         uint256 fake = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         // uint256 fake = uint256S("0x40813d2ba8cb96cfe5829ca949c6b020f898ddadc04c0fde599405eb4e6698e3"); // block 777
         // uint256 fake = InsecureRand256();
-        const std::shared_ptr<const CBlock> pblock = FinalizeBlock(Block(root));
+        const std::shared_ptr<const CBlock> pblock = FinalizeBlock(Block(fake));
         blocks.push_back(pblock);
         BuildChain(fake, height - 1, fake_rate, max_size, blocks);
     } else {
@@ -116,7 +116,7 @@ void BuildChain2(const uint256& root, int height, const int limit, const unsigne
         uint256 fake = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         // uint256 fake = uint256S("0x40813d2ba8cb96cfe5829ca949c6b020f898ddadc04c0fde599405eb4e6698e3"); // block 777
         // uint256 fake = InsecureRand256();
-        const std::shared_ptr<const CBlock> pblock = FinalizeBlock(Block(root));
+        const std::shared_ptr<const CBlock> pblock = FinalizeBlock(Block(fake));
         blocks.push_back(pblock);
         BuildChain2(fake, height - 1, limit, max_size, blocks);
     } else {
@@ -185,7 +185,7 @@ BOOST_AUTO_TEST_CASE(processnewblockheaders_fake_50_newblock)
     unsigned int count = 0;
     for (auto block : blocks) {
         count++;
-        if (count <= amount-fake_amount+1) {
+        if (count <= amount-fake_amount) {
             BOOST_CHECK_EQUAL(ProcessNewBlock(Params(), block, true, &ignored), true);
         } else {
             BOOST_CHECK_EQUAL(ProcessNewBlock(Params(), block, true, &ignored), false); // fake header should be false
