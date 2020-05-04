@@ -3048,7 +3048,7 @@ static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state,
         return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
 
     // FIXME.SUGAR // Move PoW check
-    // printf("%s CheckBlockH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
+    printf("%s CheckBlockH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), block.GetHash().ToString().c_str());
 
     return true;
 }
@@ -3345,6 +3345,9 @@ bool CChainState::AcceptBlockHeader(const CBlockHeader& block, CValidationState&
         //     return error("%s: Consensus::CheckBlockHeader: %s, %s", __func__, hash.ToString(), FormatStateMessage(state));
         // END - MOVE
 
+        // FIXME.SUGAR // Move PoW check
+        printf("%s AcceptBlockH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), hash.ToString().c_str());
+
         // Get prev block index
         CBlockIndex* pindexPrev = nullptr;
         BlockMap::iterator mi = mapBlockIndex.find(block.hashPrevBlock);
@@ -3394,7 +3397,7 @@ bool ProcessNewBlockHeaders(const std::vector<CBlockHeader>& headers, CValidatio
                 if (first_invalid) *first_invalid = header;
 
                 // FIXME.SUGAR // Move PoW check
-                // printf("%s (false)PNBH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), header.GetHash().ToString().c_str());
+                printf("%s (false)PNBH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), header.GetHash().ToString().c_str());
 
                 return false;
             }
@@ -3402,7 +3405,7 @@ bool ProcessNewBlockHeaders(const std::vector<CBlockHeader>& headers, CValidatio
                 *ppindex = pindex;
             }
             // FIXME.SUGAR // Move PoW check
-            // printf("%s PNBH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), header.GetHash().ToString().c_str());
+            printf("%s PNBH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), header.GetHash().ToString().c_str());
         }
     }
     NotifyHeaderTip();
@@ -3559,13 +3562,13 @@ bool ProcessNewBlock(const CChainParams& chainparams, const std::shared_ptr<cons
         }
         if (!ret) {
             // FIXME.SUGAR // Move PoW check
-            // printf("%s (false)PNB=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), hash.ToString().c_str());
+            printf("%s (false)PNB=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), hash.ToString().c_str());
 
             GetMainSignals().BlockChecked(*pblock, state);
             return error("%s: AcceptBlock FAILED (%s)", __func__, state.GetDebugMessage());
         }
         // FIXME.SUGAR // Move PoW check
-        // printf("%s PNB=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), hash.ToString().c_str());
+        printf("%s PNB=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), hash.ToString().c_str());
     }
 
     NotifyHeaderTip();
