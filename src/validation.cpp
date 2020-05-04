@@ -3392,15 +3392,17 @@ bool ProcessNewBlockHeaders(const std::vector<CBlockHeader>& headers, CValidatio
             CBlockIndex *pindex = nullptr; // Use a temp pindex instead of ppindex to avoid a const_cast
             if (!g_chainstate.AcceptBlockHeader(header, state, chainparams, &pindex)) {
                 if (first_invalid) *first_invalid = header;
+
                 // FIXME.SUGAR // Move PoW check
-                printf("%s (false)PNBH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), header.GetHash().ToString().c_str());
+                // printf("%s (false)PNBH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), header.GetHash().ToString().c_str());
+
                 return false;
             }
             if (ppindex) {
                 *ppindex = pindex;
             }
             // FIXME.SUGAR // Move PoW check
-            printf("%s PNBH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), header.GetHash().ToString().c_str());
+            // printf("%s PNBH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), header.GetHash().ToString().c_str());
         }
     }
     NotifyHeaderTip();
@@ -3557,13 +3559,13 @@ bool ProcessNewBlock(const CChainParams& chainparams, const std::shared_ptr<cons
         }
         if (!ret) {
             // FIXME.SUGAR // Move PoW check
-            printf("%s (false)PNB=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), hash.ToString().c_str());
+            // printf("%s (false)PNB=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), hash.ToString().c_str());
 
             GetMainSignals().BlockChecked(*pblock, state);
             return error("%s: AcceptBlock FAILED (%s)", __func__, state.GetDebugMessage());
         }
         // FIXME.SUGAR // Move PoW check
-        printf("%s PNB=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), hash.ToString().c_str());
+        // printf("%s PNB=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), hash.ToString().c_str());
     }
 
     NotifyHeaderTip();
