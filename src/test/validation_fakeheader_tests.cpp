@@ -65,6 +65,7 @@ std::shared_ptr<CBlock> Block(const uint256& prev_hash)
     pblock->vtx[0] = MakeTransactionRef(std::move(txCoinbase));
 
     // printf("%s pblock=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), pblock->hashPrevBlock.ToString().c_str());
+    // printf("%s pblock=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), pblock->ToString().c_str());
     return pblock;
 }
 
@@ -190,6 +191,21 @@ BOOST_AUTO_TEST_CASE(processnewblockheaders_fake_50_newblock)
             BOOST_CHECK_EQUAL(ProcessNewBlock(Params(), block, true, &ignored), false); // fake header should be false
         }
     }
+}
+
+BOOST_AUTO_TEST_CASE(processnewblockheaders_pow)
+{
+    uint256 right = uint256S("0031205acedcc69a9c18f79b84790179d68fb90588bedee6587ff701bdde04eb"); // genesis.GetPoWhash();
+    uint32_t right_nBit = 0x1f3fffff; // genesis.nBits
+    BOOST_CHECK_EQUAL(CheckProofOfWork(right, right_nBit, Params().GetConsensus()), true);
+
+    uint256 fake1 = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+    uint32_t fake1_nBit = 0xffffffff;
+    BOOST_CHECK_EQUAL(CheckProofOfWork(fake1, fake1_nBit, Params().GetConsensus()), false); // fake should be false
+
+    uint256 fake2 = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
+    uint32_t fake2_nBit = 0x00000000;
+    BOOST_CHECK_EQUAL(CheckProofOfWork(fake2, fake2_nBit, Params().GetConsensus()), false); // fake should be false
 }
 
 BOOST_AUTO_TEST_SUITE_END()
