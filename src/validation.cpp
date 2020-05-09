@@ -3051,8 +3051,8 @@ static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state,
     // You can see this log when IBD.
     // This means PoW check during IBD is not actually skipped, but still its checking in another places.
     // What we skipped is only when Downloading headers, but not else. This makes IBD much faster.
-    if (IsInitialBlockDownload())
-        printf("%s IBD=%d CBH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), IsInitialBlockDownload(), block.GetHash().ToString().c_str());
+    // if (IsInitialBlockDownload())
+    //     printf("%s IBD=%d CBH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), IsInitialBlockDownload(), block.GetHash().ToString().c_str());
 
     return true;
 }
