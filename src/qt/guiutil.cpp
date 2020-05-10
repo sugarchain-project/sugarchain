@@ -1006,7 +1006,10 @@ QString formatBytes(uint64_t bytes)
     if(bytes < 1024 * 1024 * 1024)
         return QString(QObject::tr("%1 MB")).arg(bytes / 1024 / 1024);
 
-    return QString(QObject::tr("%1 GB")).arg(bytes / 1024 / 1024 / 1024);
+    // FIXME.SUGAR
+    // Do not display in GB
+    // return QString(QObject::tr("%1 GB")).arg(bytes / 1024 / 1024 / 1024);
+    return QString(QObject::tr("%1 MB")).arg(bytes / 1024 / 1024);
 }
 
 qreal calculateIdealFontSize(int width, const QString& text, QFont font, qreal minPointSize, qreal font_size) {
