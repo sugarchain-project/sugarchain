@@ -765,8 +765,9 @@ void BitcoinGUI::updateHeadersSyncProgressLabel()
 
         // FIXME.SUGAR
         // display blockheader count during IBD
-        if (IsInitialBlockDownload())
-            LogPrintf("Syncing Headers: %d (%.1f%%)\n", headersTipHeight, 100.0 / (headersTipHeight+estHeadersLeft)*headersTipHeight);
+        // Start to print if the percentage is over 1.0% to make clean
+        if (IsInitialBlockDownload() && (100.0 / (headersTipHeight+estHeadersLeft)*headersTipHeight) >= 1.0)
+            LogPrintf("headers=%d(%.1f%%)\n", headersTipHeight, (100.0 / (headersTipHeight+estHeadersLeft)*headersTipHeight));
     }
 }
 
