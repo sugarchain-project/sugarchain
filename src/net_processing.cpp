@@ -1399,7 +1399,7 @@ bool static ProcessHeadersMessage(CNode *pfrom, CConnman *connman, const std::ve
 
         // FIXME.SUGAR
         // IBD: reduce frequency of additional downloading during IBD, against too much traffic
-        if (nCount == MAX_HEADERS_RESULTS && (pindexLast->nHeight) % (MAX_HEADERS_RESULTS * 2) == 0) {
+        if (IsInitialBlockDownload() && nCount == MAX_HEADERS_RESULTS && (pindexLast->nHeight) % (MAX_HEADERS_RESULTS * 2) == 0) {
             // Headers message had its maximum size; the peer may have more headers.
             // TODO: optimize: if pindexLast is an ancestor of chainActive.Tip or pindexBestHeader, continue
             // from there instead.
