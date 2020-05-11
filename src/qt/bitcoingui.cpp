@@ -32,6 +32,8 @@
 #include <ui_interface.h>
 #include <util.h>
 
+#include <validation.h> // FIXME.SUGAR // IBD: for IsInitialBlockDownload()
+
 #include <iostream>
 
 #include <QAction>
@@ -758,8 +760,14 @@ void BitcoinGUI::updateHeadersSyncProgressLabel()
     int64_t headersTipTime = clientModel->getHeaderTipTime();
     int headersTipHeight = clientModel->getHeaderTipHeight();
     int estHeadersLeft = (GetTime() - headersTipTime) / Params().GetConsensus().nPowTargetSpacing;
-    if (estHeadersLeft > HEADER_HEIGHT_DELTA_SYNC)
+    if (estHeadersLeft > HEADER_HEIGHT_DELTA_SYNC) {
         progressBarLabel->setText(tr("Syncing Headers (%1%)...").arg(QString::number(100.0 / (headersTipHeight+estHeadersLeft)*headersTipHeight, 'f', 1)));
+
+        // FIXME.SUGAR
+        // display blockheader count during IBD
+        if (IsInitialBlockDownload())
+            LogPrintf("Syncing Headers: %d (%.1f%%)\n", headersTipHeight, 100.0 / (headersTipHeight+estHeadersLeft)*headersTipHeight);
+    }
 }
 
 void BitcoinGUI::setNumBlocks(int count, const QDateTime& blockDate, double nVerificationProgress, bool header)
