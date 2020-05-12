@@ -41,8 +41,7 @@ static constexpr int64_t STALE_CHECK_INTERVAL = 5; // seconds // FIXME.SUGAR
 // sugarchain:  (5 / 3) = 1.666...
 static constexpr int64_t EXTRA_PEER_CHECK_INTERVAL = 3; // seconds // FIXME.SUGAR
 /** Minimum time an outbound-peer-eviction candidate must be connected for, in order to evict, in seconds */
-// (30 / 2) = 15 
-static constexpr int64_t MINIMUM_CONNECT_TIME = 15; // seconds // FIXME.SUGAR
+static constexpr int64_t MINIMUM_CONNECT_TIME = 30;
 
 class PeerLogicValidation : public CValidationInterface, public NetEventsInterface {
 private:
