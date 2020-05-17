@@ -1398,7 +1398,7 @@ bool static ProcessHeadersMessage(CNode *pfrom, CConnman *connman, const std::ve
         }
 
         // FIXME.SUGAR
-        // 120x bitcoin // IBD: disable additional download during IBD, due to too much traffic
+        // IBD: disable additional download during IBD, due to too much traffic and RAM usage (out-of-memory)
         /*
         if (nCount == MAX_HEADERS_RESULTS) {
             // Headers message had its maximum size; the peer may have more headers.
