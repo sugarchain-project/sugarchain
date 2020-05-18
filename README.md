@@ -108,9 +108,6 @@ Run
 ---
 The options `-rpcuser`, `-rpcpassword`, and `-printtoconsole` are optional. `server=1` needed by RPC servers or cpuminer when solo-mining.
 
-- Mainnet: debug mode: `pow` for PoW
-  > ./src/qt/sugarchain-qt -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword **-debug=pow** -printtoconsole
-
 - Mainnet: debug mode: `net` for Network
   > ./src/qt/sugarchain-qt -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword **-debug=net** -printtoconsole
 
