@@ -39,10 +39,10 @@ Change absolute location in `linearize.cfg`
 
     $ head -1 hashlist.txt # genesis
       7d5eaec2dbb75f99feadfa524c78b7cabc1d8c8204f79d4f3a83381b811b0adc
-    $ wc -l hashlist.txt # 2601001+1 (add genesis)
-      2601002 hashlist.txt
-    $ tail -n 1 hashlist.txt # height 2601001 # getblockhash 2601001
-      56e8f536feb26f749ed9198f56f397da08f018de9518674b2ac12a41061612cb
+    $ wc -l hashlist.txt # 4421701+1 (add genesis)
+      4421702 hashlist.txt
+    $ tail -n 1 hashlist.txt # height 4421701 # getblockhash 4421701
+      9a9c7db86b1a67a399d50f7f45b1d4bbb9179bcf0be08331239a1b9881ebcea9
 
 ## Step 2: Copy local block data
 
