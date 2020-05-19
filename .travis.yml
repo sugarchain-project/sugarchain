@@ -103,7 +103,7 @@ install:
     - if [ -n "$DPKG_ADD_ARCH" ]; then sudo dpkg --add-architecture "$DPKG_ADD_ARCH" ; fi
     - if [ -n "$PACKAGES" ]; then travis_retry sudo apt-get update; fi
     - if [ -n "$PACKAGES" ]; then travis_retry sudo apt-get install --no-install-recommends --no-upgrade -qq $PACKAGES; fi
-    - if [ "$CHECK_DOC" = 1 -a "$TRAVIS_EVENT_TYPE" = "pull_request" ]; then travis_retry pip3 install flake8 pathlib2 --user; fi
+    - if [ "$CHECK_DOC" = 1 -a "$TRAVIS_EVENT_TYPE" = "pull_request" ]; then travis_retry pip3 install pathlib2 flake8 --user; fi
 before_script:
     - if [ "$CHECK_DOC" = 1 -a "$TRAVIS_EVENT_TYPE" = "pull_request" ]; then contrib/devtools/commit-script-check.sh $TRAVIS_COMMIT_RANGE; fi
     - if [ "$CHECK_DOC" = 1 ]; then contrib/devtools/git-subtree-check.sh src/crypto/ctaes; fi
