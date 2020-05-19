@@ -476,6 +476,7 @@ std::string HelpMessage(HelpMessageMode mode)
         CURRENCY_UNIT, FormatMoney(DEFAULT_TRANSACTION_MAXFEE)));
     strUsage += HelpMessageOpt("-printtoconsole", _("Send trace/debug info to console instead of debug.log file"));
     strUsage += HelpMessageOpt("-prunedebuglogfile", _("Prune (limit) filesize of debug.log")); // FIXME.SUGAR // prune debug.log
+    strUsage += HelpMessageOpt("-fastsync", _("Skip check PoW during IBD for faster sync")); // FIXME.SUGAR // Never check PoW during IBD
     if (showDebug)
     {
         strUsage += HelpMessageOpt("-printpriority", strprintf("Log transaction fee per kB when mining blocks (default: %u)", DEFAULT_PRINTPRIORITY));
@@ -831,6 +832,7 @@ void InitLogging()
 {
     fPrintToConsole = gArgs.GetBoolArg("-printtoconsole", false);
     fPruneDebugLog = gArgs.GetBoolArg("-prunedebuglogfile", false); // FIXME.SUGAR // prune debug.log
+    fFastSync = gArgs.GetBoolArg("-fastsync", false); // FIXME.SUGAR // Never check PoW during IBD
     fLogTimestamps = gArgs.GetBoolArg("-logtimestamps", DEFAULT_LOGTIMESTAMPS);
     fLogTimeMicros = gArgs.GetBoolArg("-logtimemicros", DEFAULT_LOGTIMEMICROS);
     fLogIPs = gArgs.GetBoolArg("-logips", DEFAULT_LOGIPS);

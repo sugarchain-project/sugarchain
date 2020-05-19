@@ -228,6 +228,8 @@ uint64_t nPruneTarget = 0;
 int64_t nMaxTipAge = DEFAULT_MAX_TIP_AGE;
 bool fEnableReplacement = DEFAULT_ENABLE_REPLACEMENT;
 
+bool fFastSync = false; // FIXME.SUGAR // Never check PoW during IBD
+
 uint256 hashAssumeValid;
 arith_uint256 nMinimumChainWork;
 
@@ -3043,18 +3045,31 @@ static bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, 
 
 static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
 {
-    // Check proof of work matches claimed amount
-    if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash_cached(), block.nBits, consensusParams))
-        return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
+    printf("fFastSync=%d\n", fFastSync);
+    // FIXME.SUGAR // Never check PoW during IBD
+    if (fFastSync == true) { // with "-fastsync" flag (default: false)
+        printf("fFastSync enabled! Be careful! (fFastSync=%d)\n", fFastSync);
+        // Never check PoW during IBD
+        if (!IsInitialBlockDownload())
+            if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash_cached(), block.nBits, consensusParams))
+                return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
 
-    // FIXME.SUGAR // check PoW: SKIPPED during downloading headers (IBD)
-    // You can see this log when IBD.
-    // This means PoW check during IBD is not actually skipped, but still its checking in another places.
-    // What we skipped is only when Downloading headers, but not else. This makes IBD much faster.
-    // if (IsInitialBlockDownload())
-    //     printf("%s IBD=%d CBH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), IsInitialBlockDownload(), block.GetHash().ToString().c_str());
+        return true;
+    } else {
+        printf("fFastSync disabled! Good! (fFastSync=%d)\n", fFastSync);
+        // Check proof of work matches claimed amount
+        if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash_cached(), block.nBits, consensusParams))
+            return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
 
-    return true;
+        // FIXME.SUGAR // check PoW: SKIPPED during downloading headers (IBD)
+        // You can see this log when IBD.
+        // This means PoW check during IBD is not actually skipped, but still its checking in another places.
+        // What we skipped is only when Downloading headers, but not else. This makes IBD much faster.
+        // if (IsInitialBlockDownload())
+        //     printf("%s IBD=%d CBH=%s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str(), IsInitialBlockDownload(), block.GetHash().ToString().c_str());
+
+        return true;
+    }
 }
 
 bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW, bool fCheckMerkleRoot)
