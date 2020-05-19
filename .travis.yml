@@ -27,7 +27,7 @@ env:
     - YESPOWER_MSSE2_32BIT="-msse2"
     - WIN_BITCOIN_CONFIG="--disable-shared"
   matrix:
-# ARM // why?
+# ARM // why? 123
     - >
       HOST=arm-linux-gnueabihf
       PACKAGES="g++-arm-linux-gnueabihf python3-pip"
