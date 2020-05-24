@@ -27,7 +27,7 @@ PATTERN_IPV6 = re.compile(r"^\[([0-9a-z:]+)\]:(\d+)$")
 PATTERN_ONION = re.compile(r"^([abcdefghijklmnopqrstuvwxyz234567]{16}\.onion):(\d+)$")
 PATTERN_AGENT = re.compile(
     r"^/Yumekawa:("
-    r"0.16.(3).(21|23|24|25|26|27|28|29|30|31|32|33)|"
+    r"0.16.(3).(21|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37)|"
     r"0.19.99"
     r")")
 
