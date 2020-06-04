@@ -735,7 +735,7 @@ UniValue getblockhashes(const JSONRPCRequest& request)
 
 UniValue getspentinfo(const JSONRPCRequest& request)
 {
-    if (request.fHelp || request.params.size() != 1 || !request.params[0].isObject())
+    if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
             "getspentinfo\n"
             "\nReturns the txid and index where an output is spent.\n"
@@ -755,29 +755,37 @@ UniValue getspentinfo(const JSONRPCRequest& request)
             + HelpExampleRpc("getspentinfo", "{\"txid\": \"0437cd7f8525ceed2324359c2d0ba26006d92d856a9c20fa0241106ee5a597c9\", \"index\": 0}")
         );
 
-    UniValue txidValue = find_value(request.params[0].get_obj(), "txid");
-    UniValue indexValue = find_value(request.params[0].get_obj(), "index");
-
-    if (!txidValue.isStr() || !indexValue.isNum()) {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid txid or index");
+    if (!request.params[0].isStr()) {
+        throw JSONRPCError(RPC_TYPE_ERROR, "Txid must be a string");
     }
 
-    uint256 txid = ParseHashV(txidValue, "txid");
-    int outputIndex = indexValue.get_int();
+    uint256 txid(ParseHashV(request.params[0].get_str(), "txid"));
+    UniValue result(UniValue::VARR);
+    CTransactionRef tx;
+    uint256 hashBlock;
 
-    CSpentIndexKey key(txid, outputIndex);
-    CSpentIndexValue value;
-
-    if (!GetSpentIndex(key, value)) {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Unable to get spent info");
+    if (!GetTransaction(txid, tx, Params().GetConsensus(), hashBlock)) {
+        throw JSONRPCError(RPC_INTERNAL_ERROR, std::string("Unexpected internal error (tx index seems corrupt)"));
     }
 
-    UniValue obj(UniValue::VOBJ);
-    obj.pushKV("txid", value.txid.GetHex());
-    obj.pushKV("index", (int)value.inputIndex);
-    obj.pushKV("height", value.blockHeight);
+    for (unsigned int i = 0; i < tx->vout.size(); ++i) {
+        UniValue obj(UniValue::VOBJ);
+        CSpentIndexKey key(txid, i);
+        CSpentIndexValue value;
 
-    return obj;
+        if (!GetSpentIndex(key, value)) {
+            obj.pushKV("spent", false);
+        } else {
+            obj.pushKV("spent", true);
+            obj.pushKV("txid", txid.GetHex());
+            obj.pushKV("height", value.blockHeight);
+            obj.pushKV("vin", (int)value.inputIndex);
+        }
+
+        result.push_back(obj);
+    }
+
+    return result;
 }
 
 UniValue getaddresstxids(const JSONRPCRequest& request)
