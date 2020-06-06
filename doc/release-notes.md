@@ -4,9 +4,9 @@
 
 **Changes:**
 - Major Fix:
-  * Fix: IBD 30% faster, and 60% reduced data traffic
+  * Fix: IBD `30%` faster, and `60%` reduced data traffic
     [#122](https://github.com/sugarchain-project/sugarchain/pull/122)
-  * Add: new option -prunedebuglogfile: limit filesize of debug.log
+  * Add: new option `-prunedebuglogfile`: limit filesize of debug.log
     [#110](https://github.com/sugarchain-project/sugarchain/pull/110)
   * Add: when IBD, print blockheader count on debug.log (only sugarchain-qt)
     [#128](https://github.com/sugarchain-project/sugarchain/pull/128)
@@ -20,11 +20,11 @@
   * Remove: BCLog::POW (-debug=pow)
     [#142](https://github.com/sugarchain-project/sugarchain/pull/142)
 - Minor Fix:
-  * GUI: display size in MB (was GB)
+  * GUI: display size in `MB` (was GB)
     [#125](https://github.com/sugarchain-project/sugarchain/pull/125)
   * Revert: IBD settings back to BTC original
     [#124](https://github.com/sugarchain-project/sugarchain/pull/124)
-  * Add: bootstrap height at 4421701
+  * Add: bootstrap height at `4421701`
     [#143](https://github.com/sugarchain-project/sugarchain/pull/143)
   * Fix: travis pathlib2
     [#148](https://github.com/sugarchain-project/sugarchain/pull/148)
@@ -41,9 +41,11 @@
   * No ARM optimization for Yespower yet.
 - Poor performance on 32-Bit OS:
   * No SSE2 optimization for Yespower yet. [source](https://github.com/sugarchain-project/sugarchain/blob/d977987a83aba115d50a9130f0d7914330d1bc75/src/crypto/yespower-1.0.1/yespower-opt.c#L59)
-- Slow startup on low memory machines, due to blockchain growth.
-  * Startup can take up to 5 hours on 1cpu 1024ram (+swap 3GB) VPS.
+- Slow startup on low memory machines:
+  * Startup can take up to some hours on 1cpu 1024ram (+swap 3GB) VPS.
   * Workaround is just increase RAM at least 2 GB.
+- Slow rescanning `wallet.dat`:
+  * If your wallet is too heavy or mining purpose, it may take very long when importing.
 
 **Credits:**
 Thanks to everyone who directly contributed to this release
