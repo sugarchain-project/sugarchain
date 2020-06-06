@@ -29,7 +29,21 @@
   * Fix: travis pathlib2
     [#148](https://github.com/sugarchain-project/sugarchain/pull/148)
 
-**[Known Issues](https://github.com/sugarchain-project/sugarchain#known-issues)**
+**Known Issues**
+- Transaction too large:
+  * This is a part of BTC.
+  * It will be fixed in next *Taproot+Schnorr* update.
+- Slow update balance on wallet:
+  * This slow is a part of BTC.
+  * Update total balance *every minute (12 blocks)* interval.
+  * This fix is a (nice) workaround for now. [source](https://github.com/sugarchain-project/sugarchain/commit/72436c90b29844cf507895df053103f9b6840776#diff-2e3836af182cfb375329c3463ffd91f8)
+- Poor performance on ARM CPUs (32/64-Bit):
+  * No ARM optimization for Yespower yet.
+- Poor performance on 32-Bit OS:
+  * No SSE2 optimization for Yespower yet. [source](https://github.com/sugarchain-project/sugarchain/blob/d977987a83aba115d50a9130f0d7914330d1bc75/src/crypto/yespower-1.0.1/yespower-opt.c#L59)
+- Slow startup on low memory machines, due to blockchain growth.
+  * Startup can take up to 5 hours on 1cpu 1024ram (+swap 3GB) VPS.
+  * Workaround is just increase RAM at least 2 GB.
 
 **Credits:**
 Thanks to everyone who directly contributed to this release
@@ -90,7 +104,8 @@ We give our utmost thanks to the donors. This donation will be used for our futu
     [#85](https://github.com/sugarchain-project/sugarchain/pull/85)
     [#92](https://github.com/sugarchain-project/sugarchain/pull/92)
 
-**[Known Issues](https://github.com/sugarchain-project/sugarchain#known-issues)**
+**Known Issues**
+Same as before
 
 **Credits:**
 Thanks to everyone who directly contributed to this release
@@ -129,7 +144,19 @@ We give our utmost thanks to the donors. This donation will be used for our futu
   * add: bootstrap linearize at height `650000`, `1043000`
   * fix: comment error (#6)
 
-**[Known Issues](https://github.com/sugarchain-project/sugarchain#known-issues)**
+**Known Issues**
+- Transaction too large:
+  * This is a part of BTC.
+  * It will be fixed in next *Schnorr Signature* update.
+- Slow update balance on wallet:
+  * Update total balance *every minute (12 blocks)* interval.
+  * This slow is a part of BTC.
+  * This fix is a (nice) workaround for now. [source](https://github.com/sugarchain-project/sugarchain/commit/72436c90b29844cf507895df053103f9b6840776#diff-2e3836af182cfb375329c3463ffd91f8)
+- Poor performance on ARM CPUs (32/64-Bit):
+  * ARM optimization for Yespower disabled for now.
+- Poor performance on 32-Bit OS:
+  * SSE2 for Yespower disabled for now. [source](https://github.com/sugarchain-project/sugarchain/blob/d977987a83aba115d50a9130f0d7914330d1bc75/src/crypto/yespower-1.0.1/yespower-opt.c#L59)
+  * Please use *64-bit* for best performance.
 
 **Credits:**
 Thanks to everyone who directly contributed to this release (alphabetical order)
