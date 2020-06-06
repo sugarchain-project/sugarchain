@@ -1,3 +1,51 @@
+## Yumekawa v0.16.3.34-starboy
+- Version: Final Release
+- Date: 2020-06-07
+
+**Changes:**
+- Major Fix:
+  * Fix: IBD 30% faster, and 60% reduced data traffic
+    [#122](https://github.com/sugarchain-project/sugarchain/pull/122)
+  * Add: new option -prunedebuglogfile: limit filesize of debug.log
+    [#110](https://github.com/sugarchain-project/sugarchain/pull/110)
+  * Add: when IBD, print blockheader count on debug.log (only sugarchain-qt)
+    [#128](https://github.com/sugarchain-project/sugarchain/pull/128)
+  * Update: checkpoints (mainnet)
+    [#132](https://github.com/sugarchain-project/sugarchain/pull/132)
+  * Fix: IBD optimizing
+    [#135](https://github.com/sugarchain-project/sugarchain/pull/135)
+    [#22 (comment)](https://github.com/sugarchain-project/sugarchain/pull/22#issuecomment-568301895)
+  * Update: seed list
+    [#144](https://github.com/sugarchain-project/sugarchain/pull/144)
+  * Remove: BCLog::POW (-debug=pow)
+    [#142](https://github.com/sugarchain-project/sugarchain/pull/142)
+- Minor Fix:
+  * GUI: display size in MB (was GB)
+    [#125](https://github.com/sugarchain-project/sugarchain/pull/125)
+  * Revert: IBD settings back to BTC original
+    [#124](https://github.com/sugarchain-project/sugarchain/pull/124)
+  * Add: bootstrap height at 4421701
+    [#143](https://github.com/sugarchain-project/sugarchain/pull/143)
+  * Fix: travis pathlib2
+    [#148](https://github.com/sugarchain-project/sugarchain/pull/148)
+
+**[Known Issues](https://github.com/sugarchain-project/sugarchain#known-issues)**
+
+**Credits:**
+Thanks to everyone who directly contributed to this release
+- decryp2kanon
+- solardiz (original Yespower author)
+- barrystyle
+- volbil
+- Nugetzrul3
+- cryptozeny
+
+**Financial Support:**
+We give our utmost thanks to the donors. This donation will be used for our future development. See [donations](https://github.com/sugarchain-project/Donations/blob/master/README.md).
+- Rakutens
+
+-----
+
 ## Yumekawa v0.16.3.30-moonlight
 - Version: Final Release
 - Date: 2020-03-02
@@ -45,9 +93,7 @@
 **[Known Issues](https://github.com/sugarchain-project/sugarchain#known-issues)**
 
 **Credits:**
-
 Thanks to everyone who directly contributed to this release
-
 - solardiz (original Yespower author)
 - volbil
 - okoto-xyz
@@ -55,7 +101,6 @@ Thanks to everyone who directly contributed to this release
 - cryptozeny
 
 **Financial Support:**
-
 We give our utmost thanks to the donors. This donation will be used for our future development. See [donations](https://github.com/sugarchain-project/Donations/blob/master/README.md).
 
 - 唐伯虎
@@ -88,7 +133,6 @@ We give our utmost thanks to the donors. This donation will be used for our futu
 
 **Credits:**
 Thanks to everyone who directly contributed to this release (alphabetical order)
-
 - AestheticSenpai
 - cryptozeny
 - ilmango-doge
