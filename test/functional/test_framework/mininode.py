@@ -50,9 +50,9 @@ MESSAGEMAP = {
 }
 
 MAGIC_BYTES = {
-    "mainnet": b"\xf9\xbe\xb4\xd9",   # mainnet
-    "testnet5": b"\x0b\x11\x09\x07",  # testnet5
-    "regtest": b"\xfa\xbf\xb5\xda",   # regtest
+    "mainnet": b"\x9f\xeb\x4b\x9d",   # mainnet
+    "testnet5": b"\xb0\x11\x90\x70",  # testnet5
+    "regtest": b"\xaf\xfb\x5b\xad",   # regtest
 }
 
 class P2PConnection(asyncore.dispatcher):
