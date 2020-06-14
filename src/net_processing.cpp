@@ -1398,7 +1398,7 @@ bool static ProcessHeadersMessage(CNode *pfrom, CConnman *connman, const std::ve
         }
 
         // FIXME.SUGAR
-        // 120x bitcoin // IBD: disable additional download during IBD, due to too much traffic
+        // IBD: disable additional download during IBD, due to too much traffic
         /*
         if (nCount == MAX_HEADERS_RESULTS) {
             // Headers message had its maximum size; the peer may have more headers.
@@ -3589,7 +3589,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
                     // Note: If all our peers are inbound, then we won't
                     // disconnect our sync peer for stalling; we have bigger
                     // problems if we can't get any outbound peers.
-                    if (!pto->fWhitelisted && !IsInitialBlockDownload()) { // FIXME.SUGAR // IBD: do not disconnect *whitelisted* peers during IBD
+                    if (!pto->fWhitelisted) {
                         LogPrintf("Timeout downloading headers from peer=%d, disconnecting\n", pto->GetId());
                         pto->fDisconnect = true;
                         return true;

@@ -28,8 +28,8 @@ information or see https://opensource.org/licenses/MIT.
 Minimum Requirement
 -------------------
 - CPU: 1 Core
-- RAM: 1024 MB (at least 2048 MB [swap](https://github.com/sugarchain-project/doc/blob/master/swap.md))
-- DISK: 3 GB
+- RAM: 1024 MB (at least 3 GB [swap](https://github.com/sugarchain-project/doc/blob/master/swap.md))
+- DISK: 5 GB
 
 
 Depends on Bitcoin Core
@@ -108,9 +108,6 @@ Run
 ---
 The options `-rpcuser`, `-rpcpassword`, and `-printtoconsole` are optional. `server=1` needed by RPC servers or cpuminer when solo-mining.
 
-- Mainnet: debug mode: `pow` for PoW
-  > ./src/qt/sugarchain-qt -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword **-debug=pow** -printtoconsole
-
 - Mainnet: debug mode: `net` for Network
   > ./src/qt/sugarchain-qt -server=1 -rpcuser=rpcuser -rpcpassword=rpcpassword **-debug=net** -printtoconsole
 
@@ -134,18 +131,20 @@ Known Issues
 ------------
 - Transaction too large:
   * This is a part of BTC.
-  * It will be fixed in next *Schnorr Signature* update.
+  * It will be fixed in next *Taproot+Schnorr* update.
 - Slow update balance on wallet:
-  * Update total balance *every minute (12 blocks)* interval.
   * This slow is a part of BTC.
+  * Update total balance *every minute (12 blocks)* interval.
   * This fix is a (nice) workaround for now. [source](https://github.com/sugarchain-project/sugarchain/commit/72436c90b29844cf507895df053103f9b6840776#diff-2e3836af182cfb375329c3463ffd91f8)
 - Poor performance on ARM CPUs (32/64-Bit):
-  * ARM optimization for Yespower disabled for now.
-  * *TODO*
+  * No ARM optimization for Yespower yet.
 - Poor performance on 32-Bit OS:
-  * SSE2 for Yespower disabled for now. [source](https://github.com/sugarchain-project/sugarchain/blob/d977987a83aba115d50a9130f0d7914330d1bc75/src/crypto/yespower-1.0.1/yespower-opt.c#L59)
-  * Please use *64-bit* for best performance.
-
+  * No SSE2 optimization for Yespower yet. [source](https://github.com/sugarchain-project/sugarchain/blob/d977987a83aba115d50a9130f0d7914330d1bc75/src/crypto/yespower-1.0.1/yespower-opt.c#L59)
+- Slow startup on low memory machines:
+  * Startup can take up to some hours on 1cpu 1024ram (+swap 3GB) VPS.
+  * Workaround is just increase RAM at least 2 GB.
+- Slow rescanning `wallet.dat`:
+  * If your wallet is too heavy or mining purpose, it may take very long when importing.
 
 Release process using GITIAN
 ----------------------------

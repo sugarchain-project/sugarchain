@@ -49,6 +49,7 @@ public:
 
 extern bool fPrintToConsole;
 extern bool fPrintToDebugLog;
+extern bool fPruneDebugLog; // FIXME.SUGAR // prune debug.log
 
 extern bool fLogTimestamps;
 extern bool fLogTimeMicros;
@@ -104,7 +105,6 @@ namespace BCLog {
         COINDB      = (1 << 18),
         QT          = (1 << 19),
         LEVELDB     = (1 << 20),
-        POW         = (1 << 21),
         ALL         = ~(uint32_t)0,
     };
 }
