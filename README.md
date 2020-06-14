@@ -36,8 +36,22 @@ Depends on Bitcoin Core
 -----------------------
 Exactly the same as dependencies of `Bitcoin Core v0.16.3`.
 
+- Ubuntu 16.04
 ```bash
 sudo add-apt-repository -y ppa:bitcoin/bitcoin && \
+sudo apt-get update && \
+sudo apt-get install -y \
+software-properties-common libdb4.8-dev libdb4.8++-dev \
+build-essential libtool autotools-dev automake pkg-config \
+libssl-dev libevent-dev bsdmainutils libboost-all-dev \
+libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
+libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
+protobuf-compiler libqrencode-dev help2man
+```
+
+- Ubuntu 20.04
+```bash
+sudo add-apt-repository -y ppa:luke-jr/bitcoincore && \
 sudo apt-get update && \
 sudo apt-get install -y \
 software-properties-common libdb4.8-dev libdb4.8++-dev \
