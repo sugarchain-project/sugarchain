@@ -6,7 +6,7 @@ Sugarchain Yumekawa
 https://sugarchain.org
 
 
-The meaning of Yumekawa
+The Meaning of Yumekawa
 -----------------------
 Sugarchain's first node software is called `Yumekawa (夢川)`. It can be translated in some ways.
 - "Yume (夢)" means dream and "Kawa (川)" means river. So its `Dream River` in japanese.
@@ -29,7 +29,7 @@ Minimum Requirement
 -------------------
 - CPU: 1 Core
 - RAM: 1024 MB (at least 3 GB [swap](https://github.com/sugarchain-project/doc/blob/master/swap.md))
-- DISK: 5 GB
+- DISK: 5 GB HDD
 
 
 Depends on Bitcoin Core
@@ -41,43 +41,69 @@ Exactly the same as dependencies of `Bitcoin Core v0.16.3`.
 sudo add-apt-repository -y ppa:bitcoin/bitcoin && \
 sudo apt-get update && \
 sudo apt-get install -y \
-software-properties-common libdb4.8-dev libdb4.8++-dev \
-build-essential libtool autotools-dev automake pkg-config \
+libdb4.8-dev libdb4.8++-dev \
+software-properties-common build-essential libtool autotools-dev automake pkg-config \
 libssl-dev libevent-dev bsdmainutils libboost-all-dev \
 libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
 libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
 protobuf-compiler libqrencode-dev help2man
 ```
 
-- Ubuntu 20.04
+- Ubuntu 18.04+
 ```bash
 sudo add-apt-repository -y ppa:luke-jr/bitcoincore && \
 sudo apt-get update && \
 sudo apt-get install -y \
-software-properties-common libdb4.8-dev libdb4.8++-dev \
-build-essential libtool autotools-dev automake pkg-config \
+libdb4.8-dev libdb4.8++-dev \
+software-properties-common build-essential libtool autotools-dev automake pkg-config \
 libssl-dev libevent-dev bsdmainutils libboost-all-dev \
 libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
 libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
 protobuf-compiler libqrencode-dev help2man
 ```
 
+- Debian 10 (no PPA)
+```bash
+sudo apt-get install -y \
+software-properties-common build-essential libtool autotools-dev automake pkg-config \
+libssl-dev libevent-dev bsdmainutils libboost-all-dev \
+libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
+libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
+protobuf-compiler libqrencode-dev help2man
+```
+
+- PPA is *only* for Ubuntu. No `libdb4.8-dev` and `libdb4.8++-dev` packages on Debian.
+
 
 Build
 -----
-- Make
-
+- Ubuntu 16.04+
 ```bash
-git clone https://github.com/sugarchain-project/sugarchain.git && \
-cd sugarchain && \
 ./autogen.sh && \
 ./configure && \
 make -j$(nproc) && \
 make check -j$(nproc)
 ```
 
-- (optional) Reduce binary size using strip (about 90% file size reduction)
+- Debian 10+ (no PPA)
+```bash
+./autogen.sh && \
+./contrib/install_db4.sh `pwd`
+#
+# FOLLOW THE OUTPUT OF INSTRUCTION LIKE...
+# export BDB_PREFIX='${BDB_PREFIX}'
+# ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include"
+#
+make -j$(nproc) && \
+make check -j$(nproc)
+```
 
+- (optional) Following can be deleted `rm -rf db4/ && rm -f db-4.8.30.NC.tar.gz`
+
+
+Options after Build
+-------------------
+- (optional) Reduce binary size using strip (about 90% file size reduction)
 ```bash
 strip ./src/sugarchain-cli && \
 strip ./src/sugarchaind && \
@@ -87,7 +113,6 @@ strip ./src/test/test_sugarchain
 ```
 
 - (optional) After bump version on `configure.ac`, update binary docs (manpages) using help2man `.1` files
-
 ```bash
 make -j$(nproc) && ./contrib/devtools/gen-manpages.sh
 ```
@@ -106,12 +131,12 @@ All Sugarchain Yumekawa developers should execute this unit test. Some updates m
 ```bash
 ./src/test/test_sugarchain test_bitcoin --log_level=test_suite
 ```
- 
+
 - (optional) Test Partially: ie `blockencodings_tests`
 ```bash
 ./src/test/test_sugarchain test_bitcoin --log_level=test_suite --run_test=blockencodings_tests
 ```
- 
+
 - (optional) Test QT (GUI)
 ```bash
 ./src/qt/test/test_sugarchain-qt
@@ -160,7 +185,8 @@ Known Issues
 - Slow rescanning `wallet.dat`:
   * If your wallet is too heavy or mining purpose, it may take very long when importing.
 
-Release process using GITIAN
+
+Release Process using GITIAN
 ----------------------------
 - All Sugarchain Yumekawa developers should do following GITIAN release process. It's the safest way to distribute binaries to people.
 - Please use GITIAN release with checking PGP signature, or compile it yourself on your own machine.
