@@ -259,6 +259,7 @@ public:
         // release ASAP to avoid it where possible.
         vSeeds.emplace_back("1seed.sugarchain.info"); // cryptozeny
         vSeeds.emplace_back("2seed.sugarchain.info"); // cryptozeny
+        vSeeds.emplace_back("seed.sugarchain.site"); // ROZ
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,63);  // legacy: starting with S (upper)
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,125); // p2sh-segwit: starting with s (lower)
