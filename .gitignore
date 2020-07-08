@@ -122,3 +122,7 @@ init.sh
 
 # linearlize (bootstrap)
 contrib/linearize/hashlist.txt
+
+# Berkeley DB (./contrib/install_db4.sh `pwd`)
+db-4.8.30.NC.tar.gz
+/db4/
