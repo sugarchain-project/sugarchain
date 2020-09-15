@@ -403,7 +403,7 @@ public:
 
         // By default assume that the signatures in ancestors of this block are valid.
         // TODO.SUGAR.UPDATE
-        // getblockhash 4000000 && "hash"
+        // getblockhash 4000000 && "hash" (testnet)
         consensus.defaultAssumeValid = uint256S("bc05c2d5e81785f287cd58a798b64467cff35c8ef2bbe8062d8420eeb86f4056");
 
         pchMessageStart[0] = 0xb0;
