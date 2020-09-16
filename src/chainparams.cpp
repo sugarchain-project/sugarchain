@@ -215,14 +215,13 @@ public:
 
         // The best chain should have at least this much work.
         // TODO.SUGAR.UPDATE
-        // (510*510*17)+1=4421701
-        // getblockhash 4421701 && "chainwork"
-        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000214f0c90bb88");
+        // getblockhash 6513497 && "chainwork"
+        consensus.nMinimumChainWork = uint256S("00000000000000000000000000000000000000000000000000003f23ef34da28");
 
         // By default assume that the signatures in ancestors of this block are valid.
         // TODO.SUGAR.UPDATE
-        // getblockhash 4421701 && "hash"
-        consensus.defaultAssumeValid = uint256S("9a9c7db86b1a67a399d50f7f45b1d4bbb9179bcf0be08331239a1b9881ebcea9");
+        // getblockhash 6513497 && "hash"
+        consensus.defaultAssumeValid = uint256S("855f0c66238bc0246c8ca25cf958283fd49b9fb4b217ddeb518e5ea9f5071b9e");
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -284,16 +283,17 @@ public:
                 {900000, uint256S("8a566a463925cf028cb427edb6d4d18a9c1213bf472d9032369c4e45449eb71c")},
                 {2601511, uint256S("e30af0fcf522354f43c3ab2cfb4805d175b1264608b6124eab0b635bdea2589d")}, // 2601511=2601001+510
                 {4422211, uint256S("1f4186606aaab3cb3818f073599602e573476da9fed0b65c9f14646210d6b18f")}, // 4422211=4421701+510
+                {6513497, uint256S("855f0c66238bc0246c8ca25cf958283fd49b9fb4b217ddeb518e5ea9f5071b9e")},
                 // TODO.SUGAR.UPDATE
             }
         };
 
         // TODO.SUGAR.UPDATE
         chainTxData = ChainTxData{
-            // Data from RPC: getchaintxstats 4096 1f4186606aaab3cb3818f073599602e573476da9fed0b65c9f14646210d6b18f (4422211)
-            /* nTime    */ 1588725180,
-            /* nTxCount */ 4695912,
-            /* dTxRate  */ 0.2072510822510822
+            // Data from RPC: getchaintxstats 4096 855f0c66238bc0246c8ca25cf958283fd49b9fb4b217ddeb518e5ea9f5071b9e (6513497)
+            /* nTime    */ 1599181736,
+            /* nTxCount */ 6858263,
+            /* dTxRate  */ 0.2053689306146399
         };
     }
 };
@@ -397,10 +397,14 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000000039d585c9"); // getblockhash 780301 "chainwork" // TODO.SUGAR.UPDATE
+        // TODO.SUGAR.UPDATE
+        // getblockhash 4000000 && "chainwork" (testnet)
+        consensus.nMinimumChainWork = uint256S("000000000000000000000000000000000000000000000000000000014d9bf048");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("e87ec8451768ddadc3364b48efdc8f47b79e7723eb69c75ae3e7083bf48985b1"); // getblockhash 780301 "hash" // TODO.SUGAR.UPDATE
+        // TODO.SUGAR.UPDATE
+        // getblockhash 4000000 && "hash" (testnet)
+        consensus.defaultAssumeValid = uint256S("bc05c2d5e81785f287cd58a798b64467cff35c8ef2bbe8062d8420eeb86f4056");
 
         pchMessageStart[0] = 0xb0;
         pchMessageStart[1] = 0x11;
@@ -452,15 +456,16 @@ public:
                 {511, uint256S("9418cef01af69fc2491afcb56c640df9d78e0d0768bf9e2748c1978d2ffb97ed")},
                 {512, uint256S("c8663700fe1020185d26f1f06571dd51ed2f9c331436b83aa08dd21352f7ffea")},
                 {780811, uint256S("bd83debccee1bef17340539beff64ad3feab03c25e5d91969cf5418b8e2fe5a7")}, // 780811=780301+510
+                {4000000, uint256S("bc05c2d5e81785f287cd58a798b64467cff35c8ef2bbe8062d8420eeb86f4056")},
             }
         };
 
         // TODO.SUGAR.UPDATE
         chainTxData = ChainTxData{
             // Data from RPC: getchaintxstats 4096 bd83debccee1bef17340539beff64ad3feab03c25e5d91969cf5418b8e2fe5a7 (780811)
-            /* nTime    */ 1580549062,
-            /* nTxCount */ 801819,
-            /* dTxRate  */ 0.1563717517116163
+            /* nTime    */ 1598648664,
+            /* nTxCount */ 4033793,
+            /* dTxRate  */ 0.1692345821801809
         };
 
     }
