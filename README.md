@@ -28,8 +28,8 @@ information or see https://opensource.org/licenses/MIT.
 Minimum Requirement
 -------------------
 - CPU: 1 Core
-- RAM: 1024 MB (at least 3 GB [swap](https://github.com/sugarchain-project/doc/blob/master/swap.md))
-- DISK: 5 GB HDD
+- RAM: 2048 MB (at least 3 GB [swap](https://github.com/sugarchain-project/doc/blob/master/swap.md))
+- DISK: HDD 5 GB
 
 
 Depends on Bitcoin Core
@@ -162,8 +162,10 @@ The options `-rpcuser`, `-rpcpassword`, and `-printtoconsole` are optional. `ser
 
 CLI
 ---
-- Mainnet: `getblockcount` for counting blocks
-  > ./src/sugarchain-cli -rpcuser=rpcuser -rpcpassword=rpcpassword **getblockcount**
+- `-prunedebuglogfile`: Prune (limit) filesize of debug.log
+  > ./src/qt/sugarchain-qt -prunedebuglogfile
+
+  > 2020-09-15 19:41:34 DEBUG.LOG PRUNED at 10000063
 
 
 Known Issues
