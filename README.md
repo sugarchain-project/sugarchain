@@ -28,8 +28,8 @@ information or see https://opensource.org/licenses/MIT.
 Minimum Requirement
 -------------------
 - CPU: 1 Core
-- RAM: 1024 MB (at least 3 GB [swap](https://github.com/sugarchain-project/doc/blob/master/swap.md))
-- DISK: 5 GB HDD
+- RAM: 2048 MB (at least 3 GB [swap](https://github.com/sugarchain-project/doc/blob/master/swap.md))
+- DISK: HDD 5 GB
 
 
 Depends on Bitcoin Core
