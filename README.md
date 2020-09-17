@@ -162,8 +162,10 @@ The options `-rpcuser`, `-rpcpassword`, and `-printtoconsole` are optional. `ser
 
 CLI
 ---
-- Mainnet: `getblockcount` for counting blocks
-  > ./src/sugarchain-cli -rpcuser=rpcuser -rpcpassword=rpcpassword **getblockcount**
+- `-prunedebuglogfile`: Prune (limit) filesize of debug.log
+  > ./src/qt/sugarchain-qt -prunedebuglogfile
+
+  > 2020-09-15 19:41:34 DEBUG.LOG PRUNED at 10000063
 
 
 Known Issues
