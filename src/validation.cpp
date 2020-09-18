@@ -228,6 +228,8 @@ uint64_t nPruneTarget = 0;
 int64_t nMaxTipAge = DEFAULT_MAX_TIP_AGE;
 bool fEnableReplacement = DEFAULT_ENABLE_REPLACEMENT;
 
+bool fFastSync = false; // FIXME.SUGAR // skip PoW check during IBD
+
 uint256 hashAssumeValid;
 arith_uint256 nMinimumChainWork;
 
@@ -3044,6 +3046,12 @@ static bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, 
 
 static bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
 {
+    // FIXME.SUGAR // skip PoW check during IBD
+    if (fFastSync == true && IsInitialBlockDownload() == true) {
+        printf("Fast Sync Mode (fFastSync=%d)\n", fFastSync);
+        return true;
+    }
+
     // Check proof of work matches claimed amount
     if (fCheckPOW && !CheckProofOfWork(block.GetPoWHash_cached(), block.nBits, consensusParams))
         return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
