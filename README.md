@@ -62,7 +62,7 @@ libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
 protobuf-compiler libqrencode-dev help2man
 ```
 
-- Debian 10 (no PPA)
+- Debian 10 (Recommended, No PPA)
 ```bash
 sudo apt-get install -y \
 software-properties-common build-essential libtool autotools-dev automake pkg-config \
@@ -85,15 +85,12 @@ make -j$(nproc) && \
 make check -j$(nproc)
 ```
 
-- Debian 10+ (no PPA)
+- Debian 10+ (Recommended, No PPA)
 ```bash
 ./autogen.sh && \
-./contrib/install_db4.sh `pwd`
-#
-# FOLLOW THE OUTPUT OF INSTRUCTION LIKE...
-# export BDB_PREFIX='${BDB_PREFIX}'
-# ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include"
-#
+./contrib/install_db4.sh `pwd` && \
+export BDB_PREFIX=$PWD/db4 && \
+./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" && \
 make -j$(nproc) && \
 make check -j$(nproc)
 ```
