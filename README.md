@@ -34,7 +34,7 @@ Minimum Requirement
 
 Depends on Bitcoin Core
 -----------------------
-Exactly the same as dependencies of `Bitcoin Core v0.16.3`.
+Exactly the same as dependencies of [Bitcoin Core v0.16.3](https://github.com/bitcoin/bitcoin/tree/49e34e288005a5b144a642e197b628396f5a0765).
 
 - Debian 10 (Recommended, No PPA)
 ```bash
