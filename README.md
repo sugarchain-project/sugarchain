@@ -36,32 +36,6 @@ Depends on Bitcoin Core
 -----------------------
 Exactly the same as dependencies of `Bitcoin Core v0.16.3`.
 
-- Ubuntu 16.04
-```bash
-sudo add-apt-repository -y ppa:bitcoin/bitcoin && \
-sudo apt-get update && \
-sudo apt-get install -y \
-libdb4.8-dev libdb4.8++-dev \
-software-properties-common build-essential libtool autotools-dev automake pkg-config \
-libssl-dev libevent-dev bsdmainutils libboost-all-dev \
-libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
-libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
-protobuf-compiler libqrencode-dev help2man
-```
-
-- Ubuntu 18.04+
-```bash
-sudo add-apt-repository -y ppa:luke-jr/bitcoincore && \
-sudo apt-get update && \
-sudo apt-get install -y \
-libdb4.8-dev libdb4.8++-dev \
-software-properties-common build-essential libtool autotools-dev automake pkg-config \
-libssl-dev libevent-dev bsdmainutils libboost-all-dev \
-libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
-libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
-protobuf-compiler libqrencode-dev help2man
-```
-
 - Debian 10 (Recommended, No PPA)
 ```bash
 sudo apt-get install -y \
@@ -74,17 +48,38 @@ protobuf-compiler libqrencode-dev help2man
 
 - PPA is *only* for Ubuntu. No `libdb4.8-dev` and `libdb4.8++-dev` packages on Debian.
 
+- <details><summary>Old Ubuntu</summary>
+
+  * Ubuntu 16.04
+  ```bash
+  sudo add-apt-repository -y ppa:bitcoin/bitcoin && \
+  sudo apt-get update && \
+  sudo apt-get install -y \
+  libdb4.8-dev libdb4.8++-dev \
+  software-properties-common build-essential libtool autotools-dev automake pkg-config \
+  libssl-dev libevent-dev bsdmainutils libboost-all-dev \
+  libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
+  libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
+  protobuf-compiler libqrencode-dev help2man
+  ```
+
+  * Ubuntu 18.04+
+  ```bash
+  sudo add-apt-repository -y ppa:luke-jr/bitcoincore && \
+  sudo apt-get update && \
+  sudo apt-get install -y \
+  libdb4.8-dev libdb4.8++-dev \
+  software-properties-common build-essential libtool autotools-dev automake pkg-config \
+  libssl-dev libevent-dev bsdmainutils libboost-all-dev \
+  libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
+  libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
+  protobuf-compiler libqrencode-dev help2man
+  ```
+</details>
+
 
 Build
 -----
-- Ubuntu 16.04+
-```bash
-./autogen.sh && \
-./configure && \
-make -j$(nproc) && \
-make check -j$(nproc)
-```
-
 - Debian 10+ (Recommended, No PPA)
 ```bash
 ./autogen.sh && \
@@ -96,6 +91,17 @@ make check -j$(nproc)
 ```
 
 - (optional) Following can be deleted `rm -rf db4/ && rm -f db-4.8.30.NC.tar.gz`
+
+- <details><summary>Old Ubuntu</summary>
+
+  * Ubuntu 16.04+
+  ```bash
+  ./autogen.sh && \
+  ./configure && \
+  make -j$(nproc) && \
+  make check -j$(nproc)
+  ```
+</details>
 
 
 Options after Build
