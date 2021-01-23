@@ -34,35 +34,9 @@ Minimum Requirement
 
 Depends on Bitcoin Core
 -----------------------
-Exactly the same as dependencies of `Bitcoin Core v0.16.3`.
+Exactly the same as dependencies of [Bitcoin Core v0.16.3](https://github.com/bitcoin/bitcoin/tree/49e34e288005a5b144a642e197b628396f5a0765).
 
-- Ubuntu 16.04
-```bash
-sudo add-apt-repository -y ppa:bitcoin/bitcoin && \
-sudo apt-get update && \
-sudo apt-get install -y \
-libdb4.8-dev libdb4.8++-dev \
-software-properties-common build-essential libtool autotools-dev automake pkg-config \
-libssl-dev libevent-dev bsdmainutils libboost-all-dev \
-libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
-libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
-protobuf-compiler libqrencode-dev help2man
-```
-
-- Ubuntu 18.04+
-```bash
-sudo add-apt-repository -y ppa:luke-jr/bitcoincore && \
-sudo apt-get update && \
-sudo apt-get install -y \
-libdb4.8-dev libdb4.8++-dev \
-software-properties-common build-essential libtool autotools-dev automake pkg-config \
-libssl-dev libevent-dev bsdmainutils libboost-all-dev \
-libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
-libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
-protobuf-compiler libqrencode-dev help2man
-```
-
-- Debian 10 (no PPA)
+- Debian 10 (Recommended, No PPA)
 ```bash
 sudo apt-get install -y \
 software-properties-common build-essential libtool autotools-dev automake pkg-config \
@@ -74,31 +48,60 @@ protobuf-compiler libqrencode-dev help2man
 
 - PPA is *only* for Ubuntu. No `libdb4.8-dev` and `libdb4.8++-dev` packages on Debian.
 
+- <details><summary>Old Ubuntu</summary>
+
+  * Ubuntu 16.04
+  ```bash
+  sudo add-apt-repository -y ppa:bitcoin/bitcoin && \
+  sudo apt-get update && \
+  sudo apt-get install -y \
+  libdb4.8-dev libdb4.8++-dev \
+  software-properties-common build-essential libtool autotools-dev automake pkg-config \
+  libssl-dev libevent-dev bsdmainutils libboost-all-dev \
+  libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
+  libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
+  protobuf-compiler libqrencode-dev help2man
+  ```
+
+  * Ubuntu 18.04+
+  ```bash
+  sudo add-apt-repository -y ppa:luke-jr/bitcoincore && \
+  sudo apt-get update && \
+  sudo apt-get install -y \
+  libdb4.8-dev libdb4.8++-dev \
+  software-properties-common build-essential libtool autotools-dev automake pkg-config \
+  libssl-dev libevent-dev bsdmainutils libboost-all-dev \
+  libminiupnpc-dev libzmq3-dev libqt5gui5 libqt5core5a \
+  libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
+  protobuf-compiler libqrencode-dev help2man
+  ```
+</details>
+
 
 Build
 -----
-- Ubuntu 16.04+
+- Debian 10+ (Recommended, No PPA)
 ```bash
 ./autogen.sh && \
-./configure && \
-make -j$(nproc) && \
-make check -j$(nproc)
-```
-
-- Debian 10+ (no PPA)
-```bash
-./autogen.sh && \
-./contrib/install_db4.sh `pwd`
-#
-# FOLLOW THE OUTPUT OF INSTRUCTION LIKE...
-# export BDB_PREFIX='${BDB_PREFIX}'
-# ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include"
-#
+./contrib/install_db4.sh `pwd` && \
+export BDB_PREFIX=$PWD/db4 && \
+./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" && \
 make -j$(nproc) && \
 make check -j$(nproc)
 ```
 
 - (optional) Following can be deleted `rm -rf db4/ && rm -f db-4.8.30.NC.tar.gz`
+
+- <details><summary>Old Ubuntu</summary>
+
+  * Ubuntu 16.04+
+  ```bash
+  ./autogen.sh && \
+  ./configure && \
+  make -j$(nproc) && \
+  make check -j$(nproc)
+  ```
+</details>
 
 
 Options after Build
@@ -171,12 +174,11 @@ CLI
 Known Issues
 ------------
 - Transaction too large:
-  * This is a part of BTC.
-  * It will be fixed in next *Taproot+Schnorr* update.
+  * This is a part of BTC, and hopefully will be fixed in next *Taproot* Softfork.
 - Slow update balance on wallet:
   * This slow is a part of BTC.
   * Update total balance *every minute (12 blocks)* interval.
-  * This fix is a (nice) workaround for now. [source](https://github.com/sugarchain-project/sugarchain/commit/72436c90b29844cf507895df053103f9b6840776#diff-2e3836af182cfb375329c3463ffd91f8)
+  * A workaround at this moment. [source](https://github.com/sugarchain-project/sugarchain/commit/72436c90b29844cf507895df053103f9b6840776#diff-2e3836af182cfb375329c3463ffd91f8)
 - Poor performance on ARM CPUs (32/64-Bit):
   * No ARM optimization for Yespower yet.
 - Poor performance on 32-Bit OS:
@@ -184,8 +186,6 @@ Known Issues
 - Slow startup on low memory machines:
   * Startup can take up to some hours on 1cpu 1024ram (+swap 3GB) VPS.
   * Workaround is just increase RAM at least 2 GB.
-- Slow rescanning `wallet.dat`:
-  * If your wallet is too heavy or mining purpose, it may take very long when importing.
 
 
 Release Process using GITIAN
