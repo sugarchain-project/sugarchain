@@ -15,7 +15,7 @@
     [#184](https://github.com/sugarchain-project/sugarchain/pull/184)
 
 **Known Issues**
-Same as before
+- Same as before
 
 **Credits:**
 Thanks to everyone who directly contributed to this release
@@ -207,7 +207,7 @@ Nje4ppnRwR3nbnb6e95Q
     [#92](https://github.com/sugarchain-project/sugarchain/pull/92)
 
 **Known Issues**
-Same as before
+- Same as before
 
 **Credits:**
 Thanks to everyone who directly contributed to this release
