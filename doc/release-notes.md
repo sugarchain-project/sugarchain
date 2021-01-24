@@ -1,3 +1,68 @@
+## Yumekawa v0.16.3.36-payapoya
+- Version: Final Release
+- Date: 2021-01-25
+
+**Changes:**
+- Major Fix:
+  * Add: Log output during initial header sync
+    [#174](https://github.com/sugarchain-project/sugarchain/pull/174)
+  * Add: Mainnet DNSSEED
+    [#167](https://github.com/sugarchain-project/sugarchain/pull/167)
+  * Enhanced chain security
+    [#172](https://github.com/sugarchain-project/sugarchain/pull/172)
+- Minor Fix:
+  * Build documentation
+    [#184](https://github.com/sugarchain-project/sugarchain/pull/184)
+
+**Known Issues**
+Same as before
+
+**Credits:**
+Thanks to everyone who directly contributed to this release
+- decryp2kanon
+- ROZ-MOFUMOFU-ME
+- volbil
+- Nugetzrul3
+- y-chan
+- cryptozeny
+
+**PGP:**
+```
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+e89bf74cfa41c66ae9489390bfdd1144f87e448728e184be3854bd4294c2f41e  sugarchain-0.16.3.36-payapoya-aarch64-linux-gnu.tar.gz
+61fbc406fa30050132b18ec6b3b001f661f8350c9d34bdab834802fe896a7a2e  sugarchain-0.16.3.36-payapoya-arm-linux-gnueabihf.tar.gz
+5dd0817e1be7fd8efedf5bbd43583850dd6f5bd8324c6fe50783ba4becf2de90  sugarchain-0.16.3.36-payapoya-i686-pc-linux-gnu.tar.gz
+6571fdb35c3bd4aa44a8b6dae15128136257986b16d50cf6f6b091b2528a5f7e  sugarchain-0.16.3.36-payapoya-osx64.tar.gz
+620fa7a5b92fdd3d108ce38a55b505f360dc90d5071186ebd8ecb11e453f6503  sugarchain-0.16.3.36-payapoya-osx-unsigned.dmg
+7a1d56262fc9690d9f25ed292f30a058a14cbe5176b1007de69bdec8a43c78ca  sugarchain-0.16.3.36-payapoya.tar.gz
+b58d56bbafd991de163be0d69286988456a0b9d6a0965e040cb6a615cbc1ae5f  sugarchain-0.16.3.36-payapoya-win32-setup-unsigned.exe
+16d660bba5e8c3f10d42717a05c4df73dc9a91ef3295b77e05a97e7d672ee1e5  sugarchain-0.16.3.36-payapoya-win32.zip
+453fee9d4556de7c03ddb2f67d3b92246852612f9362394711a92e7354a7371f  sugarchain-0.16.3.36-payapoya-win64-setup-unsigned.exe
+30e49a2b410a7e6f9e7d76cf09fd01d756b2f234816f53cf669897917b5b02db  sugarchain-0.16.3.36-payapoya-win64.zip
+b2d0cb2886d1aa5f18a1b52b3a75fab9f1f38c54459c888555f69262cefa82ef  sugarchain-0.16.3.36-payapoya-x86_64-linux-gnu.tar.gz
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBCAAGBQJgDcHyAAoJELB664A/uejpki8QAIDbUBGUR8voLCpQRoQkQcUM
+y0cu9dWKawHnRE0mIj6Mie2ZNbsQXXyZbZCWZ6/tb+LdwBMKhci07vEQ8psPM8kt
+tVAjxZ6OspHflOaaS5jjFqI9Pl/GQd4ARsBP2ezMtKXFWW29JVLgHNwtavKos6xF
+peGje9rkt0ERt89XoYHiysA8nQb6p2um1UTfWdntGi7uuliZy9SgDJACgGlj4qLJ
+Zh/VZsfX/UyzEy3JIR977hYQjqEn7SWZ1G1rB6/+BE8kxuvXgERQFOK9NaErQISE
+Wu64FglSBl/IW8Qa+6HCkHtS2ZbB4YGO+dlqRY1EE2HHL3OqJVnmxcm6/iJemJCk
+h85TtrAjIbDydR4IFxqSoLYTU/bCn+QBR+0+9mAICYVTVDYDW6POlVhYewg6XDjy
+NiACYIj51Y9TVwF9JHWeSLW2wSL/lzO1FvozBflNG/0WFA2K10z2cLn/OSuyFRDw
+Zca9KEcmgo0cmJo0v9INPNfmZnUOmeFOpYZHTeLPCzWlgNDD6dv03lV45afeeq5U
+4agUjfG+mQ2+v0laIaL3NIYaJyh6mdOKOAlC5vK7jaXQO+Q/VECxyJSTFCTPnW7V
+s8LUt0ccBgBXRkkLYCRfJdCdBYQm404QO5f36JMDWnaiY3gRDYgpK0RMpMagm7M6
+9n6om+P6BGir9tax4BYc
+=7twE
+-----END PGP SIGNATURE-----
+```
+
+-----
+
 ## Yumekawa v0.16.3.34-starboy
 - Version: Final Release
 - Date: 2020-06-07
