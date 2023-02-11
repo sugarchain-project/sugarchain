@@ -87,7 +87,7 @@ struct Options {
   // one open file per 2MB of working set).
   //
   // Default: 1000
-  int max_open_files;
+  int max_open_files = 256; // restict feeding memtable to only recently changed files. Old files will still be updated when needed.
 
   // Control over blocks (user data is stored in a set of blocks, and
   // a block is the unit of reading from disk).
