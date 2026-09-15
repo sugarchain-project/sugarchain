@@ -1,6 +1,5 @@
 Sugarchain Yumekawa
 ===================
-[![Build Status](https://travis-ci.org/sugarchain-project/sugarchain.svg?branch=master-v0.16.3)](https://travis-ci.org/sugarchain-project/sugarchain)
 ![GitHub All Releases](https://img.shields.io/github/downloads/sugarchain-project/sugarchain/total)
 
 https://sugarchain.org
@@ -80,14 +79,25 @@ protobuf-compiler libqrencode-dev help2man
 
 Build
 -----
-- Debian 10+ (Recommended, No PPA)
+- Ubuntu 22.04.1
 ```bash
 ./autogen.sh && \
-./contrib/install_db4.sh `pwd` && \
-export BDB_PREFIX=$PWD/db4 && \
-./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" && \
-make -j$(nproc) && \
-make check -j$(nproc)
+./contrib/install_db4.sh $(pwd) && \
+export BDB_PREFIX="$PWD/db4" && \
+export BDB_CFLAGS="-I${BDB_PREFIX}/include" && \
+export BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" && \
+./configure && \
+printf '#include <deque>\n#include <boost/bind/bind.hpp>\nusing namespace boost::placeholders;\n' >/tmp/sugar_compat.h && \
+printf '#!/bin/sh\ncase " $* " in\n  *"qt/trafficgraphwidget.cpp"*)\n    exec g++ -include /tmp/sugar_compat.h -include QPainterPath "$@"\n    ;;\n  *)\n    exec g++ -include /tmp/sugar_compat.h "$@"\n    ;;\nesac\n' >/tmp/sugar-cxx && \
+chmod +x /tmp/sugar-cxx && \
+make -j$(nproc) CXX=/tmp/sugar-cxx && \ 
+find . -type f \( -name 'sugarchain-qt' -o -name 'sugarchain-cli' -o -name 'sugarchaind' \) -ls && \
+strip ./src/sugarchain-cli && \
+strip ./src/sugarchaind && \
+strip ./src/qt/sugarchain-qt && \
+strip ./src/sugarchain-tx && \
+strip ./src/test/test_sugarchain
+./src/sugarchaind --version
 ```
 
 - (optional) Following can be deleted `rm -rf db4/ && rm -f db-4.8.30.NC.tar.gz`
@@ -98,6 +108,16 @@ make check -j$(nproc)
   ```bash
   ./autogen.sh && \
   ./configure && \
+  make -j$(nproc) && \
+  make check -j$(nproc)
+  ```
+
+  * Debian 10+
+  ```bash
+  ./autogen.sh && \
+  ./contrib/install_db4.sh `pwd` && \
+  export BDB_PREFIX=$PWD/db4 && \
+  ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" && \
   make -j$(nproc) && \
   make check -j$(nproc)
   ```
