@@ -90,13 +90,12 @@ export BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" && \
 printf '#include <deque>\n#include <boost/bind/bind.hpp>\nusing namespace boost::placeholders;\n' >/tmp/sugar_compat.h && \
 printf '#!/bin/sh\ncase " $* " in\n  *"qt/trafficgraphwidget.cpp"*)\n    exec g++ -include /tmp/sugar_compat.h -include QPainterPath "$@"\n    ;;\n  *)\n    exec g++ -include /tmp/sugar_compat.h "$@"\n    ;;\nesac\n' >/tmp/sugar-cxx && \
 chmod +x /tmp/sugar-cxx && \
-make -j$(nproc) CXX=/tmp/sugar-cxx && \ 
-find . -type f \( -name 'sugarchain-qt' -o -name 'sugarchain-cli' -o -name 'sugarchaind' \) -ls && \
+make -j$(nproc) CXX=/tmp/sugar-cxx && \
 strip ./src/sugarchain-cli && \
 strip ./src/sugarchaind && \
 strip ./src/qt/sugarchain-qt && \
 strip ./src/sugarchain-tx && \
-strip ./src/test/test_sugarchain
+strip ./src/test/test_sugarchain && \
 ./src/sugarchaind --version
 ```
 
