@@ -96,6 +96,7 @@ strip ./src/sugarchaind && \
 strip ./src/qt/sugarchain-qt && \
 strip ./src/sugarchain-tx && \
 strip ./src/test/test_sugarchain && \
+./src/test/test_sugarchain test_bitcoin --log_level=test_suite && \
 ./src/sugarchaind --version
 ```
 
