@@ -90,13 +90,13 @@ static const int DEFAULT_SCRIPTCHECK_THREADS = 0;
  *  far ahead of the full blocks download, resulting in more work lost and redone in case the
  *  initial blocks download is interrupted and continued.
  *  The work loss is because we do not yet store cached PoWs on disk. */
-static const int MAX_BLOCKS_IN_TRANSIT_PER_PEER = 2000; // (was 16)
+static const int MAX_BLOCKS_IN_TRANSIT_PER_PEER = 25000; // (was 16)
 
 /** Timeout in seconds during which a peer must stall block download progress before being disconnected. */
 static const unsigned int BLOCK_STALLING_TIMEOUT = 2;
 /** Number of headers sent in one getheaders result. We rely on the assumption that if a peer sends
  *  less than this number, we reached its tip. Changing this value is a protocol upgrade. */
-static const unsigned int MAX_HEADERS_RESULTS = 2000;
+static const unsigned int MAX_HEADERS_RESULTS = 25000; // (was 2000)
 /** Maximum depth of blocks we're willing to serve as compact blocks to peers
  *  when requested. For older blocks, a regular BLOCK response will be sent. */
 static const int MAX_CMPCTBLOCK_DEPTH = 5;
