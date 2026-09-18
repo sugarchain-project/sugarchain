@@ -586,7 +586,7 @@ static int MaxMmaps() {
     return mmap_limit;
   }
   // Up to 1000 mmaps for 64-bit binaries; none for smaller pointer sizes.
-  mmap_limit = sizeof(void*) >= 8 ? 1000 : 0;
+  mmap_limit = 0; // disable mmap. uses 2mb per open file. not needed for low TPS single user setup. old code >> sizeof(void*) >= 8 ? 1000 : 0;
   return mmap_limit;
 }
 
