@@ -215,8 +215,8 @@ public:
 
         // The best chain should have at least this much work.
         // TODO.SUGAR.UPDATE
-        // getblockhash 6513497 && "chainwork"
-        consensus.nMinimumChainWork = uint256S("00000000000000000000000000000000000000000000000000003f23ef34da28");
+        // Minimum chain work at height 37,500,000 (latest halving).
+        consensus.nMinimumChainWork = uint256S("00000000000000000000000000000000000000000000000000014058fe37bb0b");
 
         // By default assume that the signatures in ancestors of this block are valid.
         // TODO.SUGAR.UPDATE
