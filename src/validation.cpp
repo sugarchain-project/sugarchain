@@ -1121,8 +1121,9 @@ bool ReadBlockFromDisk(CBlock& block, const CDiskBlockPos& pos, const Consensus:
         return error("%s: Deserialize or I/O error - %s at %s", __func__, e.what(), pos.ToString());
     }
 
-    // Check the header
-    if (!CheckProofOfWork(block.GetPoWHash_cached(), block.nBits, consensusParams))
+    // Check the header (skip expensive yespower PoW verification during IBD)
+    if (!IsInitialBlockDownload() &&
+        !CheckProofOfWork(block.GetPoWHash_cached(), block.nBits, consensusParams))
         return error("ReadBlockFromDisk: Errors in block header at %s", pos.ToString());
 
     return true;
@@ -3070,7 +3071,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, const Consensus::P
     // FIXME.SUGAR // check PoW: SKIPPED during downloading headers (IBD)
     // Check that the header is valid (particularly PoW).  This is mostly
     // redundant with the call in AcceptBlockHeader, but when IBD mode, its SKIPPED.
-    if (!CheckBlockHeader(block, state, consensusParams, fCheckPOW))
+    if (!CheckBlockHeader(block, state, consensusParams, fCheckPOW && !IsInitialBlockDownload()))
         return false;
 
     // Check the merkle root.
