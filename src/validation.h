@@ -90,7 +90,7 @@ static const int DEFAULT_SCRIPTCHECK_THREADS = 0;
  *  far ahead of the full blocks download, resulting in more work lost and redone in case the
  *  initial blocks download is interrupted and continued.
  *  The work loss is because we do not yet store cached PoWs on disk. */
-static const int MAX_BLOCKS_IN_TRANSIT_PER_PEER = 25000; // (was 16)
+static const int MAX_BLOCKS_IN_TRANSIT_PER_PEER = 8192; // (was 16)
 
 /** Timeout in seconds during which a peer must stall block download progress before being disconnected. */
 static const unsigned int BLOCK_STALLING_TIMEOUT = 20;
