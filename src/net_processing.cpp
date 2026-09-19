@@ -3608,7 +3608,32 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
         if (!pto->fClient && (fFetch || !IsInitialBlockDownload()) && state.nBlocksInFlight < MAX_BLOCKS_IN_TRANSIT_PER_PEER) {
             std::vector<const CBlockIndex*> vToDownload;
             NodeId staller = -1;
-            FindNextBlocksToDownload(pto->GetId(), MAX_BLOCKS_IN_TRANSIT_PER_PEER - state.nBlocksInFlight, vToDownload, staller, consensusParams);
+
+            /*
+            * Limit the number of blocks assigned to a peer in a single
+            * SendMessages() scheduling round during Initial Block Download.
+            *
+            * A large MAX_BLOCKS_IN_TRANSIT_PER_PEER improves throughput by
+            * keeping more block requests in flight. However, assigning the whole
+            * available window to one peer can reduce download parallelism by
+            * leaving other peers with no pending block requests.
+            *
+            * Keep the large in-flight window, but cap per-round assignments so
+            * multiple peers have an opportunity to participate in block download.
+            *
+            * This only affects scheduling fairness and does not reduce the total
+            * block download window.
+            */
+
+            // Maximum number of blocks assigned to a single peer per scheduling round.
+            const unsigned int BLOCK_DOWNLOAD_BATCH_LIMIT = 1024;
+
+            unsigned int nBlocksToRequest =
+                MAX_BLOCKS_IN_TRANSIT_PER_PEER - state.nBlocksInFlight;
+
+            nBlocksToRequest = std::min(nBlocksToRequest, BLOCK_DOWNLOAD_BATCH_LIMIT);
+
+            FindNextBlocksToDownload(pto->GetId(), nBlocksToRequest, vToDownload, staller, consensusParams);
             for (const CBlockIndex *pindex : vToDownload) {
                 uint32_t nFetchFlags = GetFetchFlags(pto);
                 vGetData.push_back(CInv(MSG_BLOCK | nFetchFlags, pindex->GetBlockHash()));
