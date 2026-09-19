@@ -90,10 +90,10 @@ static const int DEFAULT_SCRIPTCHECK_THREADS = 0;
  *  far ahead of the full blocks download, resulting in more work lost and redone in case the
  *  initial blocks download is interrupted and continued.
  *  The work loss is because we do not yet store cached PoWs on disk. */
-static const int MAX_BLOCKS_IN_TRANSIT_PER_PEER = 2000; // (was 16)
+static const int MAX_BLOCKS_IN_TRANSIT_PER_PEER = 122880; // (was 16)
 
 /** Timeout in seconds during which a peer must stall block download progress before being disconnected. */
-static const unsigned int BLOCK_STALLING_TIMEOUT = 2;
+static const unsigned int BLOCK_STALLING_TIMEOUT = 20;
 /** Number of headers sent in one getheaders result. We rely on the assumption that if a peer sends
  *  less than this number, we reached its tip. Changing this value is a protocol upgrade. */
 static const unsigned int MAX_HEADERS_RESULTS = 2000;
@@ -106,7 +106,7 @@ static const int MAX_BLOCKTXN_DEPTH = 10;
  *  Larger windows tolerate larger download speed differences between peer, but increase the potential
  *  degree of disordering of blocks on disk (which make reindexing and pruning harder). We'll probably
  *  want to make this a per-peer adaptive value at some point. */
-static const unsigned int BLOCK_DOWNLOAD_WINDOW = 1024;
+static const unsigned int BLOCK_DOWNLOAD_WINDOW = 8192;
 /** Time to wait (in seconds) between writing blocks/block index to disk. */
 static const unsigned int DATABASE_WRITE_INTERVAL = 60 * 60;
 /** Time to wait (in seconds) between flushing chainstate to disk. */
