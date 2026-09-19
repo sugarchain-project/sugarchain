@@ -3625,8 +3625,9 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
             * block download window.
             */
 
-            // Maximum number of blocks assigned to a single peer per scheduling round.
-            const unsigned int BLOCK_DOWNLOAD_BATCH_LIMIT = 8192;
+            // Per-peer block assignment limit per scheduling round, scaled by the global download window.
+            const unsigned int BLOCK_DOWNLOAD_BATCH_LIMIT =
+                std::max(1024u, MAX_BLOCKS_IN_TRANSIT_PER_PEER / 16);
 
             unsigned int nBlocksToRequest =
                 MAX_BLOCKS_IN_TRANSIT_PER_PEER - state.nBlocksInFlight;
