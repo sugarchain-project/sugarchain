@@ -285,7 +285,13 @@ then
 	    echo ""
 	    ./bin/gbuild -j ${proc} -m ${mem} --commit sugarchain=${COMMIT} --url sugarchain=${url} ../sugarchain/contrib/gitian-descriptors/gitian-linux.yml
 	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs.sugar/ ../sugarchain/contrib/gitian-descriptors/gitian-linux.yml
-	    mv build/out/sugarchain-*.tar.gz build/out/src/sugarchain-*.tar.gz ../sugarchain-binaries/${VERSION}
+	    linux_artifacts=()
+	    for artifact in "$HOME"/gitian-builder/build/out/sugarchain-*.tar.gz "$HOME"/gitian-builder/build/out/src/sugarchain-*.tar.gz; do
+	        [[ -e "$artifact" ]] && linux_artifacts+=("$artifact")
+	    done
+	    [[ ${#linux_artifacts[@]} -gt 0 ]] || { echo "No Linux artifacts found in $HOME/gitian-builder/build/out" >&2; exit 1; }
+	    mkdir -p "$HOME/sugarchain-binaries/${VERSION}"
+	    mv -- "${linux_artifacts[@]}" "$HOME/sugarchain-binaries/${VERSION}/"
 	fi
 	# Windows
 	if [[ $windows = true ]]
