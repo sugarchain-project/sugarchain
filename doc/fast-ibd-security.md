@@ -99,6 +99,27 @@ requests and ordinary chainwork-based peer eviction cannot issue competing
 locators during presync. An unavailable or repeatedly malicious peer can still
 waste bandwidth/time; there is no bounded completion guarantee under eclipse.
 
+If the transport disconnects or hits the progress timeout during presync, one
+in-memory, still-untrusted session can transfer to the next peer. Its exact last
+header hash, sparse commitments, checkpoint configuration and original four-hour
+deadline are retained. The replacement's GETHEADERS locator uses that hash and
+genesis as fallback. No header is indexed and no validation evidence is created
+by this transfer. All links and compiled checkpoints must still match, and the
+entire authenticated history is replayed before index admission. Invalid or empty
+responses discard the session; a peer that cannot extend a poisoned prefix may
+be disconnected, after which a fresh session can start. Checkpoint changes and
+expiration also discard it. Peer replacement cannot renew the absolute deadline.
+Consequently a genuinely slow presync taking more than four hours still restarts;
+the failover change addresses transport loss, not that separate resource limit.
+
+`validation_block_tests/checkpoint_presync_peer_takeover` exercises real serialized
+HEADERS messages, InitializeNode, SendMessages and FinalizeNode with a 4,003-header
+chain. Before the fix, both disconnect and progress-timeout cases lost the first
+2,017 headers: expecting a replacement at height 2,017 failed with height 0.
+The regression checks the outbound locator, untrusted-state isolation, checkpoint
+and deadline invalidation, malicious continuation, and successful authentication
+plus replay and post-checkpoint PoW rejection. No mainnet download is needed.
+
 After endpoint authentication, one immutable commitment snapshot survives peer
 loss or rejection. A replacement peer resumes replay at the highest exact
 commitment hash already indexed at its expected height, valid at TREE level and

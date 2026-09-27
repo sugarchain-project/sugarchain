@@ -180,8 +180,8 @@ struct CNodeState {
     int nUnconnectingHeaders;
     //! Whether we've started headers synchronization with this peer.
     bool fSyncStarted;
-    // Sparse, peer-local first-pass commitments. Unauthenticated headers never
-    // enter mapBlockIndex, best-header selection, or block download scheduling.
+    // Sparse first-pass commitments, owned by one peer at a time. Unauthenticated
+    // headers never enter mapBlockIndex, best-header selection, or block downloads.
     std::shared_ptr<Checkpoints::HeaderSync> checkpoint_sync;
     int64_t checkpoint_sync_deadline{0};
     int64_t checkpoint_sync_progress_deadline{0};
@@ -285,6 +285,22 @@ std::map<NodeId, CNodeState> mapNodeState;
 // One immutable, endpoint-authenticated snapshot, independent of peer lifetime.
 // It contains hashes, not block-index pointers or unverified replay packets.
 static std::shared_ptr<const Checkpoints::HeaderSync> checkpoint_replay GUARDED_BY(cs_main);
+
+// A single quarantined presync may outlive its transport. Unlike checkpoint_replay,
+// this is NOT authenticated evidence. Transfer ownership, including the original
+// absolute deadline, so peer churn cannot prolong an untrusted session indefinitely.
+static std::shared_ptr<Checkpoints::HeaderSync> checkpoint_presync GUARDED_BY(cs_main);
+static int64_t checkpoint_presync_deadline GUARDED_BY(cs_main) = 0;
+
+static void SaveCheckpointPresync(CNodeState& state)
+{
+    AssertLockHeld(cs_main);
+    if (state.checkpoint_sync && state.checkpoint_sync_deadline > GetTime() &&
+        state.checkpoint_sync->CanContinuePresync(Params().Checkpoints())) {
+        checkpoint_presync = std::move(state.checkpoint_sync);
+        checkpoint_presync_deadline = state.checkpoint_sync_deadline;
+    }
+}
 
 // Requires cs_main.
 CNodeState *State(NodeId pnode) {
@@ -646,6 +662,7 @@ void PeerLogicValidation::FinalizeNode(NodeId nodeid, bool& fUpdateConnectionTim
 
     if (state->checkpoint_sync)
         uiInterface.NotifyCheckpointHeaderProgress(0, 0, 0, false);
+    SaveCheckpointPresync(*state);
     mapNodeState.erase(nodeid);
 
     if (mapNodeState.empty()) {
@@ -843,7 +860,12 @@ static bool BlockRequestAllowed(const CBlockIndex* pindex, const Consensus::Para
 PeerLogicValidation::PeerLogicValidation(CConnman* connmanIn, CScheduler &scheduler) : connman(connmanIn), m_stale_tip_check_time(0) {
     // Initialize global variables that cannot be constructed at startup.
     recentRejects.reset(new CRollingBloomFilter(120000, 0.000001));
-    { LOCK(cs_main); checkpoint_replay.reset(); }
+    {
+        LOCK(cs_main);
+        checkpoint_replay.reset();
+        checkpoint_presync.reset();
+        checkpoint_presync_deadline = 0;
+    }
 
     const Consensus::Params& consensusParams = Params().GetConsensus();
     // Stale tip checking and peer eviction are on two different timers, but we
@@ -3380,20 +3402,30 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
                     const CBlockIndex* start = Checkpoints::GetLastCheckpoint(checkpoints);
                     if (!start) start = chainActive.Genesis();
                     if (start && start->nHeight < checkpoints.mapCheckpoints.rbegin()->first) {
+                        state.checkpoint_sync_deadline = GetTime() + 4 * 60 * 60;
                         if (checkpoint_replay) state.checkpoint_sync = checkpoint_replay->Resume(checkpoints);
+                        if (!state.checkpoint_sync && checkpoint_presync &&
+                            checkpoint_presync_deadline > GetTime() &&
+                            checkpoint_presync->CanContinuePresync(checkpoints)) {
+                            state.checkpoint_sync = std::move(checkpoint_presync);
+                            state.checkpoint_sync_deadline = checkpoint_presync_deadline;
+                        }
+                        checkpoint_presync.reset();
                         if (!state.checkpoint_sync)
                             state.checkpoint_sync = std::make_shared<Checkpoints::HeaderSync>(start->nHeight, start->GetBlockHash(), checkpoints);
+                        const bool resuming = state.checkpoint_sync->Replaying() ||
+                            state.checkpoint_sync->Height() > state.checkpoint_sync->StartHeight();
                         uiInterface.NotifyCheckpointHeaderProgress(state.checkpoint_sync->StartHeight(),
                             state.checkpoint_sync->Height(), state.checkpoint_sync->StopHeight(), state.checkpoint_sync->Replaying());
-                        state.checkpoint_sync_deadline = GetTime() + 4 * 60 * 60;
-                        state.checkpoint_sync_progress_deadline = GetTime() + 60;
+                        state.checkpoint_sync_progress_deadline = state.checkpoint_sync->Replaying() ? GetTime() + 60 :
+                            std::min<int64_t>(state.checkpoint_sync_deadline, GetTime() + 60);
                         state.nHeadersSyncTimeout = std::numeric_limits<int64_t>::max();
                         LogPrintf("%s checkpoint header %s from height=%d peer=%d\n",
-                            state.checkpoint_sync->Replaying() ? "Resuming" : "Starting",
+                            resuming ? "Resuming" : "Starting",
                             state.checkpoint_sync->Replaying() ? "replay" : "authentication",
                             state.checkpoint_sync->Height(), pto->GetId());
                         connman->PushMessage(pto, msgMaker.Make(NetMsgType::GETHEADERS,
-                            state.checkpoint_sync->Replaying() ?
+                            resuming ?
                                 CBlockLocator({state.checkpoint_sync->NextHash(), consensusParams.hashGenesisBlock}) : chainActive.GetLocator(start),
                             state.checkpoint_sync->StopHash()));
                     }
@@ -3747,6 +3779,7 @@ bool PeerLogicValidation::SendMessages(CNode* pto, std::atomic<bool>& interruptM
         if (state.checkpoint_sync && GetTime() > state.checkpoint_sync_progress_deadline) {
             LogPrintf("Timeout authenticating checkpoint headers, disconnecting peer=%d\n", pto->GetId());
             uiInterface.NotifyCheckpointHeaderProgress(0, 0, 0, false);
+            SaveCheckpointPresync(state);
             state.checkpoint_sync.reset();
             pto->fDisconnect = true;
             return true;
