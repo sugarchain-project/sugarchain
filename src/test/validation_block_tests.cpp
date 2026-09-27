@@ -425,7 +425,7 @@ BOOST_AUTO_TEST_CASE(checkpoint_replay_resume_requires_accepted_commitments)
     Checkpoints::HeaderSync sync(0, Params().GenesisBlock().GetHash(), checkpoints);
     std::vector<CBlockHeader> out;
     LOCK(cs_main);
-    BOOST_CHECK(!sync.Resume(checkpoints)); // Unauthenticated presync is not reusable.
+    BOOST_CHECK(!sync.Resume(checkpoints)); // Unauthenticated presync cannot authorize replay.
     BOOST_REQUIRE(sync.Process({headers.begin(), headers.begin() + 2000}, out));
     BOOST_REQUIRE(sync.Process({headers.begin() + 2000, headers.begin() + 4000}, out));
     BOOST_REQUIRE(sync.Process({headers.begin() + 4000, headers.end()}, out));
@@ -726,6 +726,153 @@ BOOST_AUTO_TEST_CASE(checkpoint_authentication_through_p2p_headers_messages)
         SetMockTime(GetTime() + 61);
         { LOCK(peer.cs_sendProcessing); peerLogic->SendMessages(&peer, interrupt); }
         BOOST_CHECK(peer.fDisconnect); // Replay still cannot stall indefinitely.
+    }
+}
+
+// Real HEADERS parsing and peer lifecycle, with a tiny synthetic checkpoint.
+// No checkpoint_sync internals or claimed progress heights are assigned.
+BOOST_AUTO_TEST_CASE(checkpoint_presync_peer_takeover)
+{
+    FastIBDOptions options;
+    const auto headers = HeaderChain(4003);
+    auto& checkpoints = const_cast<CCheckpointData&>(Params().Checkpoints());
+    struct Restore {
+        CCheckpointData& ref;
+        CCheckpointData original;
+        ~Restore() { ref = original; SetMockTime(0); }
+    } restore{checkpoints, checkpoints};
+    checkpoints = {{{4003, headers.back().GetHash()}}};
+    CConnman::Options conn_options;
+    conn_options.nSendBufferMaxSize = conn_options.nReceiveFloodSize = 4 * 1024 * 1024;
+    connman->Init(conn_options);
+    CService service;
+    BOOST_REQUIRE(Lookup("250.1.1.2", service, 18444, false));
+    CAddress addr(service, NODE_NETWORK);
+    std::atomic<bool> interrupt{false};
+    int height = -1;
+    bool replay = false;
+    boost::signals2::scoped_connection progress(uiInterface.NotifyCheckpointHeaderProgress.connect(
+        [&](int, int h, int, bool r) { height = h; replay = r; }));
+    const auto send = [&](CNode& peer) {
+        LOCK(peer.cs_sendProcessing);
+        peerLogic->SendMessages(&peer, interrupt);
+    };
+    const auto receive = [&](CNode& peer, const std::vector<CBlockHeader>& packet) {
+        CDataStream payload(SER_NETWORK, PROTOCOL_VERSION);
+        WriteCompactSize(payload, packet.size());
+        for (const auto& header : packet) { payload << header; WriteCompactSize(payload, 0); }
+        CNetMessage message(Params().MessageStart(), SER_NETWORK, PROTOCOL_VERSION);
+        message.hdr = CMessageHeader(Params().MessageStart(), NetMsgType::HEADERS, payload.size());
+        message.in_data = true;
+        message.nTime = GetTimeMicros();
+        message.readData(payload.data(), payload.size());
+        const auto& hash = message.GetMessageHash();
+        std::copy(hash.begin(), hash.begin() + CMessageHeader::CHECKSUM_SIZE, message.hdr.pchChecksum);
+        peer.nProcessQueueSize += payload.size() + CMessageHeader::HEADER_SIZE;
+        peer.vProcessMsg.push_back(std::move(message));
+        peerLogic->ProcessMessages(&peer, interrupt);
+    };
+    // Disconnect and inactivity timeout before authentication, followed by
+    // replacement peers, through InitializeNode/FinalizeNode/SendMessages.
+    const int64_t start_time = Params().GenesisBlock().nTime + 100000;
+    for (int scenario : {0, 1, 2, 3, 4, 6, 7, 5}) {
+        checkpoints = {{{4003, headers.back().GetHash()}}};
+        SetMockTime(start_time);
+        for (int replacement = 0; replacement < 2; ++replacement) {
+            if (replacement && scenario == 3) SetMockTime(start_time + 4 * 60 * 60 + 1);
+            if (replacement && scenario == 4) checkpoints = {{{4002, headers[4001].GetHash()}}};
+            CNode peer(13000 + scenario * 2 + replacement,
+                ServiceFlags(NODE_NETWORK | NODE_WITNESS), 0, INVALID_SOCKET, addr, 0, 0, CAddress(), "", false);
+            peer.SetSendVersion(PROTOCOL_VERSION);
+            peerLogic->InitializeNode(&peer);
+            struct Finalize {
+                PeerLogicValidation* logic;
+                NodeId id;
+                ~Finalize() { bool dummy; logic->FinalizeNode(id, dummy); }
+            } finalize{peerLogic.get(), peer.GetId()};
+            peer.nVersion = PROTOCOL_VERSION;
+            peer.fSuccessfullyConnected = true;
+            send(peer);
+            const bool continued = replacement && (scenario < 2 || scenario >= 5);
+            BOOST_CHECK_EQUAL(height, continued ? 2017 : 0);
+            BOOST_CHECK(!replay);
+            // Verify the actual wire request, not just the UI progress height.
+            bool requested = false;
+            for (size_t i = 0; i + 1 < peer.vSendMsg.size(); ++i) {
+                if (peer.vSendMsg[i].size() != CMessageHeader::HEADER_SIZE) continue;
+                CDataStream envelope(peer.vSendMsg[i], SER_NETWORK, PROTOCOL_VERSION);
+                CMessageHeader header(Params().MessageStart());
+                envelope >> header;
+                if (header.GetCommand() != NetMsgType::GETHEADERS) continue;
+                CDataStream payload(peer.vSendMsg[i + 1], SER_NETWORK, PROTOCOL_VERSION);
+                CBlockLocator locator;
+                uint256 stop;
+                payload >> locator >> stop;
+                BOOST_REQUIRE(!locator.vHave.empty());
+                BOOST_CHECK(locator.vHave.front() == (continued ? headers[2016].GetHash() : Params().GenesisBlock().GetHash()));
+                BOOST_CHECK(stop == checkpoints.mapCheckpoints.rbegin()->second);
+                requested = true;
+            }
+            BOOST_REQUIRE(requested);
+            if (!replacement) {
+                receive(peer, {headers.begin(), headers.begin() + 2000});
+                receive(peer, {headers.begin() + 2000, headers.begin() + 2017});
+                BOOST_CHECK(!peer.fDisconnect);
+                BOOST_CHECK_EQUAL(mapBlockIndex.size(), 1U);
+                if (scenario == 1) { SetMockTime(GetTime() + 61); send(peer); }
+                else if (scenario == 2) { SetMockTime(start_time + 4 * 60 * 60 + 1); send(peer); }
+                else peer.fDisconnect = true;
+                BOOST_CHECK(peer.fDisconnect);
+            } else if (scenario == 6) {
+                receive(peer, {headers.begin() + 2017, headers.begin() + 2034});
+                BOOST_CHECK(!peer.fDisconnect);
+                // New transport and useful progress must NOT renew the original
+                // four-hour lifetime. Finalization must not save expired state.
+                SetMockTime(start_time + 4 * 60 * 60 + 1);
+                send(peer);
+                BOOST_CHECK(peer.fDisconnect);
+                BOOST_CHECK_EQUAL(mapBlockIndex.size(), 1U);
+            } else if (scenario == 5) {
+                // Continuation reaches the checkpoint but still indexes nothing.
+                receive(peer, {headers.begin() + 2017, headers.end()});
+                BOOST_CHECK(!peer.fDisconnect);
+                BOOST_CHECK(replay);
+                BOOST_CHECK_EQUAL(mapBlockIndex.size(), 1U);
+                // Replay must start at genesis and validate *all* commitments,
+                // including those originally downloaded from peer A.
+                receive(peer, {headers.begin(), headers.begin() + 2000});
+                BOOST_CHECK_EQUAL(pindexBestHeader->nHeight, 2000);
+                receive(peer, {headers.begin() + 2000, headers.begin() + 4000});
+                receive(peer, {headers.begin() + 4000, headers.end()});
+                BOOST_CHECK(!peer.fDisconnect);
+                BOOST_CHECK_EQUAL(pindexBestHeader->nHeight, 4003);
+                auto invalid = headers.back();
+                invalid.hashPrevBlock = invalid.GetHash();
+                ++invalid.nTime;
+                MakeInvalidPoW(invalid);
+                receive(peer, {invalid});
+                BOOST_CHECK(!mapBlockIndex.count(invalid.GetHash()));
+            } else {
+                if (scenario == 0) {
+                    // A replacement can extend the untrusted prefix but cannot
+                    // substitute an alternative history for the hard checkpoint.
+                    std::vector<CBlockHeader> fork(headers.begin() + 2017, headers.end());
+                    ++fork.front().nNonce;
+                    for (size_t i = 1; i < fork.size(); ++i) fork[i].hashPrevBlock = fork[i - 1].GetHash();
+                    receive(peer, fork);
+                } else if (scenario == 7) {
+                    // An honest replacement may not know an untrusted locator
+                    // and fall back to genesis. Reject rather than skip linkage.
+                    receive(peer, {headers.begin(), headers.begin() + 2000});
+                } else {
+                    // An unavailable prefix/empty response discards the saved
+                    // session; the next scenario must really start from zero.
+                    receive(peer, {});
+                }
+                BOOST_CHECK(peer.fDisconnect);
+                BOOST_CHECK_EQUAL(mapBlockIndex.size(), 1U);
+            }
+        }
     }
 }
 

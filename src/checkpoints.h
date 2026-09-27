@@ -29,8 +29,9 @@ namespace Checkpoints
  * sparse SHA256d commitments, never chainwork or block-index entries. Reaching
  * the hard-coded endpoint authenticates those commitments. The second pass
  * releases a chunk only after its complete hash chain matches a commitment.
- * Mutable download state is peer-local. An authenticated snapshot may survive
- * the peer to resume replay at an indexed, authenticated chunk boundary.
+ * Presync download state may move between peers while remaining untrusted.
+ * An authenticated snapshot may survive the peer to resume replay at an
+ * indexed, authenticated chunk boundary.
  */
 class HeaderSync {
 public:
@@ -41,6 +42,11 @@ public:
     /** Clone authenticated commitments, discarding all packet-local state.
      * Requires cs_main; resumes only at an accepted commitment boundary. */
     std::shared_ptr<HeaderSync> Resume(const CCheckpointData& checkpoints) const;
+    /** Transport progress only: never authorizes indexing or PoW reuse. */
+    bool CanContinuePresync(const CCheckpointData& checkpoints) const {
+        return !m_failed && !m_replaying && m_height > m_start_height &&
+               m_checkpoints == checkpoints.mapCheckpoints;
+    }
     uint256 NextHash() const { return m_prev; }
     uint256 StopHash() const { return m_checkpoints.rbegin()->second; }
     bool Complete() const { return m_complete; }
